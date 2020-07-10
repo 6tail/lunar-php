@@ -218,6 +218,7 @@ class LunarUtil
   public static $BASE_MONTH = 11;
   public static $BASE_DAY = 11;
   public static $BASE_INDEX = 0;
+  public static $BASE_YEAR_JIU_XING_INDEX = 0;
   public static $BASE_YEAR_GAN_ZHI_INDEX = -4;
   public static $BASE_DAY_GAN_ZHI_INDEX = 15;
   public static $BASE_MONTH_ZHI_INDEX = 2;
@@ -294,6 +295,8 @@ class LunarUtil
   public static $JIE = array('小寒', '立春', '惊蛰', '清明', '立夏', '芒种', '小暑', '立秋', '白露', '寒露', '立冬', '大雪');
 
   public static $DAY = array('', '初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十', '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十');
+
+  public static $YUE_XIANG = array('', '朔', '既朔', '蛾眉新', '蛾眉新', '蛾眉', '夕月', '上弦', '上弦', '九夜', '宵', '宵', '宵', '渐盈凸', '小望', '望', '既望', '立待', '居待', '寝待', '更待', '渐亏凸', '下弦', '下弦', '有明', '有明', '蛾眉残', '蛾眉残', '残', '晓', '晦');
 
   /**
    * 农历日期对应的节日
@@ -612,7 +615,8 @@ class LunarUtil
     '离' => '正南',
     '坤' => '西南',
     '兑' => '正西',
-    '乾' => '西北'
+    '乾' => '西北',
+    '中' => '中宫'
   );
 
   public static $GONG = array(
@@ -1355,7 +1359,7 @@ class LunarUtil
    * @param string $ganZhi 干支
    * @return int 甲子序号
    */
-  private static function getJiaZiIndex($ganZhi)
+  public static function getJiaZiIndex($ganZhi)
   {
     for ($i = 0, $j = count(LunarUtil::$JIA_ZI); $i < $j; $i++) {
       if (strcmp(LunarUtil::$JIA_ZI[$i], $ganZhi) === 0) {
@@ -1404,7 +1408,7 @@ class LunarUtil
       }
       $index = strpos($right, $day . '=');
     }
-    if(count($l)<1){
+    if (count($l) < 1) {
       $l[] = '无';
     }
     return $l;
@@ -1448,7 +1452,7 @@ class LunarUtil
       }
       $index = strpos($right, $day . '=');
     }
-    if(count($l)<1){
+    if (count($l) < 1) {
       $l[] = '无';
     }
     return $l;
@@ -1477,7 +1481,7 @@ class LunarUtil
         $l[] = LunarUtil::$SHEN_SHA[hexdec($m)];
       }
     }
-    if(count($l)<1){
+    if (count($l) < 1) {
       $l[] = '无';
     }
     return $l;
@@ -1506,7 +1510,7 @@ class LunarUtil
         $l[] = LunarUtil::$SHEN_SHA[hexdec($m)];
       }
     }
-    if(count($l)<1){
+    if (count($l) < 1) {
       $l[] = '无';
     }
     return $l;
@@ -1535,7 +1539,7 @@ class LunarUtil
         $l[] = LunarUtil::$YI_JI[hexdec($m)];
       }
     }
-    if(count($l)<1){
+    if (count($l) < 1) {
       $l[] = '无';
     }
     return $l;
@@ -1564,7 +1568,7 @@ class LunarUtil
         $l[] = LunarUtil::$YI_JI[hexdec($m)];
       }
     }
-    if(count($l)<1){
+    if (count($l) < 1) {
       $l[] = '无';
     }
     return $l;
@@ -3780,7 +3784,7 @@ class Lunar
   }
 
   /**
-   * 获取日吉神（宜趋），如果没有，返回["无"]
+   * 获取日吉神（宜趋），如果没有，返回['无']
    * @return array 吉神
    */
   public function getDayJiShen()
@@ -3789,12 +3793,126 @@ class Lunar
   }
 
   /**
-   * 获取日凶煞（宜忌），如果没有，返回["无"]
+   * 获取日凶煞（宜忌），如果没有，返回['无']
    * @return array 凶煞
    */
   public function getDayXiongSha()
   {
     return LunarUtil::getDayXiongSha($this->getMonth(), $this->getDayInGanZhi());
+  }
+
+  /**
+   * 获取月相
+   * @return string 月相
+   */
+  public function getYueXiang()
+  {
+    return LunarUtil::$YUE_XIANG[$this->getDay()];
+  }
+
+  /**
+   * 获取值年九星（流年紫白星起例歌诀：年上吉星论甲子，逐年星逆中宫起；上中下作三元汇，一上四中七下兑。）
+   * @return NineStar 值年九星
+   */
+  public function getYearNineStar()
+  {
+    $index = LunarUtil::$BASE_YEAR_JIU_XING_INDEX - ($this->getYear() - LunarUtil::$BASE_YEAR) % 9;
+    if ($index < 0) {
+      $index += 9;
+    }
+    return new NineStar($index);
+  }
+
+  /**
+   * 获取值月九星（月紫白星歌诀：子午卯酉八白起，寅申巳亥二黑求，辰戌丑未五黄中。）
+   * @return NineStar 值月九星
+   */
+  public function getMonthNineStar()
+  {
+    $start = 2;
+    $yearZhi = $this->getYearZhi();
+    if (strpos('子午卯酉', $yearZhi)!==false) {
+      $start = 8;
+    } else if (strpos('辰戌丑未', $yearZhi)!==false) {
+      $start = 5;
+    }
+    // 寅月起，所以需要-2
+    $monthIndex = $this->monthZhiIndex - 2;
+    $index = $start - $monthIndex - 1;
+    if ($index < 0) {
+      $index += 9;
+    }
+    return new NineStar($index);
+  }
+
+  /**
+   * 获取值日九星（日家紫白星歌诀：日家白法不难求，二十四气六宫周；冬至雨水及谷雨，阳顺一七四中游；夏至处暑霜降后，九三六星逆行求。）
+   * @return NineStar 值日九星
+   */
+  public function getDayNineStar()
+  {
+    //顺逆
+    $solarYmd = $this->solar->toYmd();
+    $yuShui = $this->jieQi['雨水']->toYmd();
+    $guYu = $this->jieQi['谷雨']->toYmd();
+    $xiaZhi = $this->jieQi['夏至']->toYmd();
+    $chuShu = $this->jieQi['处暑']->toYmd();
+    $shuangJiang = $this->jieQi['霜降']->toYmd();
+
+    $start = 6;
+    $asc = false;
+    if (strcmp($solarYmd, $this->jieQi['冬至']->toYmd()) >= 0 && strcmp($solarYmd, $yuShui) < 0) {
+      $asc = true;
+      $start = 1;
+    } else if (strcmp($solarYmd, $yuShui) >= 0 && strcmp($solarYmd, $guYu) < 0) {
+      $asc = true;
+      $start = 7;
+    } else if (strcmp($solarYmd, $guYu) >= 0 && strcmp($solarYmd, $xiaZhi) < 0) {
+      $asc = true;
+      $start = 4;
+    } else if (strcmp($solarYmd, $xiaZhi) >= 0 && strcmp($solarYmd, $chuShu) < 0) {
+      $start = 9;
+    } else if (strcmp($solarYmd, $chuShu) >= 0 && strcmp($solarYmd, $shuangJiang) < 0) {
+      $start = 3;
+    }
+    $ganZhiIndex = LunarUtil::getJiaZiIndex($this->getDayInGanZhi()) % 9;
+    $index = $asc ? $start + $ganZhiIndex - 1 : $start - $ganZhiIndex - 1;
+    if ($index > 8) {
+      $index -= 9;
+    }
+    if ($index < 0) {
+      $index += 9;
+    }
+    return new NineStar($index);
+  }
+
+  /**
+   * 获取值时九星（时家紫白星歌诀：三元时白最为佳，冬至阳生顺莫差，孟日七宫仲一白，季日四绿发萌芽，每把时辰起甲子，本时星耀照光华，时星移入中宫去，顺飞八方逐细查。夏至阴生逆回首，孟归三碧季加六，仲在九宫时起甲，依然掌中逆轮跨。）
+   * @return NineStar 值时九星
+   */
+  public function getTimeNineStar()
+  {
+    //顺逆
+    $solarYmd = $this->solar->toYmd();
+    $asc = false;
+    if (strcmp($solarYmd, $this->jieQi['冬至']->toYmd()) >= 0 && strcmp($solarYmd, $this->jieQi['夏至']->toYmd()) < 0) {
+      $asc = true;
+    }
+    $start = $asc ? 7 : 3;
+    $dayZhi = $this->getDayZhi();
+    if (strpos('子午卯酉', $dayZhi)!==false) {
+      $start = $asc ? 1 : 9;
+    } else if (strpos('辰戌丑未', $dayZhi)!==false) {
+      $start = $asc ? 4 : 6;
+    }
+    $index = $asc ? $start + $this->timeZhiIndex - 1 : $start - $this->timeZhiIndex - 1;
+    if ($index > 8) {
+      $index -= 9;
+    }
+    if ($index < 0) {
+      $index += 9;
+    }
+    return new NineStar($index);
   }
 
   /**
@@ -4666,5 +4784,292 @@ class Holiday
   public function __toString()
   {
     return $this->day . ' ' . $this->name . ($this->work ? '调休' : '') . ' ' . $this->target;
+  }
+}
+
+/**
+ * 九星
+ * @package com\nlf\calendar
+ */
+class NineStar
+{
+  /**
+   * 序号
+   * @var int
+   */
+  private $index;
+
+  /**
+   * 九数
+   * @var array
+   */
+  public static $NUMBER = array('一', '二', '三', '四', '五', '六', '七', '八', '九');
+
+  /**
+   * 七色
+   * @var array
+   */
+  public static $COLOR = array('白', '黒', '碧', '绿', '黄', '白', '赤', '白', '紫');
+
+  /**
+   * 五行
+   * @var array
+   */
+  public static $WU_XING = array('水', '土', '木', '木', '土', '金', '金', '土', '火');
+
+  /**
+   * 后天八卦方位
+   * @var array
+   */
+  public static $POSITION = array('坎', '坤', '震', '巽', '中', '乾', '兑', '艮', '离');
+
+  /**
+   * 北斗九星
+   * @var array
+   */
+  public static $NAME_BEI_DOU = array('天枢', '天璇', '天玑', '天权', '玉衡', '开阳', '摇光', '洞明', '隐元');
+
+  /**
+   * 玄空九星（玄空风水）
+   * @var array
+   */
+  public static $NAME_XUAN_KONG = array('贪狼', '巨门', '禄存', '文曲', '廉贞', '武曲', '破军', '左辅', '右弼');
+
+  /**
+   * 奇门九星（奇门遁甲，也称天盘九星）
+   * @var array
+   */
+  public static $NAME_QI_MEN = array('天蓬', '天芮', '天冲', '天辅', '天禽', '天心', '天柱', '天任', '天英');
+
+  /**
+   * 八门（奇门遁甲）
+   * @var array
+   */
+  public static $BA_MEN_QI_MEN = array('休', '死', '伤', '杜', '', '开', '惊', '生', '景');
+
+  /**
+   * 太乙九神（太乙神数）
+   * @var array
+   */
+  public static $NAME_TAI_YI = array('太乙', '摄提', '轩辕', '招摇', '天符', '青龙', '咸池', '太阴', '天乙');
+
+  /**
+   * 太乙九神对应类型
+   * @var array
+   */
+  public static $TYPE_TAI_YI = array('吉神', '凶神', '安神', '安神', '凶神', '吉神', '凶神', '吉神', '吉神');
+
+  /**
+   * 太乙九神歌诀（太乙神数）
+   * @var array
+   */
+  public static $SONG_TAI_YI = array('门中太乙明，星官号贪狼，赌彩财喜旺，婚姻大吉昌，出入无阻挡，参谒见贤良，此行三五里，黑衣别阴阳。', '门前见摄提，百事必忧疑，相生犹自可，相克祸必临，死门并相会，老妇哭悲啼，求谋并吉事，尽皆不相宜，只可藏隐遁，若动伤身疾。', '出入会轩辕，凡事必缠牵，相生全不美，相克更忧煎，远行多不利，博彩尽输钱，九天玄女法，句句不虚言。', '招摇号木星，当之事莫行，相克行人阻，阴人口舌迎，梦寐多惊惧，屋响斧自鸣，阴阳消息理，万法弗违情。', '五鬼为天符，当门阴女谋，相克无好事，行路阻中途，走失难寻觅，道逢有尼姑，此星当门值，万事有灾除。', '神光跃青龙，财气喜重重，投入有酒食，赌彩最兴隆，更逢相生旺，休言克破凶，见贵安营寨，万事总吉同。', '吾将为咸池，当之尽不宜，出入多不利，相克有灾情，赌彩全输尽，求财空手回，仙人真妙语，愚人莫与知，动用虚惊退，反复逆风吹。', '坐临太阴星，百祸不相侵，求谋悉成就，知交有觅寻，回风归来路，恐有殃伏起，密语中记取，慎乎莫轻行。', '迎来天乙星，相逢百事兴，运用和合庆，茶酒喜相迎，求谋并嫁娶，好合有天成，祸福如神验，吉凶甚分明。');
+
+  /**
+   * 吉凶（玄空风水）
+   * @var array
+   */
+  public static $LUCK_XUAN_KONG = array('吉', '凶', '凶', '吉', '凶', '吉', '凶', '吉', '吉');
+
+  /**
+   * 吉凶（奇门遁甲）
+   * @var array
+   */
+  public static $LUCK_QI_MEN = array('大凶', '大凶', '小吉', '大吉', '大吉', '大吉', '小凶', '小吉', '小凶');
+
+  /**
+   * 阴阳（奇门遁甲）
+   * @var array
+   */
+  public static $YIN_YANG_QI_MEN = array('阳', '阴', '阳', '阳', '阳', '阴', '阴', '阳', '阴');
+
+  function __construct($index)
+  {
+    $this->index = $index;
+  }
+
+  /**
+   * 获取九数
+   * @return string 九数
+   */
+  public function getNumber()
+  {
+    return NineStar::$NUMBER[$this->index];
+  }
+
+  /**
+   * 获取七色
+   * @return string 七色
+   */
+  public function getColor()
+  {
+    return NineStar::$COLOR[$this->index];
+  }
+
+  /**
+   * 获取五行
+   * @return string 五行
+   */
+  public function getWuXing()
+  {
+    return NineStar::$WU_XING[$this->index];
+  }
+
+
+  /**
+   * 获取方位
+   * @return string 方位
+   */
+  public function getPosition()
+  {
+    return NineStar::$POSITION[$this->index];
+  }
+
+  /**
+   * 获取方位描述
+   * @return string 方位描述
+   */
+  public function getPositionDesc()
+  {
+    return LunarUtil::$POSITION_DESC [$this->getPosition()];
+  }
+
+  /**
+   * 获取玄空九星名称
+   * @return string 玄空九星名称
+   */
+  public function getNameInXuanKong()
+  {
+    return NineStar::$NAME_XUAN_KONG[$this->index];
+  }
+
+  /**
+   * 获取北斗九星名称
+   * @return string 北斗九星名称
+   */
+  public function getNameInBeiDou()
+  {
+    return NineStar::$NAME_BEI_DOU[$this->index];
+  }
+
+  /**
+   * 获取奇门九星名称
+   * @return string 奇门九星名称
+   */
+  public function getNameInQiMen()
+  {
+    return NineStar::$NAME_QI_MEN[$this->index];
+  }
+
+  /**
+   * 获取太乙九神名称
+   * @return string 太乙九神名称
+   */
+  public function getNameInTaiYi()
+  {
+    return NineStar::$NAME_TAI_YI[$this->index];
+  }
+
+  /**
+   * 获取奇门九星吉凶
+   * @return string 大吉/小吉/大凶/小凶
+   */
+  public function getLuckInQiMen()
+  {
+    return NineStar::$LUCK_QI_MEN[$this->index];
+  }
+
+  /**
+   * 获取玄空九星吉凶
+   * @return string 吉/凶
+   */
+  public function getLuckInXuanKong()
+  {
+    return NineStar::$LUCK_XUAN_KONG[$this->index];
+  }
+
+  /**
+   * 获取奇门九星阴阳
+   * @return string 阴/阳
+   */
+  public function getYinYangInQiMen()
+  {
+    return NineStar::$YIN_YANG_QI_MEN[$this->index];
+  }
+
+  /**
+   * 获取太乙九神类型
+   * @return string 吉神/凶神/安神
+   */
+  public function getTypeInTaiYi()
+  {
+    return NineStar::$TYPE_TAI_YI[$this->index];
+  }
+
+  /**
+   * 获取八门（奇门遁甲）
+   * @return string 八门
+   */
+  public function getBaMenInQiMen()
+  {
+    return NineStar::$BA_MEN_QI_MEN[$this->index];
+  }
+
+  /**
+   * 获取太乙九神歌诀
+   * @return string 太乙九神歌诀
+   */
+  public function getSongInTaiYi()
+  {
+    return NineStar::$SONG_TAI_YI[$this->index];
+  }
+
+  /**
+   * 获取九星序号，从0开始
+   * @return int 序号
+   */
+  public function getIndex()
+  {
+    return $this->index;
+  }
+
+  public function __toString()
+  {
+    return $this->getNumber() . $this->getColor() . $this->getWuXing() . $this->getNameInBeiDou();
+  }
+
+  public function toFullString()
+  {
+    $s = '';
+    $s .= $this->getNumber();
+    $s .= $this->getColor();
+    $s .= $this->getWuXing();
+    $s .= ' ';
+    $s .= $this->getPosition();
+    $s .= '(';
+    $s .= $this->getPositionDesc();
+    $s .= ') ';
+    $s .= $this->getNameInBeiDou();
+    $s .= ' 玄空[';
+    $s .= $this->getNameInXuanKong();
+    $s .= ' ';
+    $s .= $this->getLuckInXuanKong();
+    $s .= '] 奇门[';
+    $s .= $this->getNameInQiMen();
+    $s .= ' ';
+    $s .= $this->getLuckInQiMen();
+    if (strlen($this->getBaMenInQiMen()) > 0) {
+      $s .= ' ';
+      $s .= $this->getBaMenInQiMen();
+      $s .= '门';
+    }
+    $s .= ' ';
+    $s .= $this->getYinYangInQiMen();
+    $s .= '] 太乙[';
+    $s .= $this->getNameInTaiYi();
+    $s .= ' ';
+    $s .= $this->getTypeInTaiYi();
+    $s .= ']';
+    return $s;
   }
 }
