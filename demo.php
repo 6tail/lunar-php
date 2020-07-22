@@ -26,6 +26,7 @@ foreach ($jieQi as $key => $value) {
   echo $key." = ".$value->toYmdHms()."\n";
 }
 
+// 时辰吉神方位
 echo $lunar->getTimePositionFu()."\n";
 echo $lunar->getTimePositionXi()."\n";
 echo $lunar->getTimePositionCai()."\n";
@@ -37,3 +38,9 @@ echo $lunar->getTimePositionXiDesc()."\n";
 echo $lunar->getTimePositionCaiDesc()."\n";
 echo $lunar->getTimePositionYinGuiDesc()."\n";
 echo $lunar->getTimePositionYangGuiDesc()."\n";
+
+// 八字转阳历
+$l = Solar::fromBaZi("庚子", "癸未", "乙丑", "丁亥");
+foreach ($l as $d){
+  echo $d->toFullString()."\n";
+}
