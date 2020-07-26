@@ -3834,7 +3834,7 @@ class Lunar
    */
   public function getBaZi()
   {
-    $l = array(4);
+    $l = array();
     $l[] = $this->getYearInGanZhiExact();
     $l[] = $this->getMonthInGanZhiExact();
     $l[] = $this->getDayInGanZhiExact();
@@ -3849,10 +3849,11 @@ class Lunar
   public function getBaZiWuXing()
   {
     $baZi = $this->getBaZi();
-    $l = array(count($baZi));
+    $l = array();
     foreach ($baZi as $ganZhi) {
-      $gan = substr($ganZhi, 0, 1);
-      $zhi = substr($ganZhi, 1);
+      $size = strlen($ganZhi)/2;
+      $gan = substr($ganZhi, 0, $size);
+      $zhi = substr($ganZhi, $size);
       $l[] = LunarUtil::$WU_XING_GAN[$gan] . LunarUtil::$WU_XING_ZHI[$zhi];
     }
     return $l;
@@ -3865,7 +3866,7 @@ class Lunar
   public function getBaZiNaYin()
   {
     $baZi = $this->getBaZi();
-    $l = array(count($baZi));
+    $l = array();
     foreach ($baZi as $ganZhi) {
       $l[] = LunarUtil::$NAYIN[$ganZhi];
     }
@@ -3879,11 +3880,11 @@ class Lunar
   public function getBaZiShiShenGan()
   {
     $baZi = $this->getBaZi();
-    $yearGan = substr($baZi[0], 0, 1);
-    $monthGan = substr($baZi[1], 0, 1);
-    $dayGan = substr($baZi[2], 0, 1);
-    $timeGan = substr($baZi[3], 0, 1);
-    $l = array(count($baZi));
+    $yearGan = substr($baZi[0], 0, strlen($baZi[0])/2);
+    $monthGan = substr($baZi[1], 0, strlen($baZi[1])/2);
+    $dayGan = substr($baZi[2], 0, strlen($baZi[2])/2);
+    $timeGan = substr($baZi[3], 0, strlen($baZi[3])/2);
+    $l = array();
     $l[] = LunarUtil::$SHI_SHEN_GAN[$dayGan . $yearGan];
     $l[] = LunarUtil::$SHI_SHEN_GAN[$dayGan . $monthGan];
     $l[] = '日主';
@@ -3898,10 +3899,10 @@ class Lunar
   public function getBaZiShiShenZhi()
   {
     $baZi = $this->getBaZi();
-    $dayGan = substr($baZi[2], 0, 1);
-    $l = array(count($baZi));
+    $dayGan = substr($baZi[2], 0, strlen($baZi[2])/2);
+    $l = array();
     foreach ($baZi as $ganZhi) {
-      $zhi = substr($ganZhi, 1);
+      $zhi = substr($ganZhi, strlen($ganZhi)/2);
       $l[] = LunarUtil::$SHI_SHEN_ZHI[$dayGan . $zhi . LunarUtil::$ZHI_HIDE_GAN[$zhi][0]];
     }
     return $l;
