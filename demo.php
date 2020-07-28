@@ -68,6 +68,30 @@ foreach ($lunar->getBaZiShiShenZhi() as $shen) {
 }
 echo "\n";
 
+// 遍历八字年支十神
+foreach ($lunar->getBaZiShiShenYearZhi() as $shen) {
+  echo $shen . " ";
+}
+echo "\n";
+
+// 遍历八字月支十神
+foreach ($lunar->getBaZiShiShenMonthZhi() as $shen) {
+  echo $shen . " ";
+}
+echo "\n";
+
+// 遍历八字日支十神
+foreach ($lunar->getBaZiShiShenDayZhi() as $shen) {
+  echo $shen . " ";
+}
+echo "\n";
+
+// 遍历八字时支十神
+foreach ($lunar->getBaZiShiShenTimeZhi() as $shen) {
+  echo $shen . " ";
+}
+echo "\n";
+
 // 时辰吉神方位
 echo $lunar->getTimePositionFu() . "\n";
 echo $lunar->getTimePositionXi() . "\n";

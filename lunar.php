@@ -3851,7 +3851,7 @@ class Lunar
     $baZi = $this->getBaZi();
     $l = array();
     foreach ($baZi as $ganZhi) {
-      $size = strlen($ganZhi)/2;
+      $size = strlen($ganZhi) / 2;
       $gan = substr($ganZhi, 0, $size);
       $zhi = substr($ganZhi, $size);
       $l[] = LunarUtil::$WU_XING_GAN[$gan] . LunarUtil::$WU_XING_ZHI[$zhi];
@@ -3880,10 +3880,10 @@ class Lunar
   public function getBaZiShiShenGan()
   {
     $baZi = $this->getBaZi();
-    $yearGan = substr($baZi[0], 0, strlen($baZi[0])/2);
-    $monthGan = substr($baZi[1], 0, strlen($baZi[1])/2);
-    $dayGan = substr($baZi[2], 0, strlen($baZi[2])/2);
-    $timeGan = substr($baZi[3], 0, strlen($baZi[3])/2);
+    $yearGan = substr($baZi[0], 0, strlen($baZi[0]) / 2);
+    $monthGan = substr($baZi[1], 0, strlen($baZi[1]) / 2);
+    $dayGan = substr($baZi[2], 0, strlen($baZi[2]) / 2);
+    $timeGan = substr($baZi[3], 0, strlen($baZi[3]) / 2);
     $l = array();
     $l[] = LunarUtil::$SHI_SHEN_GAN[$dayGan . $yearGan];
     $l[] = LunarUtil::$SHI_SHEN_GAN[$dayGan . $monthGan];
@@ -3899,13 +3899,69 @@ class Lunar
   public function getBaZiShiShenZhi()
   {
     $baZi = $this->getBaZi();
-    $dayGan = substr($baZi[2], 0, strlen($baZi[2])/2);
+    $dayGan = substr($baZi[2], 0, strlen($baZi[2]) / 2);
     $l = array();
     foreach ($baZi as $ganZhi) {
-      $zhi = substr($ganZhi, strlen($ganZhi)/2);
+      $zhi = substr($ganZhi, strlen($ganZhi) / 2);
       $l[] = LunarUtil::$SHI_SHEN_ZHI[$dayGan . $zhi . LunarUtil::$ZHI_HIDE_GAN[$zhi][0]];
     }
     return $l;
+  }
+
+  private function getBaZiShiShenByZhi($zhi)
+  {
+    $baZi = $this->getBaZi();
+    $dayGan = substr($baZi[2], 0, strlen($baZi[2]) / 2);
+    $hideGan = LunarUtil::$ZHI_HIDE_GAN[$zhi];
+    $l = array();
+    foreach ($hideGan as $gan) {
+      $l[] = LunarUtil::$SHI_SHEN_ZHI[$dayGan . $zhi . $gan];
+    }
+    return $l;
+  }
+
+  /**
+   * 获取八字年支十神
+   * @return array 八字年支十神
+   */
+  public function getBaZiShiShenYearZhi()
+  {
+    $baZi = $this->getBaZi();
+    $zhi = substr($baZi[0], strlen($baZi[0]) / 2);
+    return $this->getBaZiShiShenByZhi($zhi);
+  }
+
+  /**
+   * 获取八字月支十神
+   * @return array 八字月支十神
+   */
+  public function getBaZiShiShenMonthZhi()
+  {
+    $baZi = $this->getBaZi();
+    $zhi = substr($baZi[1], strlen($baZi[1]) / 2);
+    return $this->getBaZiShiShenByZhi($zhi);
+  }
+
+  /**
+   * 获取八字日支十神
+   * @return array 八字日支十神
+   */
+  public function getBaZiShiShenDayZhi()
+  {
+    $baZi = $this->getBaZi();
+    $zhi = substr($baZi[2], strlen($baZi[2]) / 2);
+    return $this->getBaZiShiShenByZhi($zhi);
+  }
+
+  /**
+   * 获取八字时支十神
+   * @return array 八字时支十神
+   */
+  public function getBaZiShiShenTimeZhi()
+  {
+    $baZi = $this->getBaZi();
+    $zhi = substr($baZi[3], strlen($baZi[3]) / 2);
+    return $this->getBaZiShiShenByZhi($zhi);
   }
 
   /**
