@@ -38,58 +38,57 @@ foreach ($lunar->getTimeYi() as $yi) {
 }
 echo "\n";
 
-// 遍历八字
-foreach ($lunar->getBaZi() as $bz) {
-  echo $bz . " ";
-}
+// 八字
+$baZi = $lunar->getEightChar();
+echo $baZi . " ";
 echo "\n";
 
-// 遍历八字五行
-foreach ($lunar->getBaZiWuXing() as $wx) {
-  echo $wx . " ";
-}
+// 八字五行
+echo $baZi->getYearWuXing() . " " . $baZi->getMonthWuXing() . " " . $baZi->getDayWuXing() . " " . $baZi->getTimeWuXing();
 echo "\n";
 
-// 遍历八字纳音
-foreach ($lunar->getBaZiNaYin() as $ny) {
-  echo $ny . " ";
-}
+// 八字纳音
+echo $baZi->getYearNaYin() . " " . $baZi->getMonthNaYin() . " " . $baZi->getDayNaYin() . " " . $baZi->getTimeNaYin();
 echo "\n";
 
-// 遍历八字天干十神
-foreach ($lunar->getBaZiShiShenGan() as $shen) {
-  echo $shen . " ";
-}
-echo "\n";
-
-// 遍历八字地支十神
-foreach ($lunar->getBaZiShiShenZhi() as $shen) {
-  echo $shen . " ";
-}
+// 八字天干十神
+echo $baZi->getYearShiShenGan() . " " . $baZi->getMonthShiShenGan() . " " . $baZi->getDayShiShenGan() . " " . $baZi->getTimeShiShenGan();
 echo "\n";
 
 // 遍历八字年支十神
-foreach ($lunar->getBaZiShiShenYearZhi() as $shen) {
+foreach ($baZi->getYearShiShenZhi() as $shen) {
   echo $shen . " ";
 }
 echo "\n";
 
 // 遍历八字月支十神
-foreach ($lunar->getBaZiShiShenMonthZhi() as $shen) {
+foreach ($baZi->getMonthShiShenZhi() as $shen) {
   echo $shen . " ";
 }
 echo "\n";
 
 // 遍历八字日支十神
-foreach ($lunar->getBaZiShiShenDayZhi() as $shen) {
+foreach ($baZi->getDayShiShenZhi() as $shen) {
   echo $shen . " ";
 }
 echo "\n";
 
 // 遍历八字时支十神
-foreach ($lunar->getBaZiShiShenTimeZhi() as $shen) {
+foreach ($baZi->getTimeShiShenZhi() as $shen) {
   echo $shen . " ";
 }
+echo "\n";
+
+// 八字胎元
+echo $baZi->getTaiYuan();
+echo "\n";
+
+// 八字命宫
+echo $baZi->getMingGong();
+echo "\n";
+
+// 八字身宫
+echo $baZi->getShenGong();
 echo "\n";
 
 // 时辰吉神方位

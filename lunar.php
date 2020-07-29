@@ -2184,16 +2184,40 @@ class Lunar
   private static $QI_KB = array(1640650.479938, 15.21842500, 1642476.703182, 15.21874996, 1683430.515601, 15.218750011, 1752157.640664, 15.218749978, 1807675.003759, 15.218620279, 1883627.765182, 15.218612292, 1907369.128100, 15.218449176, 1936603.140413, 15.218425000, 1939145.524180, 15.218466998, 1947180.798300, 15.218524844, 1964362.041824, 15.218533526, 1987372.340971, 15.218513908, 1999653.819126, 15.218530782, 2007445.469786, 15.218535181, 2021324.917146, 15.218526248, 2047257.232342, 15.218519654, 2070282.898213, 15.218425000, 2073204.872850, 15.218515221, 2080144.500926, 15.218530782, 2086703.688963, 15.218523776, 2110033.182763, 15.218425000, 2111190.300888, 15.218425000, 2113731.271005, 15.218515671, 2120670.840263, 15.218425000, 2123973.309063, 15.218425000, 2125068.997336, 15.218477932, 2136026.312633, 15.218472436, 2156099.495538, 15.218425000, 2159021.324663, 15.218425000, 2162308.575254, 15.218461742, 2178485.706538, 15.218425000, 2178759.662849, 15.218445786, 2185334.020800, 15.218425000, 2187525.481425, 15.218425000, 2188621.191481, 15.218437494, 2322147.76);
   private static $QB = '0000000000000200000001000000000000222000000000000000000000000000000000000000000000000000000000000000000000000200000001010000000000202002000000000000000000000000000000020000000000000020000000000000000000002000000000010000020000002002000000000000000010000000000000100100000000000020000010000000000020000000020000010000000002000002002000000000000000000000000100100101000000000020000000001000000020000000020000010000000002000002000000000000000000020000000000100101000200000020200000001000000020000000000000000000000002000000000000000000000000220000000000000010000200000000200000001000000000000000000000000000000002000200000000000000002000222000000000000010000000000000200000001000100000000000000000000000000000000200000001000000000000222000000000000010000000000000000000000000100000000000200000000000000000000200200001000000000000222002000000000000000000000000000000000000000000000020000000000000000000000200000000010000000000202002000000000000000000000000000000100000000000000020000010000000000000000000020000010000000000002002002000000000000000000000000000100100000000000020000000000000000020000000020000010000000002000002000000000000000001000000000000100101000000000020200000001000000020000000000000000000000002000000000000000000000000020000000000000101000200000020200000001000000020000000000000000000000002000200000000000000000000020000000000000001000200000000200000001000000000000000000000000000000002000200000000000000000000222000000000000010000000000000000000000000000000000000000000000000000000000200000001000000002000222000000000000000000000000000000000000000100000000000000000000000010000000200000000010000000000222002000000000000000000000000000000100000000000000020000010000000000000000200020000010000000000202002002000000000000000000000000100100000000000000020000000000000000000000000020000010000000000002002000000000000000000000000000000100100000000000020200000000000000000000000020000000000000002000002000000000000000000000000000000000100000000000020200000001000000020000000000000000000000002000000000000000000000000020000000000000111000000000000200000001000000020000000000000000000000002000200000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000020000000000000000000000000000000200000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000010000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000020000002000000000000000000000000000000000000000000000000000000000010000000200000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000001000000002000000000000000000000000000000000100000000000000000000001000010000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000010000000000000000100100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000100000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000001000010000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000010000000000000000001000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100100000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
 
+  /**
+   * 年
+   * @var int
+   */
   private $year;
 
+  /**
+   * 月
+   * @var int
+   */
   private $month;
 
+  /**
+   * 日
+   * @var int
+   */
   private $day;
 
+  /**
+   * 时
+   * @var int
+   */
   private $hour;
 
+  /**
+   * 分
+   * @var int
+   */
   private $minute;
 
+  /**
+   * 秒
+   * @var int
+   */
   private $second;
 
   /**
@@ -2315,6 +2339,12 @@ class Lunar
    * @var array
    */
   private $jieQi = array();
+
+  /**
+   * 八字
+   * @var EightChar
+   */
+  private $eightChar = null;
 
   function __construct($year, $month, $day, $hour, $minute, $second)
   {
@@ -3834,11 +3864,12 @@ class Lunar
    */
   public function getBaZi()
   {
+    $baZi = $this->getEightChar();
     $l = array();
-    $l[] = $this->getYearInGanZhiExact();
-    $l[] = $this->getMonthInGanZhiExact();
-    $l[] = $this->getDayInGanZhiExact();
-    $l[] = $this->getTimeInGanZhi();
+    $l[] = $baZi->getYear();
+    $l[] = $baZi->getMonth();
+    $l[] = $baZi->getDay();
+    $l[] = $baZi->getTime();
     return $l;
   }
 
@@ -3848,14 +3879,12 @@ class Lunar
    */
   public function getBaZiWuXing()
   {
-    $baZi = $this->getBaZi();
+    $baZi = $this->getEightChar();
     $l = array();
-    foreach ($baZi as $ganZhi) {
-      $size = strlen($ganZhi) / 2;
-      $gan = substr($ganZhi, 0, $size);
-      $zhi = substr($ganZhi, $size);
-      $l[] = LunarUtil::$WU_XING_GAN[$gan] . LunarUtil::$WU_XING_ZHI[$zhi];
-    }
+    $l[] = $baZi->getYearWuXing();
+    $l[] = $baZi->getMonthWuXing();
+    $l[] = $baZi->getDayWuXing();
+    $l[] = $baZi->getTimeWuXing();
     return $l;
   }
 
@@ -3865,11 +3894,12 @@ class Lunar
    */
   public function getBaZiNaYin()
   {
-    $baZi = $this->getBaZi();
+    $baZi = $this->getEightChar();
     $l = array();
-    foreach ($baZi as $ganZhi) {
-      $l[] = LunarUtil::$NAYIN[$ganZhi];
-    }
+    $l[] = $baZi->getYearNaYin();
+    $l[] = $baZi->getMonthNaYin();
+    $l[] = $baZi->getDayNaYin();
+    $l[] = $baZi->getTimeNaYin();
     return $l;
   }
 
@@ -3879,16 +3909,12 @@ class Lunar
    */
   public function getBaZiShiShenGan()
   {
-    $baZi = $this->getBaZi();
-    $yearGan = substr($baZi[0], 0, strlen($baZi[0]) / 2);
-    $monthGan = substr($baZi[1], 0, strlen($baZi[1]) / 2);
-    $dayGan = substr($baZi[2], 0, strlen($baZi[2]) / 2);
-    $timeGan = substr($baZi[3], 0, strlen($baZi[3]) / 2);
+    $baZi = $this->getEightChar();
     $l = array();
-    $l[] = LunarUtil::$SHI_SHEN_GAN[$dayGan . $yearGan];
-    $l[] = LunarUtil::$SHI_SHEN_GAN[$dayGan . $monthGan];
-    $l[] = '日主';
-    $l[] = LunarUtil::$SHI_SHEN_GAN[$dayGan . $timeGan];
+    $l[] = $baZi->getYearShiShenGan();
+    $l[] = $baZi->getMonthShiShenGan();
+    $l[] = $baZi->getDayShiShenGan();
+    $l[] = $baZi->getTimeShiShenGan();
     return $l;
   }
 
@@ -3898,25 +3924,16 @@ class Lunar
    */
   public function getBaZiShiShenZhi()
   {
-    $baZi = $this->getBaZi();
-    $dayGan = substr($baZi[2], 0, strlen($baZi[2]) / 2);
+    $baZi = $this->getEightChar();
+    $yearShiShenZhi = $baZi->getYearShiShenZhi();
+    $monthShiShenZhi = $baZi->getMonthShiShenZhi();
+    $dayShiShenZhi = $baZi->getDayShiShenZhi();
+    $timeShiShenZhi = $baZi->getTimeShiShenZhi();
     $l = array();
-    foreach ($baZi as $ganZhi) {
-      $zhi = substr($ganZhi, strlen($ganZhi) / 2);
-      $l[] = LunarUtil::$SHI_SHEN_ZHI[$dayGan . $zhi . LunarUtil::$ZHI_HIDE_GAN[$zhi][0]];
-    }
-    return $l;
-  }
-
-  private function getBaZiShiShenByZhi($zhi)
-  {
-    $baZi = $this->getBaZi();
-    $dayGan = substr($baZi[2], 0, strlen($baZi[2]) / 2);
-    $hideGan = LunarUtil::$ZHI_HIDE_GAN[$zhi];
-    $l = array();
-    foreach ($hideGan as $gan) {
-      $l[] = LunarUtil::$SHI_SHEN_ZHI[$dayGan . $zhi . $gan];
-    }
+    $l[] = $yearShiShenZhi[0];
+    $l[] = $monthShiShenZhi[0];
+    $l[] = $dayShiShenZhi[0];
+    $l[] = $timeShiShenZhi[0];
     return $l;
   }
 
@@ -3926,9 +3943,7 @@ class Lunar
    */
   public function getBaZiShiShenYearZhi()
   {
-    $baZi = $this->getBaZi();
-    $zhi = substr($baZi[0], strlen($baZi[0]) / 2);
-    return $this->getBaZiShiShenByZhi($zhi);
+    return $this->getEightChar()->getYearShiShenZhi();
   }
 
   /**
@@ -3937,9 +3952,7 @@ class Lunar
    */
   public function getBaZiShiShenMonthZhi()
   {
-    $baZi = $this->getBaZi();
-    $zhi = substr($baZi[1], strlen($baZi[1]) / 2);
-    return $this->getBaZiShiShenByZhi($zhi);
+    return $this->getEightChar()->getMonthShiShenZhi();
   }
 
   /**
@@ -3948,9 +3961,7 @@ class Lunar
    */
   public function getBaZiShiShenDayZhi()
   {
-    $baZi = $this->getBaZi();
-    $zhi = substr($baZi[2], strlen($baZi[2]) / 2);
-    return $this->getBaZiShiShenByZhi($zhi);
+    return $this->getEightChar()->getDayShiShenZhi();
   }
 
   /**
@@ -3959,9 +3970,7 @@ class Lunar
    */
   public function getBaZiShiShenTimeZhi()
   {
-    $baZi = $this->getBaZi();
-    $zhi = substr($baZi[3], strlen($baZi[3]) / 2);
-    return $this->getBaZiShiShenByZhi($zhi);
+    return $this->getEightChar()->getTimeShiShenZhi();
   }
 
   /**
@@ -4235,6 +4244,54 @@ class Lunar
   public function getJieQiTable()
   {
     return $this->jieQi;
+  }
+
+  public function getTimeGanIndex()
+  {
+    return $this->timeGanIndex;
+  }
+
+  public function getTimeZhiIndex()
+  {
+    return $this->timeZhiIndex;
+  }
+
+  public function getDayGanIndexExact()
+  {
+    return $this->dayGanIndexExact;
+  }
+
+  public function getDayZhiIndexExact()
+  {
+    return $this->dayZhiIndexExact;
+  }
+
+  public function getMonthGanIndexExact()
+  {
+    return $this->monthGanIndexExact;
+  }
+
+  public function getMonthZhiIndexExact()
+  {
+    return $this->monthZhiIndexExact;
+  }
+
+  public function getYearGanIndexExact()
+  {
+    return $this->yearGanIndexExact;
+  }
+
+  public function getYearZhiIndexExact()
+  {
+    return $this->yearZhiIndexExact;
+  }
+
+  public function getEightChar()
+  {
+    if (null == $this->eightChar) {
+      $this->eightChar = EightChar::fromLunar($this);
+    }
+    return $this->eightChar;
   }
 
   public function toFullString()
@@ -5384,5 +5441,509 @@ class NineStar
     $s .= $this->getTypeInTaiYi();
     $s .= ']';
     return $s;
+  }
+}
+
+/**
+ * 八字
+ * @package com\nlf\calendar
+ */
+class EightChar
+{
+
+  /**
+   * 阴历
+   * @var Lunar
+   */
+  private $lunar;
+
+  private static $CHANG_SHENG_OFFSET = array(
+    '甲' => 11,
+    '丙' => 2,
+    '戊' => 2,
+    '庚' => 5,
+    '壬' => 8,
+    '乙' => 6,
+    '丁' => 9,
+    '己' => 9,
+    '辛' => 0,
+    '癸' => 3
+  );
+
+  /**
+   * 月支，按正月起寅排列
+   * @var array
+   */
+  public static $MONTH_ZHI = array('', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥', '子', '丑');
+
+  /**
+   * 长生十二神
+   * @var array
+   */
+  public static $CHANG_SHENG = array('长生', '沐浴', '冠带', '临官', '帝旺', '衰', '病', '死', '墓', '绝', '胎', '养');
+
+  function __construct($lunar)
+  {
+    $this->lunar = $lunar;
+  }
+
+  public static function fromLunar($lunar)
+  {
+    return new EightChar($lunar);
+  }
+
+  public function __toString()
+  {
+    return $this->getYear() . ' ' . $this->getMonth() . ' ' . $this->getDay() . ' ' . $this->getTime();
+  }
+
+  /**
+   * 获取年柱
+   * @return string 年柱
+   */
+  public function getYear()
+  {
+    return $this->lunar->getYearInGanZhiExact();
+  }
+
+  /**
+   * 获取年干
+   * @return string 天干
+   */
+  public function getYearGan()
+  {
+    return $this->lunar->getYearGanExact();
+  }
+
+  /**
+   * 获取年支
+   * @return string 地支
+   */
+  public function getYearZhi()
+  {
+    return $this->lunar->getYearZhiExact();
+  }
+
+  /**
+   * 获取年柱地支藏干，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
+   * @return string 天干
+   */
+  public function getYearHideGan()
+  {
+    return LunarUtil::$ZHI_HIDE_GAN[$this->getYearZhi()];
+  }
+
+  /**
+   * 获取年柱五行
+   * @return string 五行
+   */
+  public function getYearWuXing()
+  {
+    return LunarUtil::$WU_XING_GAN[$this->lunar->getYearGanExact()] . LunarUtil::$WU_XING_ZHI[$this->lunar->getYearZhiExact()];
+  }
+
+  /**
+   * 获取年柱纳音
+   * @return string 纳音
+   */
+  public function getYearNaYin()
+  {
+    return LunarUtil::$NAYIN[$this->getYear()];
+  }
+
+  /**
+   * 获取年柱天干十神
+   * @return string 十神
+   */
+  public function getYearShiShenGan()
+  {
+    return LunarUtil::$SHI_SHEN_GAN[$this->getDayGan() . $this->getYearGan()];
+  }
+
+  private function getShiShenZhi($zhi)
+  {
+    $hideGan = LunarUtil::$ZHI_HIDE_GAN[$zhi];
+    $l = array();
+    foreach ($hideGan as $gan) {
+      $l[] = LunarUtil::$SHI_SHEN_ZHI[$this->getDayGan() . $zhi . $gan];
+    }
+    return $l;
+  }
+
+  /**
+   * 获取年柱地支十神，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
+   * @return array 十神
+   */
+  public function getYearShiShenZhi()
+  {
+    return $this->getShiShenZhi($this->getYearZhi());
+  }
+
+  private function getDiShi($zhiIndex)
+  {
+    $offset = EightChar::$CHANG_SHENG_OFFSET[$this->getDayGan()];
+    $index = $offset + ($this->lunar->getDayGanIndexExact() % 2 == 0 ? $zhiIndex : 0 - $zhiIndex);
+    if ($index >= 12) {
+      $index -= 12;
+    }
+    if ($index < 0) {
+      $index += 12;
+    }
+    return EightChar::$CHANG_SHENG[$index];
+  }
+
+  /**
+   * 获取年柱地势（长生十二神）
+   * @return string 地势
+   */
+  public function getYearDiShi()
+  {
+    return $this->getDiShi($this->lunar->getYearZhiIndexExact());
+  }
+
+  /**
+   * 获取月柱
+   * @return string 月柱
+   */
+  public function getMonth()
+  {
+    return $this->lunar->getMonthInGanZhiExact();
+  }
+
+  /**
+   * 获取月干
+   * @return string 天干
+   */
+  public function getMonthGan()
+  {
+    return $this->lunar->getMonthGanExact();
+  }
+
+  /**
+   * 获取月支
+   * @return string 地支
+   */
+  public function getMonthZhi()
+  {
+    return $this->lunar->getMonthZhiExact();
+  }
+
+  /**
+   * 获取月柱地支藏干，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
+   * @return string 天干
+   */
+  public function getMonthHideGan()
+  {
+    return LunarUtil::$ZHI_HIDE_GAN[$this->getMonthZhi()];
+  }
+
+  /**
+   * 获取月柱五行
+   * @return string 五行
+   */
+  public function getMonthWuXing()
+  {
+    return LunarUtil::$WU_XING_GAN[$this->lunar->getMonthGanExact()] . LunarUtil::$WU_XING_ZHI[$this->lunar->getMonthZhiExact()];
+  }
+
+  /**
+   * 获取月柱纳音
+   * @return string 纳音
+   */
+  public function getMonthNaYin()
+  {
+    return LunarUtil::$NAYIN[$this->getMonth()];
+  }
+
+  /**
+   * 获取月柱天干十神
+   * @return string 十神
+   */
+  public function getMonthShiShenGan()
+  {
+    return LunarUtil::$SHI_SHEN_GAN[$this->getDayGan() . $this->getMonthGan()];
+  }
+
+  /**
+   * 获取月柱地支十神，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
+   * @return array 十神
+   */
+  public function getMonthShiShenZhi()
+  {
+    return $this->getShiShenZhi($this->getMonthZhi());
+  }
+
+  /**
+   * 获取月柱地势（长生十二神）
+   * @return string 地势
+   */
+  public function getMonthDiShi()
+  {
+    return $this->getDiShi($this->lunar->getMonthZhiIndexExact());
+  }
+
+  /**
+   * 获取日柱
+   * @return string 日柱
+   */
+  public function getDay()
+  {
+    return $this->lunar->getDayInGanZhiExact();
+  }
+
+  /**
+   * 获取日干
+   * @return string 天干
+   */
+  public function getDayGan()
+  {
+    return $this->lunar->getDayGanExact();
+  }
+
+  /**
+   * 获取日支
+   * @return string 地支
+   */
+  public function getDayZhi()
+  {
+    return $this->lunar->getDayZhiExact();
+  }
+
+  /**
+   * 获取日柱地支藏干，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
+   * @return string 天干
+   */
+  public function getDayHideGan()
+  {
+    return LunarUtil::$ZHI_HIDE_GAN[$this->getDayZhi()];
+  }
+
+  /**
+   * 获取日柱五行
+   * @return string 五行
+   */
+  public function getDayWuXing()
+  {
+    return LunarUtil::$WU_XING_GAN[$this->lunar->getDayGanExact()] . LunarUtil::$WU_XING_ZHI[$this->lunar->getDayZhiExact()];
+  }
+
+  /**
+   * 获取日柱纳音
+   * @return string 纳音
+   */
+  public function getDayNaYin()
+  {
+    return LunarUtil::$NAYIN[$this->getDay()];
+  }
+
+  /**
+   * 获取日柱天干十神，也称日元、日干
+   * @return string 十神
+   */
+  public function getDayShiShenGan()
+  {
+    return '日主';
+  }
+
+  /**
+   * 获取日柱地支十神，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
+   * @return array 十神
+   */
+  public function getDayShiShenZhi()
+  {
+    return $this->getShiShenZhi($this->getDayZhi());
+  }
+
+  /**
+   * 获取日柱地势（长生十二神）
+   * @return string 地势
+   */
+  public function getDayDiShi()
+  {
+    return $this->getDiShi($this->lunar->getDayZhiIndexExact());
+  }
+
+  /**
+   * 获取时柱
+   * @return string 时柱
+   */
+  public function getTime()
+  {
+    return $this->lunar->getTimeInGanZhi();
+  }
+
+  /**
+   * 获取时干
+   * @return string 天干
+   */
+  public function getTimeGan()
+  {
+    return $this->lunar->getTimeGan();
+  }
+
+  /**
+   * 获取时支
+   * @return string 地支
+   */
+  public function getTimeZhi()
+  {
+    return $this->lunar->getTimeZhi();
+  }
+
+  /**
+   * 获取时柱地支藏干，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
+   * @return string 天干
+   */
+  public function getTimeHideGan()
+  {
+    return LunarUtil::$ZHI_HIDE_GAN[$this->getTimeZhi()];
+  }
+
+  /**
+   * 获取时柱五行
+   * @return string 五行
+   */
+  public function getTimeWuXing()
+  {
+    return LunarUtil::$WU_XING_GAN[$this->lunar->getTimeGan()] . LunarUtil::$WU_XING_ZHI[$this->lunar->getTimeZhi()];
+  }
+
+  /**
+   * 获取时柱纳音
+   * @return string 纳音
+   */
+  public function getTimeNaYin()
+  {
+    return LunarUtil::$NAYIN[$this->getTime()];
+  }
+
+  /**
+   * 获取时柱天干十神
+   * @return string 十神
+   */
+  public function getTimeShiShenGan()
+  {
+    return LunarUtil::$SHI_SHEN_GAN[$this->getDayGan() . $this->getTimeGan()];
+  }
+
+  /**
+   * 获取时柱地支十神，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
+   * @return array 十神
+   */
+  public function getTimeShiShenZhi()
+  {
+    return $this->getShiShenZhi($this->getTimeZhi());
+  }
+
+  /**
+   * 获取时柱地势（长生十二神）
+   * @return string 地势
+   */
+  public function getTimeDiShi()
+  {
+    return $this->getDiShi($this->lunar->getTimeZhiIndex());
+  }
+
+  /**
+   * 获取胎元
+   * @return string 胎元
+   */
+  public function getTaiYuan()
+  {
+    $ganIndex = $this->lunar->getMonthGanIndexExact() + 1;
+    if ($ganIndex >= 10) {
+      $ganIndex -= 10;
+    }
+    $zhiIndex = $this->lunar->getMonthZhiIndexExact() + 3;
+    if ($zhiIndex >= 12) {
+      $zhiIndex -= 12;
+    }
+    return LunarUtil::$GAN[$ganIndex + 1] . LunarUtil::$ZHI[$zhiIndex + 1];
+  }
+
+  /**
+   * 获取胎元纳音
+   * @return string 纳音
+   */
+  public function getTaiYuanNaYin()
+  {
+    return LunarUtil::$NAYIN[$this->getTaiYuan()];
+  }
+
+  /**
+   * 获取命宫
+   * @return string 命宫
+   */
+  public function getMingGong()
+  {
+    $monthZhiIndex = 0;
+    $timeZhiIndex = 0;
+    for ($i = 0, $j = count(EightChar::$MONTH_ZHI); $i < $j; $i++) {
+      $zhi = EightChar::$MONTH_ZHI[$i];
+      if ($this->lunar->getMonthZhiExact() == $zhi) {
+        $monthZhiIndex = $i;
+      }
+      if ($this->lunar->getTimeZhi() == $zhi) {
+        $timeZhiIndex = $i;
+      }
+    }
+    $zhiIndex = 26 - ($monthZhiIndex + $timeZhiIndex);
+    if ($zhiIndex > 12) {
+      $zhiIndex -= 12;
+    }
+    $jiaZiIndex = LunarUtil::getJiaZiIndex($this->lunar->getMonthInGanZhiExact()) - ($monthZhiIndex - $zhiIndex);
+    if ($jiaZiIndex >= 60) {
+      $jiaZiIndex -= 60;
+    }
+    if ($jiaZiIndex < 0) {
+      $jiaZiIndex += 60;
+    }
+    return LunarUtil::$JIA_ZI[$jiaZiIndex];
+  }
+
+  /**
+   * 获取命宫纳音
+   * @return string 纳音
+   */
+  public function getMingGongNaYin()
+  {
+    return LunarUtil::$NAYIN[$this->getMingGong()];
+  }
+
+  /**
+   * 获取身宫
+   * @return string 身宫
+   */
+  public function getShenGong()
+  {
+    $monthZhiIndex = 0;
+    $timeZhiIndex = 0;
+    for ($i = 0, $j = count(EightChar::$MONTH_ZHI); $i < $j; $i++) {
+      $zhi = EightChar::$MONTH_ZHI[$i];
+      if ($this->lunar->getMonthZhiExact() == $zhi) {
+        $monthZhiIndex = $i;
+      }
+      if ($this->lunar->getTimeZhi() == $zhi) {
+        $timeZhiIndex = $i;
+      }
+    }
+    $zhiIndex = (2 + ($monthZhiIndex + $timeZhiIndex)) % 12;
+    $jiaZiIndex = LunarUtil::getJiaZiIndex($this->lunar->getMonthInGanZhiExact()) - ($monthZhiIndex - $zhiIndex);
+    if ($jiaZiIndex >= 60) {
+      $jiaZiIndex -= 60;
+    }
+    if ($jiaZiIndex < 0) {
+      $jiaZiIndex += 60;
+    }
+    return LunarUtil::$JIA_ZI[$jiaZiIndex];
+  }
+
+  /**
+   * 获取身宫纳音
+   * @return string 纳音
+   */
+  public function getShenGongNaYin()
+  {
+    return LunarUtil::$NAYIN[$this->getShenGong()];
   }
 }
