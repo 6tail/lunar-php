@@ -1898,6 +1898,15 @@ class Solar
     return Solar::fromYmdHms($year, $month, $day, $hour, $minute, $second);
   }
 
+  /**
+   * 八字转阳历
+   * @param string $yearGanZhi 年柱
+   * @param string $monthGanZhi 月柱
+   * @param string $dayGanZhi 日柱
+   * @param string $timeGanZhi 时柱
+   * @return Solar[]
+   * @throws Exception
+   */
   public static function fromBaZi($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi)
   {
     $l = array();
@@ -4239,11 +4248,93 @@ class Lunar
 
   /**
    * 获取节气表（节气名称:阳历），节气交接时刻精确到秒，以冬至开头，按先后顺序排列
-   * @return array 节气表
+   * @return Solar[] 节气表
    */
   public function getJieQiTable()
   {
     return $this->jieQi;
+  }
+
+  /**
+   * 获取最近的节气，如果未找到匹配的，返回null
+   * @param $forward bool 是否顺推，true为顺推，false为逆推
+   * @param $conditions array 过滤条件，如果设置过滤条件，仅返回匹配该名称的
+   * @return JieQi|null 节气
+   */
+  protected function getNearJieQi($forward, array $conditions)
+  {
+    $name = null;
+    $near = null;
+    $filter = null != $conditions && count($conditions) > 0;
+    $today = $this->solar->toYmdHms();
+    foreach ($this->jieQi as $jq => $solar) {
+      if ('DONG_ZHI' == $jq) {
+        $jq = '冬至';
+      }
+      if ($filter) {
+        if (!in_array($jq, $conditions)) {
+          continue;
+        }
+      }
+      $day = $solar->toYmdHms();
+      if ($forward) {
+        if (strcmp($day, $today) < 0) {
+          continue;
+        }
+        if (null == $near || strcmp($day, $near) < 0) {
+          $name = $jq;
+          $near = $solar;
+        }
+      } else {
+        if (strcmp($day, $today) > 0) {
+          continue;
+        }
+        if (null == $near || strcmp($day, $near) > 0) {
+          $name = $jq;
+          $near = $solar;
+        }
+      }
+    }
+    if (null == $near) {
+      return null;
+    }
+    return new JieQi($name, $near);
+  }
+
+  /**
+   * 获取下一节（顺推的第一个节）
+   * @return JieQi|null 节气
+   */
+  public function getNextJie()
+  {
+    return $this->getNearJieQi(true, LunarUtil::$JIE);
+  }
+
+  /**
+   * 获取上一节（逆推的第一个节）
+   * @return JieQi|null 节气
+   */
+  public function getPrevJie()
+  {
+    return $this->getNearJieQi(false, LunarUtil::$JIE);
+  }
+
+  /**
+   * 获取下一节气（顺推的第一个节气）
+   * @return JieQi|null 节气
+   */
+  public function getNextJieQi()
+  {
+    return $this->getNearJieQi(true, null);
+  }
+
+  /**
+   * 获取上一节气（逆推的第一个节气）
+   * @return JieQi|null 节气
+   */
+  public function getPrevJieQi()
+  {
+    return $this->getNearJieQi(false, null);
   }
 
   public function getTimeGanIndex()
@@ -5445,6 +5536,790 @@ class NineStar
 }
 
 /**
+ * 节气
+ * @package com\nlf\calendar
+ */
+class JieQi
+{
+  /**
+   * 名称
+   * @var string
+   */
+  private $name;
+
+  /**
+   * 阳历日期
+   * @var Solar
+   */
+  private $solar;
+
+  function __construct($name, $solar)
+  {
+    $this->name = $name;
+    $this->solar = $solar;
+  }
+
+  /**
+   * 获取名称
+   * @return string
+   */
+  public function getName()
+  {
+    return $this->name;
+  }
+
+  /**
+   * 设置名称
+   * @param string $name 名称
+   */
+  public function setName($name)
+  {
+    $this->name = $name;
+  }
+
+  /**
+   * 获取阳历日期
+   * @return Solar
+   */
+  public function getSolar()
+  {
+    return $this->solar;
+  }
+
+  /**
+   * 设置阳历日期
+   * @param Solar $solar 阳历日期
+   */
+  public function setSolar($solar)
+  {
+    $this->solar = $solar;
+  }
+}
+
+/**
+ * 流月
+ * @package com\nlf\calendar
+ */
+class LiuYue
+{
+  /**
+   * 序数，0-9
+   * @var int
+   */
+  private $index;
+
+  /**
+   * 流年
+   * @var LiuNian
+   */
+  private $liuNian;
+
+  /**
+   * 初始化
+   * @param LiuNian $liuNian
+   * @param int $index
+   */
+  public function __construct(LiuNian $liuNian, $index)
+  {
+    $this->liuNian = $liuNian;
+    $this->index = $index;
+  }
+
+  /**
+   * 获取序数
+   * @return int
+   */
+  public function getIndex()
+  {
+    return $this->index;
+  }
+
+  /**
+   * 获取流年
+   * @return LiuNian
+   */
+  public function getLiuNian()
+  {
+    return $this->liuNian;
+  }
+
+  /**
+   * 获取中文的月
+   * @return string 中文月，如正
+   */
+  public function getMonthInChinese()
+  {
+    return LunarUtil::$MONTH[$this->index + 1];
+  }
+
+  /**
+   * 获取干支
+   * @return string
+   */
+  public function getGanZhi()
+  {
+    $offset = 0;
+    $liuNianGanZhi = $this->liuNian->getGanZhi();
+    $yearGan = substr($liuNianGanZhi, 0, strlen($liuNianGanZhi) / 2);
+    if ('甲' == $yearGan || '己' == $yearGan) {
+      $offset = 2;
+    } else if ('乙' == $yearGan || '庚' == $yearGan) {
+      $offset = 4;
+    } else if ('丙' == $yearGan || '辛' == $yearGan) {
+      $offset = 6;
+    } else if ('丁' == $yearGan || '壬' == $yearGan) {
+      $offset = 8;
+    }
+    $gan = LunarUtil::$GAN[($this->index + $offset) % 10 + 1];
+    $zhi = LunarUtil::$ZHI[($this->index + LunarUtil::$BASE_MONTH_ZHI_INDEX) % 12 + 1];
+    return $gan . $zhi;
+  }
+
+}
+
+/**
+ * 小运
+ * @package com\nlf\calendar
+ */
+class XiaoYun
+{
+  /**
+   * 序数，0-9
+   * @var int
+   */
+  private $index;
+
+  /**
+   * 大运
+   * @var DaYun
+   */
+  private $daYun;
+
+  /**
+   * 年
+   * @var int
+   */
+  private $year;
+
+  /**
+   * 年龄
+   * @var int
+   */
+  private $age;
+
+  /**
+   * 阴历
+   * @var Lunar
+   */
+  private $lunar;
+
+  /**
+   * 是否顺推
+   * @var bool
+   */
+  private $forward;
+
+  /**
+   * 初始化
+   * @param int $index 序数
+   * @param DaYun $daYun 大运
+   * @param bool $forward 是否顺推
+   */
+  public function __construct(DaYun $daYun, $index, $forward)
+  {
+    $this->daYun = $daYun;
+    $this->lunar = $daYun->getLunar();
+    $this->index = $index;
+    $this->year = $daYun->getStartYear() + $index;
+    $this->age = $daYun->getStartAge() + $index;
+    $this->forward = $forward;
+  }
+
+  /**
+   * 获取序数
+   * @return int
+   */
+  public function getIndex()
+  {
+    return $this->index;
+  }
+
+  /**
+   * 获取大运
+   * @return DaYun
+   */
+  public function getDaYun()
+  {
+    return $this->daYun;
+  }
+
+  /**
+   * 获取年
+   * @return int
+   */
+  public function getYear()
+  {
+    return $this->year;
+  }
+
+  /**
+   * 获取年龄
+   * @return int
+   */
+  public function getAge()
+  {
+    return $this->age;
+  }
+
+  /**
+   * 获取阴历
+   * @return Lunar
+   */
+  public function getLunar()
+  {
+    return $this->lunar;
+  }
+
+  /**
+   * 是否顺推
+   * @return bool
+   */
+  public function isForward()
+  {
+    return $this->forward;
+  }
+
+  /**
+   * 获取干支
+   * @return string
+   */
+  public function getGanZhi()
+  {
+    $offset = LunarUtil::getJiaZiIndex($this->lunar->getTimeInGanZhi());
+    $add = $this->index + 1;
+    if ($this->daYun->getIndex() > 0) {
+      $add += $this->daYun->getStartAge() - 1;
+    }
+    $offset += $this->forward ? $add : -$add;
+    $size = count(LunarUtil::$JIA_ZI);
+    while ($offset < 0) {
+      $offset += $size;
+    }
+    $offset %= $size;
+    return LunarUtil::$JIA_ZI[$offset];
+  }
+
+}
+
+/**
+ * 流年
+ * @package com\nlf\calendar
+ */
+class LiuNian
+{
+  /**
+   * 序数，0-9
+   * @var int
+   */
+  private $index;
+
+  /**
+   * 大运
+   * @var DaYun
+   */
+  private $daYun;
+
+  /**
+   * 年
+   * @var int
+   */
+  private $year;
+
+  /**
+   * 年龄
+   * @var int
+   */
+  private $age;
+
+  /**
+   * 阴历
+   * @var Lunar
+   */
+  private $lunar;
+
+  /**
+   * 初始化
+   * @param int $index
+   * @param DaYun $daYun
+   */
+  public function __construct(DaYun $daYun, $index)
+  {
+    $this->daYun = $daYun;
+    $this->lunar = $daYun->getLunar();
+    $this->index = $index;
+    $this->year = $daYun->getStartYear() + $index;
+    $this->age = $daYun->getStartAge() + $index;
+  }
+
+  /**
+   * 获取序数
+   * @return int
+   */
+  public function getIndex()
+  {
+    return $this->index;
+  }
+
+  /**
+   * 获取大运
+   * @return DaYun
+   */
+  public function getDaYun()
+  {
+    return $this->daYun;
+  }
+
+  /**
+   * 获取年
+   * @return int
+   */
+  public function getYear()
+  {
+    return $this->year;
+  }
+
+  /**
+   * 获取年龄
+   * @return int
+   */
+  public function getAge()
+  {
+    return $this->age;
+  }
+
+  /**
+   * 获取阴历
+   * @return Lunar
+   */
+  public function getLunar()
+  {
+    return $this->lunar;
+  }
+
+  /**
+   * 获取干支
+   * @return string
+   */
+  public function getGanZhi()
+  {
+    $offset = LunarUtil::getJiaZiIndex($this->lunar->getYearInGanZhiExact()) + $this->index;
+    if ($this->daYun->getIndex() > 0) {
+      $offset += $this->daYun->getStartAge() - 1;
+    }
+    $offset %= count(LunarUtil::$JIA_ZI);
+    return LunarUtil::$JIA_ZI[$offset];
+  }
+
+  /**
+   * 获取流月
+   * @return LiuYue[]
+   */
+  public function getLiuYue()
+  {
+    $n = 12;
+    $l = array();
+    for ($i = 0; $i < $n; $i++) {
+      $l[] = new LiuYue($this, $i);
+    }
+    return $l;
+  }
+
+}
+
+/**
+ * 大运
+ * @package com\nlf\calendar
+ */
+class DaYun
+{
+  /**
+   * 开始年(含)
+   * @var int
+   */
+  private $startYear;
+
+  /**
+   * 结束年(含)
+   * @var int
+   */
+  private $endYear;
+
+  /**
+   * 开始年龄(含)
+   * @var int
+   */
+  private $startAge;
+
+  /**
+   * 结束年龄(含)
+   * @var int
+   */
+  private $endAge;
+
+  /**
+   * 序数，0-9
+   * @var int
+   */
+  private $index;
+
+  /**
+   * 运
+   * @var Yun
+   */
+  private $yun;
+
+  /**
+   * 阴历
+   * @var Lunar
+   */
+  private $lunar;
+
+  /**
+   * DaYun constructor.
+   * @param $yun Yun 运
+   * @param $index int
+   */
+  public function __construct($yun, $index)
+  {
+    $this->yun = $yun;
+    $this->lunar = $yun->getLunar();
+    $this->index = $index;
+    $year = $yun->getStartSolar()->getYear();
+    if ($index < 1) {
+      $this->startYear = $this->lunar->getSolar()->getYear();
+      $this->startAge = 1;
+      $this->endYear = $year - 1;
+      $this->endAge = $yun->getStartYear();
+    } else {
+      $add = ($index - 1) * 10;
+      $this->startYear = $year + $add;
+      $this->startAge = $yun->getStartYear() + $add + 1;
+      $this->endYear = $this->startYear + 9;
+      $this->endAge = $this->startAge + 9;
+    }
+  }
+
+  /**
+   * 获取起始年
+   * @return int
+   */
+  public function getStartYear()
+  {
+    return $this->startYear;
+  }
+
+  /**
+   * 获取结束年
+   * @return int
+   */
+  public function getEndYear()
+  {
+    return $this->endYear;
+  }
+
+  /**
+   * 获取开始年龄
+   * @return int
+   */
+  public function getStartAge()
+  {
+    return $this->startAge;
+  }
+
+  /**
+   * 获取结束年龄
+   * @return int
+   */
+  public function getEndAge()
+  {
+    return $this->endAge;
+  }
+
+  /**
+   * 获取序数
+   * @return int
+   */
+  public function getIndex()
+  {
+    return $this->index;
+  }
+
+  /**
+   * 获取运
+   * @return Yun
+   */
+  public function getYun()
+  {
+    return $this->yun;
+  }
+
+  /**
+   * 获取阴历
+   * @return Lunar
+   */
+  public function getLunar()
+  {
+    return $this->lunar;
+  }
+
+  /**
+   * 获取干支
+   * @return string
+   */
+  public function getGanZhi()
+  {
+    if ($this->index < 1) {
+      return '';
+    }
+    $offset = LunarUtil::getJiaZiIndex($this->lunar->getMonthInGanZhiExact());
+    $offset += $this->yun->isForward() ? $this->index : -$this->index;
+    $size = count(LunarUtil::$JIA_ZI);
+    if ($offset >= $size) {
+      $offset -= $size;
+    }
+    if ($offset < 0) {
+      $offset += $size;
+    }
+    return LunarUtil::$JIA_ZI[$offset];
+  }
+
+  /**
+   * 获取流年
+   * @return LiuNian[]
+   */
+  public function getLiuNian()
+  {
+    $n = 10;
+    if ($this->index < 1) {
+      $n = $this->endYear - $this->startYear + 1;
+    }
+    $l = array();
+    for ($i = 0; $i < $n; $i++) {
+      $l[] = new LiuNian($this, $i);
+    }
+    return $l;
+  }
+
+  /**
+   * 获取小运
+   * @return XiaoYun[]
+   */
+  public function getXiaoYun()
+  {
+    $n = 10;
+    if ($this->index < 1) {
+      $n = $this->endYear - $this->startYear + 1;
+    }
+    $l = array();
+    for ($i = 0; $i < $n; $i++) {
+      $l[] = new XiaoYun($this, $i, $this->yun->isForward());
+    }
+    return $l;
+  }
+
+}
+
+/**
+ * 运
+ * @package com\nlf\calendar
+ */
+class Yun
+{
+
+  /**
+   * 性别，1男，0女
+   * @var int
+   */
+  private $gender;
+
+  /**
+   * 起运年数
+   * @var int
+   */
+  private $startYear;
+
+  /**
+   * 起运月数
+   * @var int
+   */
+  private $startMonth;
+
+  /**
+   * 起运天数
+   * @var int
+   */
+  private $startDay;
+
+  /**
+   * 是否顺推
+   * @var bool
+   */
+  private $forward;
+
+  /**
+   * 阴历日期
+   * @var Lunar
+   */
+  private $lunar;
+
+  /**
+   * 初始化
+   * @param $eightChar EightChar 八字
+   * @param $gender int 性别，1男，0女
+   */
+  public function __construct($eightChar, $gender)
+  {
+    $this->lunar = $eightChar->getLunar();
+    $this->gender = $gender;
+    // 阳
+    $yang = 0 == $this->lunar->getYearGanIndexExact() % 2;
+    // 男
+    $man = 1 == $gender;
+    $this->forward = ($yang && $man) || (!$yang && !$man);
+    $this->computeStart();
+  }
+
+  private function computeStart()
+  {
+    // 上节
+    $prev = $this->lunar->getPrevJie();
+    // 下节
+    $next = $this->lunar->getNextJie();
+    // 出生日期
+    $current = $this->lunar->getSolar();
+    // 阳男阴女顺推，阴男阳女逆推
+    $start = $this->forward ? $current : $prev->getSolar();
+    $end = $this->forward ? $next->getSolar() : $current;
+    // 时辰差
+    $hourDiff = LunarUtil::getTimeZhiIndex(substr($end->toYmdHms(), 11, 5)) - LunarUtil::getTimeZhiIndex(substr($start->toYmdHms(), 11, 5));
+
+    try {
+      $endCalendar = new DateTime($end->getYear() . '-' . $end->getMonth() . '-' . $end->getDay());
+    } catch (Exception $e) {
+      return null;
+    }
+    $endCalendar->setTime(0, 0, 0, 0);
+    try {
+      $startCalendar = new DateTime($start->getYear() . '-' . $start->getMonth() . '-' . $start->getDay());
+    } catch (Exception $e) {
+      return null;
+    }
+    $startCalendar->setTime(0, 0, 0, 0);
+    // 天数差
+    $dayDiff = intval(floor(($endCalendar->getTimestamp() - $startCalendar->getTimestamp()) / 86400));
+    if ($hourDiff < 0) {
+      $hourDiff += 12;
+      $dayDiff--;
+    }
+    $monthDiff = intval(floor($hourDiff * 10 / 30));
+    $month = $dayDiff * 4 + $monthDiff;
+    $day = $hourDiff * 10 - $monthDiff * 30;
+    $year = intval(floor($month / 12));
+    $month = $month - $year * 12;
+    $this->startYear = $year;
+    $this->startMonth = $month;
+    $this->startDay = $day;
+  }
+
+  /**
+   * 获取性别
+   * @return int
+   */
+  public function getGender()
+  {
+    return $this->gender;
+  }
+
+  /**
+   * 获取起运年数
+   * @return int
+   */
+  public function getStartYear()
+  {
+    return $this->startYear;
+  }
+
+  /**
+   * 获取起运月数
+   * @return int
+   */
+  public function getStartMonth()
+  {
+    return $this->startMonth;
+  }
+
+  /**
+   * 获取起运天数
+   * @return int
+   */
+  public function getStartDay()
+  {
+    return $this->startDay;
+  }
+
+  /**
+   * 是否顺推
+   * @return bool
+   */
+  public function isForward()
+  {
+    return $this->forward;
+  }
+
+  /**
+   * 获取阴历日期
+   * @return Lunar
+   */
+  public function getLunar()
+  {
+    return $this->lunar;
+  }
+
+  /**
+   * 获取起运的阳历日期
+   * @return Solar|null
+   */
+  public function getStartSolar()
+  {
+    $birth = $this->lunar->getSolar();
+    try {
+      $date = new DateTime($birth->getYear() . '-' . $birth->getMonth() . '-' . $birth->getDay());
+    } catch (Exception $e) {
+      return null;
+    }
+    $date->modify($this->startYear . ' year');
+    $date->modify($this->startMonth . ' month');
+    $date->modify($this->startDay . ' day');
+    return Solar::fromDate($date);
+  }
+
+  /**
+   * 获取大运
+   * @return DaYun[]
+   */
+  public function getDaYun()
+  {
+    $n = 10;
+    $l = array();
+    for ($i = 0; $i < $n; $i++) {
+      $l[] = new DaYun($this, $i);
+    }
+    return $l;
+  }
+
+}
+
+/**
  * 八字
  * @package com\nlf\calendar
  */
@@ -5495,6 +6370,15 @@ class EightChar
   public function __toString()
   {
     return $this->getYear() . ' ' . $this->getMonth() . ' ' . $this->getDay() . ' ' . $this->getTime();
+  }
+
+  /**
+   * 获取阴历对象
+   * @return Lunar 阴历对象
+   */
+  public function getLunar()
+  {
+    return $this->lunar;
   }
 
   /**
@@ -5945,5 +6829,15 @@ class EightChar
   public function getShenGongNaYin()
   {
     return LunarUtil::$NAYIN[$this->getShenGong()];
+  }
+
+  /**
+   * 获取运
+   * @param int $gender 性别，1男，0女
+   * @return Yun 运
+   */
+  public function getYun($gender)
+  {
+    return new Yun($this, $gender);
   }
 }

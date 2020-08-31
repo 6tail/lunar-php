@@ -104,8 +104,63 @@ echo $lunar->getTimePositionCaiDesc() . "\n";
 echo $lunar->getTimePositionYinGuiDesc() . "\n";
 echo $lunar->getTimePositionYangGuiDesc() . "\n";
 
+// 指定阳历时间得到八字信息
+$solar = Solar::fromYmdHms(1988, 3, 20, 18, 0, 0);
+$lunar = $solar->getLunar();
+$baZi = $lunar->getEightChar();
+
+// 男运
+$yun = $baZi->getYun(1);
+
+echo "\n";
+echo "阳历" . $solar->toYmdHms() . "出生\n";
+echo "出生" . $yun->getStartYear() . "年" . $yun->getStartMonth() . "个月" . $yun->getStartDay() . "天后起运" . "\n";
+echo "阳历" . $yun->getStartSolar()->toYmd() . "后起运" . "\n";
+
+echo "\n";
+
+// 大运
+$daYunArr = $yun->getDaYun();
+for ($i = 0; $i < count($daYunArr); $i++) {
+  $daYun = $daYunArr[$i];
+  echo "大运[" . $daYun->getIndex() . "] = " . $daYun->getStartYear() . "年 " . $daYun->getStartAge() . "岁 " . $daYun->getGanZhi() . "\n";
+}
+
+echo "\n";
+
+// 第1次大运流年
+$liuNianArr = $daYunArr[1]->getLiuNian();
+for ($i = 0; $i < count($liuNianArr); $i++) {
+  $liuNian = $liuNianArr[$i];
+  echo "流年[" . $liuNian->getIndex() . "] = " . $liuNian->getYear() . "年 " . $liuNian->getAge() . "岁 " . $liuNian->getGanZhi() . "\n";
+}
+
+echo "\n";
+
+// 第1次大运小运
+$xiaoYunArr = $daYunArr[1]->getXiaoYun();
+for ($i = 0; $i < count($xiaoYunArr); $i++) {
+  $xiaoYun = $xiaoYunArr[$i];
+  echo "小运[" . $xiaoYun->getIndex() . "] = " . $xiaoYun->getYear() . "年 " . $xiaoYun->getAge() . "岁 " . $xiaoYun->getGanZhi() . "\n";
+}
+
+echo "\n";
+
+// 第1次大运首个流年的流月
+$liuYueArr = $liuNianArr[0]->getLiuYue();
+for ($i = 0; $i < count($liuYueArr); $i++) {
+  $liuYue = $liuYueArr[$i];
+  echo "流月[" . $liuYue->getIndex() . "] = " . $liuYue->getMonthInChinese() . "月 " . $liuYue->getGanZhi() . "\n";
+}
+
+echo "\n";
+
 // 八字转阳历
-$l = Solar::fromBaZi("庚子", "癸未", "乙丑", "丁亥");
-foreach ($l as $d) {
-  echo $d->toFullString() . "\n";
+try {
+  $l = Solar::fromBaZi("庚子", "癸未", "乙丑", "丁亥");
+  foreach ($l as $d) {
+    echo $d->toFullString() . "\n";
+  }
+} catch (Exception $e) {
+  echo $e->getMessage();
 }
