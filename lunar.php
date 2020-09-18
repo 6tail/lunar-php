@@ -2182,6 +2182,30 @@ class Solar
 class Lunar
 {
   /**
+   * 节气表头部追加农历上年末的节气名(节令：大雪)，以示区分
+   * @var string
+   */
+  public static $JIE_QI_PREPEND = 'DA_XUE';
+
+  /**
+   * 节气表尾部追加农历下年初的节气名(气令：冬至)，以示区分
+   * @var string
+   */
+  public static $JIE_QI_APPEND = 'DONG_ZHI';
+
+  /**
+   * 农历年初节气名(气令：冬至)
+   * @var string
+   */
+  public static $JIE_QI_FIRST = '冬至';
+
+  /**
+   * 农历年末节气名(节令：大雪)
+   * @var string
+   */
+  public static $JIE_QI_LAST = '大雪';
+
+  /**
    * 节气表，国标以冬至为首个节气
    * @var array
    */
@@ -2675,14 +2699,17 @@ class Lunar
     if ($this->calcJieQi($w) > $jd) {
       $w -= 365.2422;
     }
+    //追加上一农历年末的大雪
+    $q = $this->calcJieQi($w - 15.2184);
+    $this->jieQi[Lunar::$JIE_QI_PREPEND] = Solar::fromJulianDay($this->qiAccurate2($q) + Solar::$J2000);
     $size = count(Lunar::$JIE_QI);
     for ($i = 0; $i < $size; $i++) {
       $q = $this->calcJieQi($w + 15.2184 * $i);
       $this->jieQi[Lunar::$JIE_QI[$i]] = Solar::fromJulianDay($this->qiAccurate2($q) + Solar::$J2000);
     }
-    //追加下一农历年的冬至
+    //追加下一农历年初的冬至
     $q = $this->calcJieQi($w + 15.2184 * $size);
-    $this->jieQi['DONG_ZHI'] = Solar::fromJulianDay($this->qiAccurate2($q) + Solar::$J2000);
+    $this->jieQi[Lunar::$JIE_QI_APPEND] = Solar::fromJulianDay($this->qiAccurate2($q) + Solar::$J2000);
   }
 
   /**
@@ -3231,6 +3258,10 @@ class Lunar
         return $jie;
       }
     }
+    $d = $this->jieQi[Lunar::$JIE_QI_PREPEND];
+    if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
+      return Lunar::$JIE_QI_LAST;
+    }
     return '';
   }
 
@@ -3247,9 +3278,9 @@ class Lunar
         return $qi;
       }
     }
-    $d = $this->jieQi['DONG_ZHI'];
+    $d = $this->jieQi[Lunar::$JIE_QI_APPEND];
     if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
-      return '冬至';
+      return Lunar::$JIE_QI_FIRST;
     }
     return '';
   }
@@ -4268,8 +4299,11 @@ class Lunar
     $filter = null != $conditions && count($conditions) > 0;
     $today = $this->solar->toYmdHms();
     foreach ($this->jieQi as $jq => $solar) {
-      if ('DONG_ZHI' == $jq) {
-        $jq = '冬至';
+      if (Lunar::$JIE_QI_APPEND == $jq) {
+        $jq = Lunar::$JIE_QI_FIRST;
+      }
+      if (Lunar::$JIE_QI_PREPEND == $jq) {
+        $jq = Lunar::$JIE_QI_LAST;
       }
       if ($filter) {
         if (!in_array($jq, $conditions)) {
