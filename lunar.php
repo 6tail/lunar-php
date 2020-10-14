@@ -4354,6 +4354,24 @@ class Lunar
   }
 
   /**
+   * 获取下一气令（顺推的第一个气令）
+   * @return JieQi|null 节气
+   */
+  public function getNextQi()
+  {
+    return $this->getNearJieQi(true, LunarUtil::$QI);
+  }
+
+  /**
+   * 获取上一气令（逆推的第一个气令）
+   * @return JieQi|null 节气
+   */
+  public function getPrevQi()
+  {
+    return $this->getNearJieQi(false, LunarUtil::$QI);
+  }
+
+  /**
    * 获取下一节气（顺推的第一个节气）
    * @return JieQi|null 节气
    */
@@ -4369,6 +4387,57 @@ class Lunar
   public function getPrevJieQi()
   {
     return $this->getNearJieQi(false, null);
+  }
+
+  /**
+   * 获取节气名称，如果无节气，返回空字符串
+   * @return string 节气名称
+   */
+  public function getJieQi()
+  {
+    $name = '';
+    foreach ($this->jieQi as $jq => $d) {
+      if ($d->getYear() == $this->solar->getYear() && $d->getMonth() == $this->solar->getMonth() && $d->getDay() == $this->solar->getDay()) {
+        $name = $jq;
+        break;
+      }
+    }
+    if (Lunar::$JIE_QI_APPEND == $name) {
+      $name = Lunar::$JIE_QI_FIRST;
+    } else if (Lunar::$JIE_QI_PREPEND == $name) {
+      $name = Lunar::$JIE_QI_LAST;
+    }
+    return $name;
+  }
+
+  /**
+   * 获取当天节气对象，如果无节气，返回null
+   * @return JieQi|null 节气对象
+   */
+  public function getCurrentJieQi()
+  {
+    $name = $this->getJieQi();
+    return strlen($name) > 0 ? new JieQi($name, $this->solar) : null;
+  }
+
+  /**
+   * 获取当天节令对象，如果无节令，返回null
+   * @return JieQi|null 节气对象
+   */
+  public function getCurrentJie()
+  {
+    $name = $this->getJie();
+    return strlen($name) > 0 ? new JieQi($name, $this->solar) : null;
+  }
+
+  /**
+   * 获取当天气令对象，如果无气令，返回null
+   * @return JieQi|null 节气对象
+   */
+  public function getCurrentQi()
+  {
+    $name = $this->getQi();
+    return strlen($name) > 0 ? new JieQi($name, $this->solar) : null;
   }
 
   public function getTimeGanIndex()
@@ -4455,7 +4524,7 @@ class Lunar
     foreach ($this->getOtherFestivals() as $f) {
       $s .= ' (' . $f . ')';
     }
-    $jq = $this->getJie() . $this->getQi();
+    $jq = $this->getJieQi();
     if (strlen($jq) > 0) {
       $s .= ' (' . $jq . ')';
     }
@@ -5586,10 +5655,12 @@ class JieQi
    * @var Solar
    */
   private $solar;
+  private $jie;
+  private $qi;
 
   function __construct($name, $solar)
   {
-    $this->name = $name;
+    $this->setName($name);
     $this->solar = $solar;
   }
 
@@ -5609,6 +5680,18 @@ class JieQi
   public function setName($name)
   {
     $this->name = $name;
+    foreach (LunarUtil::$JIE as $key) {
+      if ($key == $name) {
+        $this->jie = true;
+        return;
+      }
+    }
+    foreach (LunarUtil::$QI as $key) {
+      if ($key == $name) {
+        $this->qi = true;
+        return;
+      }
+    }
   }
 
   /**
@@ -5627,6 +5710,29 @@ class JieQi
   public function setSolar($solar)
   {
     $this->solar = $solar;
+  }
+
+  /**
+   * 是否节令
+   * @return true/false
+   */
+  public function isJie()
+  {
+    return $this->jie;
+  }
+
+  /**
+   * 是否气令
+   * @return true/false
+   */
+  public function isQi()
+  {
+    return $this->qi;
+  }
+
+  public function __toString()
+  {
+    return $this->name;
   }
 }
 
