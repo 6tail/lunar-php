@@ -105,6 +105,11 @@ echo $lunar->getTimePositionYinGuiDesc() . "\n";
 echo $lunar->getTimePositionYangGuiDesc() . "\n";
 
 // 指定阳历时间得到八字信息
+$solar = Solar::fromYmdHms(1988, 2, 15, 23, 0, 0);
+$lunar = $solar->getLunar();
+$baZi = $lunar->getEightChar();
+echo $baZi->getYear() . " " . $baZi->getMonth() . " " . $baZi->getDay() . " " . $baZi->getTime() . "\n";
+
 $solar = Solar::fromYmdHms(1988, 3, 20, 18, 0, 0);
 $lunar = $solar->getLunar();
 $baZi = $lunar->getEightChar();

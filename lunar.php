@@ -1256,17 +1256,11 @@ class LunarUtil
   {
     $n = abs($m) + 1;
     if ($m > 0) {
-      $index = $y - LunarUtil::$BASE_YEAR + LunarUtil::$BASE_INDEX;
-      $v = LunarUtil::$LUNAR_MONTH[2 * $index + 1];
-      $v = ($v >> 4) & 0x0F;
-      if ($v === $m) {
+      if ($m == LunarUtil::getLeapMonth($y)) {
         $n = -$m;
       }
     }
-    if ($n == 13) {
-      $n = 1;
-    }
-    return (int)$n;
+    return 13 != $n ? $n : 1;
   }
 
   /**
@@ -2717,6 +2711,7 @@ class Lunar
    */
   private function computeYear()
   {
+    //以正月初一开始
     $yearGanIndex = ($this->year + LunarUtil::$BASE_YEAR_GAN_ZHI_INDEX) % 10;
     $yearZhiIndex = ($this->year + LunarUtil::$BASE_YEAR_GAN_ZHI_INDEX) % 12;
 
@@ -2728,31 +2723,54 @@ class Lunar
     $gExact = $yearGanIndex;
     $zExact = $yearZhiIndex;
 
+    //获取立春的阳历时刻
+    $liChun = $this->jieQi['立春'];
+
+    //阳历和阴历年份相同代表正月初一及以后
     if ($this->year === $this->solar->getYear()) {
-      //获取立春的阳历时刻
-      $liChun = $this->jieQi['立春'];
       //立春日期判断
       if (strcmp($this->solar->toYmd(), $liChun->toYmd()) < 0) {
         $g--;
-        if ($g < 0) {
-          $g += 10;
-        }
         $z--;
-        if ($z < 0) {
-          $z += 12;
-        }
       }
       //立春交接时刻判断
       if (strcmp($this->solar->toYmdHms(), $liChun->toYmdHms()) < 0) {
         $gExact--;
-        if ($gExact < 0) {
-          $gExact += 10;
-        }
         $zExact--;
-        if ($zExact < 0) {
-          $zExact += 12;
-        }
       }
+    } else {
+      if (strcmp($this->solar->toYmd(), $liChun->toYmd()) >= 0) {
+        $g++;
+        $z++;
+      }
+      if (strcmp($this->solar->toYmdHms(), $liChun->toYmdHms()) >= 0) {
+        $gExact++;
+        $zExact++;
+      }
+    }
+    if ($g < 0) {
+      $g += 10;
+    }
+    if ($g >= 10) {
+      $g -= 10;
+    }
+    if ($z < 0) {
+      $z += 12;
+    }
+    if ($z >= 12) {
+      $z -= 12;
+    }
+    if ($gExact < 0) {
+      $gExact += 10;
+    }
+    if ($gExact >= 10) {
+      $gExact -= 10;
+    }
+    if ($zExact < 0) {
+      $zExact += 12;
+    }
+    if ($zExact >= 12) {
+      $zExact -= 12;
     }
 
     $this->yearGanIndex = $yearGanIndex;
@@ -4486,6 +4504,58 @@ class Lunar
       $this->eightChar = EightChar::fromLunar($this);
     }
     return $this->eightChar;
+  }
+
+  /**
+   * 获取往后推几天的农历日期，如果要往前推，则天数用负数
+   * @param int days 天数
+   * @return Lunar 农历日期
+   */
+  public function next($days)
+  {
+    $y = $this->year;
+    $m = $this->month;
+    $d = $this->day;
+    if ($days > 0) {
+      $daysInMonth = LunarUtil::getDaysOfMonth($y, $m);
+      $rest = $this->day + $days;
+      while ($daysInMonth < $rest) {
+        if ($m > 0) {
+          if (LunarUtil::getLeapMonth($y) != $m) {
+            $m++;
+          } else {
+            $m = -$m;
+          }
+        } else {
+          $m = 1 - $m;
+        }
+        if (13 == $m) {
+          $y++;
+          $m = 1;
+        }
+        $rest -= $daysInMonth;
+        $daysInMonth = LunarUtil::getDaysOfMonth($y, $m);
+      }
+      $d = $rest;
+    } else if ($days < 0) {
+      $daysInMonth = $this->day;
+      $rest = -$days;
+      while ($daysInMonth <= $rest) {
+        if ($m > 0) {
+          $m--;
+          if (0 == $m) {
+            $y--;
+            $m = LunarUtil::getLeapMonth($y) != 12 ? 12 : -12;
+          }
+        } else {
+          $m = -$m;
+        }
+        $rest -= $daysInMonth;
+        $daysInMonth = LunarUtil::getDaysOfMonth($y, $m);
+      }
+      $d = $daysInMonth - $rest;
+    }
+    return new Lunar($y, $m, $d, $this->hour, $this->minute, $this->second);
   }
 
   public function toFullString()
