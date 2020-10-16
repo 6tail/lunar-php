@@ -4260,6 +4260,9 @@ class Lunar
     }
     // 寅月起，所以需要-2
     $monthIndex = $this->monthZhiIndex - 2;
+    if ($monthIndex < 0) {
+      $monthIndex += 12;
+    }
     $index = $start - $monthIndex - 1;
     if ($index < 0) {
       $index += 9;
