@@ -2200,6 +2200,30 @@ class Lunar
   public static $JIE_QI_LAST = '大雪';
 
   /**
+   * 节气表尾部追加阳历下年初的第一个节气名(节令：小寒)，以示区分
+   * @var string
+   */
+  public static $JIE_APPEND_SOLAR_FIRST = "XIAO_HAN";
+
+  /**
+   * 节气表尾部追加阳历下年初的第二个节气名(气令：大寒)，以示区分
+   * @var string
+   */
+  public static $QI_APPEND_SOLAR_SECOND = "DA_HAN";
+
+  /**
+   * 阳历下年初的第一个节气名(节令：小寒)
+   * @var string
+   */
+  public static $JIE_SOLAR_FIRST = "小寒";
+
+  /**
+   * 阳历下年初的第二个节气名(气令：大寒)
+   * @var string
+   */
+  public static $QI_SOLAR_SECOND = "大寒";
+
+  /**
    * 节气表，国标以冬至为首个节气
    * @var array
    */
@@ -2704,6 +2728,16 @@ class Lunar
     //追加下一农历年初的冬至
     $q = $this->calcJieQi($w + 15.2184 * $size);
     $this->jieQi[Lunar::$JIE_QI_APPEND] = Solar::fromJulianDay($this->qiAccurate2($q) + Solar::$J2000);
+
+    //追加下一阳历年初的小寒
+    $size++;
+    $q = $this->calcJieQi($w + 15.2184 * $size);
+    $this->jieQi[Lunar::$JIE_APPEND_SOLAR_FIRST] = Solar::fromJulianDay($this->qiAccurate2($q) + Solar::$J2000);
+
+    //追加下一阳历年初的大寒
+    $size++;
+    $q = $this->calcJieQi($w + 15.2184 * $size);
+    $this->jieQi[Lunar::$QI_APPEND_SOLAR_SECOND] = Solar::fromJulianDay($this->qiAccurate2($q) + Solar::$J2000);
   }
 
   /**
@@ -3280,6 +3314,10 @@ class Lunar
     if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
       return Lunar::$JIE_QI_LAST;
     }
+    $d = $this->jieQi[Lunar::$JIE_APPEND_SOLAR_FIRST];
+    if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
+      return Lunar::$JIE_SOLAR_FIRST;
+    }
     return '';
   }
 
@@ -3299,6 +3337,10 @@ class Lunar
     $d = $this->jieQi[Lunar::$JIE_QI_APPEND];
     if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
       return Lunar::$JIE_QI_FIRST;
+    }
+    $d = $this->jieQi[Lunar::$QI_APPEND_SOLAR_SECOND];
+    if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
+      return Lunar::$QI_SOLAR_SECOND;
     }
     return '';
   }
@@ -4323,6 +4365,12 @@ class Lunar
       if (Lunar::$JIE_QI_PREPEND == $jq) {
         $jq = Lunar::$JIE_QI_LAST;
       }
+      if (Lunar::$JIE_APPEND_SOLAR_FIRST == $jq) {
+        $jq = Lunar::$JIE_SOLAR_FIRST;
+      }
+      if (Lunar::$QI_APPEND_SOLAR_SECOND == $jq) {
+        $jq = Lunar::$QI_SOLAR_SECOND;
+      }
       if ($filter) {
         if (!in_array($jq, $conditions)) {
           continue;
@@ -4424,6 +4472,10 @@ class Lunar
       $name = Lunar::$JIE_QI_FIRST;
     } else if (Lunar::$JIE_QI_PREPEND == $name) {
       $name = Lunar::$JIE_QI_LAST;
+    } else if (Lunar::$JIE_APPEND_SOLAR_FIRST == $name) {
+      $name = Lunar::$JIE_SOLAR_FIRST;
+    } else if (Lunar::$QI_APPEND_SOLAR_SECOND == $name) {
+      $name = Lunar::$QI_SOLAR_SECOND;
     }
     return $name;
   }
