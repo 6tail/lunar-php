@@ -4264,7 +4264,7 @@ class Lunar
       $monthIndex += 12;
     }
     $index = $start - $monthIndex - 1;
-    if ($index < 0) {
+    while ($index < 0) {
       $index += 9;
     }
     return new NineStar($index);
