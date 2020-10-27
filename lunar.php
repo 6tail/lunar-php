@@ -6259,16 +6259,17 @@ class DaYun
     $this->yun = $yun;
     $this->lunar = $yun->getLunar();
     $this->index = $index;
+    $birthYear = $this->lunar->getSolar()->getYear();
     $year = $yun->getStartSolar()->getYear();
     if ($index < 1) {
-      $this->startYear = $this->lunar->getSolar()->getYear();
+      $this->startYear = $birthYear;
       $this->startAge = 1;
       $this->endYear = $year - 1;
-      $this->endAge = $yun->getStartYear();
+      $this->endAge = $year - $birthYear;
     } else {
       $add = ($index - 1) * 10;
       $this->startYear = $year + $add;
-      $this->startAge = $yun->getStartYear() + $add + 1;
+      $this->startAge = $this->startYear - $birthYear + 1;
       $this->endYear = $this->startYear + 9;
       $this->endAge = $this->startAge + 9;
     }
