@@ -1594,7 +1594,7 @@ class HolidayUtil
    * 节假日名称（元旦0，春节1，清明2，劳动3，端午4，中秋5，国庆6，国庆中秋7，抗战胜利日8）
    * @var array
    */
-  private static $NAMES = array('元旦节', '春节', '清明节', '劳动节', '端午节', '中秋节', '国庆节', '国庆中秋', '抗战胜利日');
+  public static $NAMES = array('元旦节', '春节', '清明节', '劳动节', '端午节', '中秋节', '国庆节', '国庆中秋', '抗战胜利日');
 
   /**
    * 节假日数据，日期YYYYMMDD+名称下标+是否调休+对应节日YYYYMMDD
@@ -1767,10 +1767,51 @@ class HolidayUtil
   {
     return HolidayUtil::findHolidaysBackward(str_replace('-', '', $ymd));
   }
+
+  /**
+   * 修正或追加节假日数据。节假日名称下标从0开始，超过9的，按ASCII码表依次往后排列；调休标识0为上班，否则放假
+   * @param array $names 用于替换默认的节假日名称列表，传null即可使用默认名称
+   * @param string $data 需要修正或追加的节假日数据，每18位表示1天依次排列，格式：当天年月日YYYYMMDD(8位)+节假日名称下标(1位)+调休标识(1位)+节假日当天YYYYMMDD(8位)。例：202005023120200501代表2020-05-02为劳动节放假，对应节假日为2020-05-01
+   */
+  public static function fix($names, $data)
+  {
+    if (null != $names) {
+      self::$NAMES = $names;
+    }
+    if (null == $data) {
+      return;
+    }
+    $append = '';
+    while (strlen($data) >= self::$SIZE) {
+      $segment = substr($data, 0, self::$SIZE);
+      $day = substr($segment, 0, 8);
+      $holiday = self::getHoliday($day);
+      if (null == $holiday) {
+        $append .= $segment;
+      } else {
+        $nameIndex = -1;
+        for ($i = 0, $j = count(self::$NAMES); $i < $j; $i++) {
+          if (strcmp(self::$NAMES[$i], $holiday->getName()) == 0) {
+            $nameIndex = $i;
+            break;
+          }
+        }
+        if ($nameIndex > -1) {
+          $old = $day . chr($nameIndex + self::$ZERO) . ($holiday->isWork() ? '0' : '1') . str_replace('-', '', $holiday->getTarget());
+          self::$DATA = str_replace($old, $segment, self::$DATA);
+        }
+      }
+      $data = substr($data, self::$SIZE);
+    }
+    if (strlen($append) > 0) {
+      self::$DATA .= $append;
+    }
+  }
 }
 
 namespace com\nlf\calendar;
 
+use com\nlf\calendar\util\HolidayUtil;
 use com\nlf\calendar\util\LunarUtil;
 use com\nlf\calendar\util\SolarUtil;
 use DateTime;
@@ -2167,6 +2208,45 @@ class Solar
     return Solar::fromDate($calendar);
   }
 
+  /**
+   * 获取往后推几个工作日的阳历日期，如果要往前推，则天数用负数
+   * @param int $days 天数
+   * @return Solar|null
+   */
+  public function nextWorkday($days)
+  {
+    if ($days == 0) {
+      return Solar::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
+    }
+    try {
+      $calendar = new DateTime($this->year . '-' . $this->month . '-' . $this->day . ' ' . $this->hour . ':' . $this->minute . ':' . $this->second);
+    } catch (Exception $e) {
+      return null;
+    }
+    $rest = abs($days);
+    $add = $days < 1 ? -1 : 1;
+    while ($rest > 0) {
+      $calendar->modify(($add > 0 ? '+' : '') . $add . ' day');
+      $work = true;
+      $year = (int)date_format($calendar, 'Y');
+      $month = (int)date_format($calendar, 'n');
+      $day = (int)date_format($calendar, 'j');
+      $holiday = HolidayUtil::getHolidayByYmd($year, $month, $day);
+      if (null == $holiday) {
+        $week = (int)$calendar->format('w');
+        if (0 == $week || 6 == $week) {
+          $work = false;
+        }
+      } else {
+        $work = $holiday->isWork();
+      }
+      if ($work) {
+        $rest -= 1;
+      }
+    }
+    return Solar::fromDate($calendar);
+  }
+
 }
 
 /**
@@ -2203,25 +2283,25 @@ class Lunar
    * 节气表尾部追加阳历下年初的第一个节气名(节令：小寒)，以示区分
    * @var string
    */
-  public static $JIE_APPEND_SOLAR_FIRST = "XIAO_HAN";
+  public static $JIE_APPEND_SOLAR_FIRST = 'XIAO_HAN';
 
   /**
    * 节气表尾部追加阳历下年初的第二个节气名(气令：大寒)，以示区分
    * @var string
    */
-  public static $QI_APPEND_SOLAR_SECOND = "DA_HAN";
+  public static $QI_APPEND_SOLAR_SECOND = 'DA_HAN';
 
   /**
    * 阳历下年初的第一个节气名(节令：小寒)
    * @var string
    */
-  public static $JIE_SOLAR_FIRST = "小寒";
+  public static $JIE_SOLAR_FIRST = '小寒';
 
   /**
    * 阳历下年初的第二个节气名(气令：大寒)
    * @var string
    */
-  public static $QI_SOLAR_SECOND = "大寒";
+  public static $QI_SOLAR_SECOND = '大寒';
 
   /**
    * 节气表，国标以冬至为首个节气
