@@ -150,6 +150,7 @@ class SolarUtil
     '10-13' => array('中国少年先锋队诞辰日'),
     '10-25' => array('抗美援朝纪念日'),
     '11-12' => array('孙中山诞辰纪念日'),
+    '11-17' => array('国际大学生节'),
     '11-28' => array('恩格斯诞辰纪念日'),
     '12-1' => array('世界艾滋病日'),
     '12-12' => array('西安事变纪念日'),
@@ -225,6 +226,8 @@ class LunarUtil
   public static $BASE_WEEK_INDEX = 2;
   public static $LEAP_MONTH_YEAR = array(6, 14, 19, 25, 33, 36, 38, 41, 44, 52, 55, 79, 117, 136, 147, 150, 155, 158, 185, 193);
   public static $LUNAR_MONTH = array(0x00, 0x04, 0xad, 0x08, 0x5a, 0x01, 0xd5, 0x54, 0xb4, 0x09, 0x64, 0x05, 0x59, 0x45, 0x95, 0x0a, 0xa6, 0x04, 0x55, 0x24, 0xad, 0x08, 0x5a, 0x62, 0xda, 0x04, 0xb4, 0x05, 0xb4, 0x55, 0x52, 0x0d, 0x94, 0x0a, 0x4a, 0x2a, 0x56, 0x02, 0x6d, 0x71, 0x6d, 0x01, 0xda, 0x02, 0xd2, 0x52, 0xa9, 0x05, 0x49, 0x0d, 0x2a, 0x45, 0x2b, 0x09, 0x56, 0x01, 0xb5, 0x20, 0x6d, 0x01, 0x59, 0x69, 0xd4, 0x0a, 0xa8, 0x05, 0xa9, 0x56, 0xa5, 0x04, 0x2b, 0x09, 0x9e, 0x38, 0xb6, 0x08, 0xec, 0x74, 0x6c, 0x05, 0xd4, 0x0a, 0xe4, 0x6a, 0x52, 0x05, 0x95, 0x0a, 0x5a, 0x42, 0x5b, 0x04, 0xb6, 0x04, 0xb4, 0x22, 0x6a, 0x05, 0x52, 0x75, 0xc9, 0x0a, 0x52, 0x05, 0x35, 0x55, 0x4d, 0x0a, 0x5a, 0x02, 0x5d, 0x31, 0xb5, 0x02, 0x6a, 0x8a, 0x68, 0x05, 0xa9, 0x0a, 0x8a, 0x6a, 0x2a, 0x05, 0x2d, 0x09, 0xaa, 0x48, 0x5a, 0x01, 0xb5, 0x09, 0xb0, 0x39, 0x64, 0x05, 0x25, 0x75, 0x95, 0x0a, 0x96, 0x04, 0x4d, 0x54, 0xad, 0x04, 0xda, 0x04, 0xd4, 0x44, 0xb4, 0x05, 0x54, 0x85, 0x52, 0x0d, 0x92, 0x0a, 0x56, 0x6a, 0x56, 0x02, 0x6d, 0x02, 0x6a, 0x41, 0xda, 0x02, 0xb2, 0xa1, 0xa9, 0x05, 0x49, 0x0d, 0x0a, 0x6d, 0x2a, 0x09, 0x56, 0x01, 0xad, 0x50, 0x6d, 0x01, 0xd9, 0x02, 0xd1, 0x3a, 0xa8, 0x05, 0x29, 0x85, 0xa5, 0x0c, 0x2a, 0x09, 0x96, 0x54, 0xb6, 0x08, 0x6c, 0x09, 0x64, 0x45, 0xd4, 0x0a, 0xa4, 0x05, 0x51, 0x25, 0x95, 0x0a, 0x2a, 0x72, 0x5b, 0x04, 0xb6, 0x04, 0xac, 0x52, 0x6a, 0x05, 0xd2, 0x0a, 0xa2, 0x4a, 0x4a, 0x05, 0x55, 0x94, 0x2d, 0x0a, 0x5a, 0x02, 0x75, 0x61, 0xb5, 0x02, 0x6a, 0x03, 0x61, 0x45, 0xa9, 0x0a, 0x4a, 0x05, 0x25, 0x25, 0x2d, 0x09, 0x9a, 0x68, 0xda, 0x08, 0xb4, 0x09, 0xa8, 0x59, 0x54, 0x03, 0xa5, 0x0a, 0x91, 0x3a, 0x96, 0x04, 0xad, 0xb0, 0xad, 0x04, 0xda, 0x04, 0xf4, 0x62, 0xb4, 0x05, 0x54, 0x0b, 0x44, 0x5d, 0x52, 0x0a, 0x95, 0x04, 0x55, 0x22, 0x6d, 0x02, 0x5a, 0x71, 0xda, 0x02, 0xaa, 0x05, 0xb2, 0x55, 0x49, 0x0b, 0x4a, 0x0a, 0x2d, 0x39, 0x36, 0x01, 0x6d, 0x80, 0x6d, 0x01, 0xd9, 0x02, 0xe9, 0x6a, 0xa8, 0x05, 0x29, 0x0b, 0x9a, 0x4c, 0xaa, 0x08, 0xb6, 0x08, 0xb4, 0x38, 0x6c, 0x09, 0x54, 0x75, 0xd4, 0x0a, 0xa4, 0x05, 0x45, 0x55, 0x95, 0x0a, 0x9a, 0x04, 0x55, 0x44, 0xb5, 0x04, 0x6a, 0x82, 0x6a, 0x05, 0xd2, 0x0a, 0x92, 0x6a, 0x4a, 0x05, 0x55, 0x0a, 0x2a, 0x4a, 0x5a, 0x02, 0xb5, 0x02, 0xb2, 0x31, 0x69, 0x03, 0x31, 0x73, 0xa9, 0x0a, 0x4a, 0x05, 0x2d, 0x55, 0x2d, 0x09, 0x5a, 0x01, 0xd5, 0x48, 0xb4, 0x09, 0x68, 0x89, 0x54, 0x0b, 0xa4, 0x0a, 0xa5, 0x6a, 0x95, 0x04, 0xad, 0x08, 0x6a, 0x44, 0xda, 0x04, 0x74, 0x05, 0xb0, 0x25, 0x54, 0x03);
+  public static $XUN = array('甲子', '甲戌', '甲申', '甲午', '甲辰', '甲寅');
+  public static $XUN_KONG = array('戌亥', '申酉', '午未', '辰巳', '寅卯', '子丑');
   public static $GAN = array('', '甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸');
   public static $POSITION_XI = array('', '艮', '乾', '坤', '离', '巽', '艮', '乾', '坤', '离', '巽');
   public static $POSITION_YANG_GUI = array('', '坤', '坤', '兑', '乾', '艮', '坎', '离', '艮', '震', '巽');
@@ -1569,6 +1572,57 @@ class LunarUtil
     }
     return $l;
   }
+
+  /**
+   * 获取干支所在旬下标，0-5
+   * @param string $ganZhi 干支
+   * @return int 旬下标，0-5
+   */
+  private static function getXunIndex($ganZhi)
+  {
+    $half = strlen($ganZhi) / 2;
+    $gan = substr($ganZhi, 0 ,$half);
+    $zhi = substr($ganZhi, $half);
+    $ganIndex = 0;
+    $zhiIndex = 0;
+    for ($i = 0, $j = count(LunarUtil::$GAN); $i < $j; $i++) {
+      if (strcmp(LunarUtil::$GAN[$i], $gan) === 0) {
+        $ganIndex = $i;
+        break;
+      }
+    }
+    for ($i = 0, $j = count(LunarUtil::$ZHI); $i < $j; $i++) {
+      if (strcmp(LunarUtil::$ZHI[$i], $zhi) === 0) {
+        $zhiIndex = $i;
+        break;
+      }
+    }
+    $diff = $ganIndex - $zhiIndex;
+    if ($diff < 0) {
+      $diff += 12;
+    }
+    return $diff / 2;
+  }
+
+  /**
+   * 获取干支所在旬
+   * @param string ganZhi 干支
+   * @return string 旬
+   */
+  public static function getXun($ganZhi)
+  {
+    return LunarUtil::$XUN[LunarUtil::getXunIndex($ganZhi)];
+  }
+
+  /**
+   * 获取干支所在旬对应的旬空(空亡)
+   * @param string ganZhi 干支
+   * @return string 旬空(空亡)
+   */
+  public static function getXunKong($ganZhi)
+  {
+    return LunarUtil::$XUN_KONG[LunarUtil::getXunIndex($ganZhi)];
+  }
 }
 
 /**
@@ -2169,13 +2223,10 @@ class Solar
     if (!empty(SolarUtil::$FESTIVAL[$this->month . '-' . $this->day])) {
       $l[] = SolarUtil::$FESTIVAL[$this->month . '-' . $this->day];
     }
+    $weeks = intval(ceil($this->day / 7.0));
     $week = $this->getWeek();
-    $weekInMonth = ceil(($this->day - $week) / 7);
-    if ($week > 0) {
-      $weekInMonth++;
-    }
-    if (!empty(SolarUtil::$WEEK_FESTIVAL[$this->month . '-' . $weekInMonth . '-' . $week])) {
-      $l[] = SolarUtil::$WEEK_FESTIVAL[$this->month . '-' . $weekInMonth . '-' . $week];
+    if (!empty(SolarUtil::$WEEK_FESTIVAL[$this->month . '-' . $weeks . '-' . $week])) {
+      $l[] = SolarUtil::$WEEK_FESTIVAL[$this->month . '-' . $weeks . '-' . $week];
     }
     return $l;
   }
@@ -4780,6 +4831,150 @@ class Lunar
     return $this->getYearInChinese() . '年' . $this->getMonthInChinese() . '月' . $this->getDayInChinese();
   }
 
+  /**
+   * 获取年所在旬（以正月初一作为新年的开始）
+   * @return string 旬
+   */
+  public function getYearXun()
+  {
+    return LunarUtil::getXun($this->getYearInGanZhi());
+  }
+
+  /**
+   * 获取年所在旬（以立春当天作为新年的开始）
+   * @return string 旬
+   */
+  public function getYearXunByLiChun()
+  {
+    return LunarUtil::getXun($this->getYearInGanZhiByLiChun());
+  }
+
+  /**
+   * 获取年所在旬（以立春交接时刻作为新年的开始）
+   * @return string 旬
+   */
+  public function getYearXunExact()
+  {
+    return LunarUtil::getXun($this->getYearInGanZhiExact());
+  }
+
+  /**
+   * 获取值年空亡（以正月初一作为新年的开始）
+   * @return string 空亡(旬空)
+   */
+  public function getYearXunKong()
+  {
+    return LunarUtil::getXunKong($this->getYearInGanZhi());
+  }
+
+  /**
+   * 获取值年空亡（以立春当天作为新年的开始）
+   * @return string 空亡(旬空)
+   */
+  public function getYearXunKongByLiChun()
+  {
+    return LunarUtil::getXunKong($this->getYearInGanZhiByLiChun());
+  }
+
+  /**
+   * 获取值年空亡（以立春交接时刻作为新年的开始）
+   * @return string 空亡(旬空)
+   */
+  public function getYearXunKongExact()
+  {
+    return LunarUtil::getXunKong($this->getYearInGanZhiExact());
+  }
+
+  /**
+   * 获取月所在旬（以节交接当天起算）
+   * @return string 旬
+   */
+  public function getMonthXun()
+  {
+    return LunarUtil::getXun($this->getMonthInGanZhi());
+  }
+
+  /**
+   * 获取月所在旬（以节交接时刻起算）
+   * @return string 旬
+   */
+  public function getMonthXunExact()
+  {
+    return LunarUtil::getXun($this->getMonthInGanZhiExact());
+  }
+
+  /**
+   * 获取值月空亡（以节交接当天起算）
+   * @return string 空亡(旬空)
+   */
+  public function getMonthXunKong()
+  {
+    return LunarUtil::getXunKong($this->getMonthInGanZhi());
+  }
+
+  /**
+   * 获取值月空亡（以节交接时刻起算）
+   * @return string 空亡(旬空)
+   */
+  public function getMonthXunKongExact()
+  {
+    return LunarUtil::getXunKong($this->getMonthInGanZhiExact());
+  }
+
+  /**
+   * 获取日所在旬（以节交接当天起算）
+   * @return string 旬
+   */
+  public function getDayXun()
+  {
+    return LunarUtil::getXun($this->getDayInGanZhi());
+  }
+
+  /**
+   * 获取日所在旬（晚子时算第二天）
+   * @return string 旬
+   */
+  public function getDayXunExact()
+  {
+    return LunarUtil::getXun($this->getDayInGanZhiExact());
+  }
+
+  /**
+   * 获取值日空亡
+   * @return string 空亡(旬空)
+   */
+  public function getDayXunKong()
+  {
+    return LunarUtil::getXunKong($this->getDayInGanZhi());
+  }
+
+  /**
+   * 获取值日空亡（晚子时算第二天）
+   * @return string 空亡(旬空)
+   */
+  public function getDayXunKongExact()
+  {
+    return LunarUtil::getXunKong($this->getDayInGanZhiExact());
+  }
+
+  /**
+   * 获取时辰所在旬
+   * @return string 旬
+   */
+  public function getTimeXun()
+  {
+    return LunarUtil::getXun($this->getTimeInGanZhi());
+  }
+
+  /**
+   * 获取值时空亡
+   * @return string 空亡(旬空)
+   */
+  public function getTimeXunKong()
+  {
+    return LunarUtil::getXunKong($this->getTimeInGanZhi());
+  }
+
 }
 
 /**
@@ -6020,6 +6215,24 @@ class LiuYue
     return $gan . $zhi;
   }
 
+  /**
+   * 获取所在旬
+   * @return string 旬
+   */
+  public function getXun()
+  {
+    return LunarUtil::getXun($this->getGanZhi());
+  }
+
+  /**
+   * 获取旬空(空亡)
+   * @return string 旬空(空亡)
+   */
+  public function getXunKong()
+  {
+    return LunarUtil::getXunKong($this->getGanZhi());
+  }
+
 }
 
 /**
@@ -6154,6 +6367,24 @@ class XiaoYun
     return LunarUtil::$JIA_ZI[$offset];
   }
 
+  /**
+   * 获取所在旬
+   * @return string 旬
+   */
+  public function getXun()
+  {
+    return LunarUtil::getXun($this->getGanZhi());
+  }
+
+  /**
+   * 获取旬空(空亡)
+   * @return string 旬空(空亡)
+   */
+  public function getXunKong()
+  {
+    return LunarUtil::getXunKong($this->getGanZhi());
+  }
+
 }
 
 /**
@@ -6263,6 +6494,24 @@ class LiuNian
     }
     $offset %= count(LunarUtil::$JIA_ZI);
     return LunarUtil::$JIA_ZI[$offset];
+  }
+
+  /**
+   * 获取所在旬
+   * @return string 旬
+   */
+  public function getXun()
+  {
+    return LunarUtil::getXun($this->getGanZhi());
+  }
+
+  /**
+   * 获取旬空(空亡)
+   * @return string 旬空(空亡)
+   */
+  public function getXunKong()
+  {
+    return LunarUtil::getXunKong($this->getGanZhi());
   }
 
   /**
@@ -6437,6 +6686,24 @@ class DaYun
       $offset += $size;
     }
     return LunarUtil::$JIA_ZI[$offset];
+  }
+
+  /**
+   * 获取所在旬
+   * @return string 旬
+   */
+  public function getXun()
+  {
+    return LunarUtil::getXun($this->getGanZhi());
+  }
+
+  /**
+   * 获取旬空(空亡)
+   * @return string 旬空(空亡)
+   */
+  public function getXunKong()
+  {
+    return LunarUtil::getXunKong($this->getGanZhi());
   }
 
   /**
@@ -7185,5 +7452,77 @@ class EightChar
   public function getYun($gender)
   {
     return new Yun($this, $gender);
+  }
+
+  /**
+   * 获取年柱所在旬
+   * @return string 旬
+   */
+  public function getYearXun()
+  {
+    return $this->lunar->getYearXunExact();
+  }
+
+  /**
+   * 获取年柱旬空(空亡)
+   * @return string 旬空(空亡)
+   */
+  public function getYearXunKong()
+  {
+    return $this->lunar->getYearXunKongExact();
+  }
+
+  /**
+   * 获取月柱所在旬
+   * @return string 旬
+   */
+  public function getMonthXun()
+  {
+    return $this->lunar->getMonthXunExact();
+  }
+
+  /**
+   * 获取月柱旬空(空亡)
+   * @return string 旬空(空亡)
+   */
+  public function getMonthXunKong()
+  {
+    return $this->lunar->getMonthXunKongExact();
+  }
+
+  /**
+   * 获取日柱所在旬
+   * @return string 旬
+   */
+  public function getDayXun()
+  {
+    return $this->lunar->getDayXunExact();
+  }
+
+  /**
+   * 获取日柱旬空(空亡)
+   * @return string 旬空(空亡)
+   */
+  public function getDayXunKong()
+  {
+    return $this->lunar->getDayXunKongExact();
+  }
+
+  /**
+   * 获取时柱所在旬
+   * @return string 旬
+   */
+  public function getTimeXun()
+  {
+    return $this->lunar->getTimeXun();
+  }
+
+  /**
+   * 获取时柱旬空(空亡)
+   * @return string 旬空(空亡)
+   */
+  public function getTimeXunKong()
+  {
+    return $this->lunar->getTimeXunKong();
   }
 }

@@ -229,3 +229,55 @@ HolidayUtil::fix($names, '20210529912021052920211111:12021111120211201;120211201
 echo strcmp('2021-05-29 我的生日 2021-05-29', HolidayUtil::getHoliday('2021-05-29') . '');
 echo strcmp('2021-11-11 结婚纪念日 2021-11-11', HolidayUtil::getHoliday('2021-11-11') . '');
 echo strcmp('2021-12-01 她的生日 2021-12-01', HolidayUtil::getHoliday('2021-12-01') . '') . "\n";
+
+// 节日
+$solar = Solar::fromYmd(2020, 11, 26);
+foreach ($solar->getFestivals() as $f) {
+  echo $f . "\n";
+}
+
+$solar = Solar::fromYmd(2020, 6, 21);
+foreach ($solar->getFestivals() as $f) {
+  echo $f . "\n";
+}
+
+$solar = Solar::fromYmd(2021, 5, 9);
+foreach ($solar->getFestivals() as $f) {
+  echo $f . "\n";
+}
+
+$solar = Solar::fromYmd(1986, 11, 27);
+foreach ($solar->getFestivals() as $f) {
+  echo $f . "\n";
+}
+
+$solar = Solar::fromYmd(1985, 6, 16);
+foreach ($solar->getFestivals() as $f) {
+  echo $f . "\n";
+}
+
+$solar = Solar::fromYmd(1984, 5, 13);
+foreach ($solar->getFestivals() as $f) {
+  echo $f . "\n";
+}
+
+// 旬
+$solar = Solar::fromYmdHms(2020, 11, 19, 0, 0, 0);
+$lunar = $solar->getLunar();
+// 甲午
+echo $lunar->getYearXun() . "\n";
+
+// 旬空(空亡)
+// 辰巳
+echo $lunar->getYearXunKong() . "\n";
+// 午未
+echo $lunar->getMonthXunKong() . "\n";
+// 戌亥
+echo $lunar->getDayXunKong() . "\n";
+
+// 八字日柱旬空(空亡)
+$solar = Solar::fromYmdHms(1990, 12, 23, 8, 37, 0);
+$lunar = $solar->getLunar();
+$eightChar = $lunar->getEightChar();
+// 子丑
+echo $eightChar->getDayXunKong() . "\n";
