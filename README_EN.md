@@ -6,9 +6,9 @@ lunar is a calendar library for Solar and Chinese Lunar.
 
 ## Example
 
-    <?php
-    include 'lunar.php';
+    composer require 6tail/lunar-php
      
+    <?php
     use com\nlf\calendar\Lunar;
      
     $lunar = Lunar::fromYmd(1986,4,21);

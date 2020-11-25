@@ -1,5 +1,5 @@
 <?php
-include 'lunar.php';
+require 'vendor/autoload.php';
 
 use com\nlf\calendar\util\HolidayUtil;
 use com\nlf\calendar\Lunar;

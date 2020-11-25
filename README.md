@@ -8,9 +8,9 @@ lunar是一款无第三方依赖的公历(阳历)和农历(阴历、老黄历)�
 
 ## 示例
 
-    <?php
-    include 'lunar.php';
+    composer require 6tail/lunar-php
      
+    <?php
     use com\nlf\calendar\Lunar;
      
     $lunar = Lunar::fromYmd(1986,4,21);
