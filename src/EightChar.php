@@ -21,11 +21,11 @@ class EightChar
   private $lunar;
 
   private static $CHANG_SHENG_OFFSET = array(
-    '甲' => 11,
-    '丙' => 2,
-    '戊' => 2,
-    '庚' => 5,
-    '壬' => 8,
+    '甲' => 1,
+    '丙' => 10,
+    '戊' => 10,
+    '庚' => 7,
+    '壬' => 4,
     '乙' => 6,
     '丁' => 9,
     '己' => 9,
