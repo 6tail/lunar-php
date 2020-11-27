@@ -108,7 +108,8 @@ class LiuNian
    */
   public function getGanZhi()
   {
-    $offset = LunarUtil::getJiaZiIndex($this->lunar->getYearInGanZhiExact()) + $this->index;
+    $jieQi = $this->lunar->getJieQiTable();
+    $offset = LunarUtil::getJiaZiIndex($jieQi['立春']->getLunar()->getYearInGanZhiExact()) + $this->index;
     if ($this->daYun->getIndex() > 0) {
       $offset += $this->daYun->getStartAge() - 1;
     }
