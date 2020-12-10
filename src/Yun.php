@@ -88,13 +88,13 @@ class Yun
     } catch (Exception $e) {
       return null;
     }
-    $endCalendar->setTime(0, 0, 0, 0);
+    $endCalendar->setTime(0, 0, 0);
     try {
       $startCalendar = new DateTime($start->getYear() . '-' . $start->getMonth() . '-' . $start->getDay());
     } catch (Exception $e) {
       return null;
     }
-    $startCalendar->setTime(0, 0, 0, 0);
+    $startCalendar->setTime(0, 0, 0);
     // 天数差
     $dayDiff = intval(floor(($endCalendar->getTimestamp() - $startCalendar->getTimestamp()) / 86400));
     if ($hourDiff < 0) {
