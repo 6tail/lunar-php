@@ -34,9 +34,14 @@ class SolarMonth
     $this->month = $month;
   }
 
-  public function __toString()
+  public function toString()
   {
     return $this->year . '-' . $this->month;
+  }
+
+  public function __toString()
+  {
+    return $this->toString();
   }
 
   public function toFullString()

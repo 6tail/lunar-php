@@ -31,9 +31,14 @@ class SolarYear
     $this->year = $year;
   }
 
-  public function __toString()
+  public function toString()
   {
     return $this->year . '';
+  }
+
+  public function __toString()
+  {
+    return $this->toString();
   }
 
   public function toFullString()

@@ -99,9 +99,14 @@ class JieQi
     return $this->qi;
   }
 
-  public function __toString()
+  public function toString()
   {
     return $this->name;
+  }
+
+  public function __toString()
+  {
+    return $this->toString();
   }
 
 }

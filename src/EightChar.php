@@ -55,9 +55,14 @@ class EightChar
     return new EightChar($lunar);
   }
 
-  public function __toString()
+  public function toString()
   {
     return $this->getYear() . ' ' . $this->getMonth() . ' ' . $this->getDay() . ' ' . $this->getTime();
+  }
+
+  public function __toString()
+  {
+    return $this->toString();
   }
 
   /**

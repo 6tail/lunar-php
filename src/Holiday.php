@@ -92,9 +92,14 @@ class Holiday
     return $this->target;
   }
 
-  public function __toString()
+  public function toString()
   {
     return $this->day . ' ' . $this->name . ($this->work ? '调休' : '') . ' ' . $this->target;
+  }
+
+  public function __toString()
+  {
+    return $this->toString();
   }
 
 }

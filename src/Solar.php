@@ -305,9 +305,14 @@ class Solar
     return $this->calendar;
   }
 
-  public function __toString()
+  public function toString()
   {
     return $this->toYmd();
+  }
+
+  public function __toString()
+  {
+    return $this->toString();
   }
 
   public function isLeapYear()

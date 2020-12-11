@@ -253,9 +253,14 @@ class NineStar
     return $this->index;
   }
 
-  public function __toString()
+  public function toString()
   {
     return $this->getNumber() . $this->getColor() . $this->getWuXing() . $this->getNameInBeiDou();
+  }
+
+  public function __toString()
+  {
+    return $this->toString();
   }
 
   public function toFullString()

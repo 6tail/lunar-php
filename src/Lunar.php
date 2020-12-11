@@ -2536,9 +2536,14 @@ class Lunar
     return $s;
   }
 
-  public function __toString()
+  public function toString()
   {
     return $this->getYearInChinese() . '年' . $this->getMonthInChinese() . '月' . $this->getDayInChinese();
+  }
+
+  public function __toString()
+  {
+    return $this->toString();
   }
 
   /**
