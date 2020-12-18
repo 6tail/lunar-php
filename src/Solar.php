@@ -128,7 +128,7 @@ class Solar
   }
 
   /**
-   * 八字转阳历
+   * 八字转阳历，默认流派
    * @param string $yearGanZhi 年柱
    * @param string $monthGanZhi 月柱
    * @param string $dayGanZhi 日柱
@@ -138,6 +138,22 @@ class Solar
    */
   public static function fromBaZi($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi)
   {
+    return self::fromBaZiBySect($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, 2);
+  }
+
+  /**
+   * 八字转阳历
+   * @param string $yearGanZhi 年柱
+   * @param string $monthGanZhi 月柱
+   * @param string $dayGanZhi 日柱
+   * @param string $timeGanZhi 时柱
+   * @param int sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
+   * @return Solar[]
+   * @throws Exception
+   */
+  public static function fromBaZiBySect($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect)
+  {
+    $sect = (1 == $sect) ? 1 : 2;
     $l = array();
     $today = Solar::fromDate(new DateTime());
     $lunar = $today->getLunar();
@@ -192,7 +208,8 @@ class Solar
         $solar = Solar::fromYmdHms($year, $month, $day, $hour, 0, 0);
         while ($counter < 61) {
           $lunar = $solar->getLunar();
-          if (strcmp($lunar->getYearInGanZhiExact(), $yearGanZhi) == 0 && strcmp($lunar->getMonthInGanZhiExact(), $monthGanZhi) == 0 && strcmp($lunar->getDayInGanZhiExact(), $dayGanZhi) == 0 && strcmp($lunar->getTimeInGanZhi(), $timeGanZhi) == 0) {
+          $dgz = (2 == $sect) ? $lunar->getDayInGanZhiExact2() : $lunar->getDayInGanZhiExact();
+          if (strcmp($lunar->getYearInGanZhiExact(), $yearGanZhi) == 0 && strcmp($lunar->getMonthInGanZhiExact(), $monthGanZhi) == 0 && strcmp($dgz, $dayGanZhi) == 0 && strcmp($lunar->getTimeInGanZhi(), $timeGanZhi) == 0) {
             $l[] = $solar;
             break;
           }

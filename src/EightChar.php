@@ -15,6 +15,12 @@ class EightChar
 {
 
   /**
+   * 流派
+   * @var int
+   */
+  private $sect = 2;
+
+  /**
    * 阴历
    * @var Lunar
    */
@@ -63,6 +69,24 @@ class EightChar
   public function __toString()
   {
     return $this->toString();
+  }
+
+  /**
+   * 获取流派
+   * @return int 流派，2晚子时日柱按当天，1晚子时日柱按明天
+   */
+  public function getSect()
+  {
+    return $this->sect;
+  }
+
+  /**
+   * 设置流派
+   * @param int $sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
+   */
+  public function setSect($sect)
+  {
+    $this->sect = (1 == $sect) ? 1 : 2;
   }
 
   /**
@@ -116,7 +140,7 @@ class EightChar
    */
   public function getYearWuXing()
   {
-    return LunarUtil::$WU_XING_GAN[$this->lunar->getYearGanExact()] . LunarUtil::$WU_XING_ZHI[$this->lunar->getYearZhiExact()];
+    return LunarUtil::$WU_XING_GAN[$this->getYearGan()] . LunarUtil::$WU_XING_ZHI[$this->getYearZhi()];
   }
 
   /**
@@ -159,7 +183,7 @@ class EightChar
   private function getDiShi($zhiIndex)
   {
     $offset = EightChar::$CHANG_SHENG_OFFSET[$this->getDayGan()];
-    $index = $offset + ($this->lunar->getDayGanIndexExact() % 2 == 0 ? $zhiIndex : 0 - $zhiIndex);
+    $index = $offset + ($this->getDayGanIndex() % 2 == 0 ? $zhiIndex : 0 - $zhiIndex);
     if ($index >= 12) {
       $index -= 12;
     }
@@ -220,7 +244,7 @@ class EightChar
    */
   public function getMonthWuXing()
   {
-    return LunarUtil::$WU_XING_GAN[$this->lunar->getMonthGanExact()] . LunarUtil::$WU_XING_ZHI[$this->lunar->getMonthZhiExact()];
+    return LunarUtil::$WU_XING_GAN[$this->getMonthGan()] . LunarUtil::$WU_XING_ZHI[$this->getMonthZhi()];
   }
 
   /**
@@ -265,7 +289,7 @@ class EightChar
    */
   public function getDay()
   {
-    return $this->lunar->getDayInGanZhiExact();
+    return (2 == $this->sect) ? $this->lunar->getDayInGanZhiExact2() : $this->lunar->getDayInGanZhiExact();
   }
 
   /**
@@ -274,7 +298,7 @@ class EightChar
    */
   public function getDayGan()
   {
-    return $this->lunar->getDayGanExact();
+    return (2 == $this->sect) ? $this->lunar->getDayGanExact2() : $this->lunar->getDayGanExact();
   }
 
   /**
@@ -283,7 +307,7 @@ class EightChar
    */
   public function getDayZhi()
   {
-    return $this->lunar->getDayZhiExact();
+    return (2 == $this->sect) ? $this->lunar->getDayZhiExact2() : $this->lunar->getDayZhiExact();
   }
 
   /**
@@ -301,7 +325,7 @@ class EightChar
    */
   public function getDayWuXing()
   {
-    return LunarUtil::$WU_XING_GAN[$this->lunar->getDayGanExact()] . LunarUtil::$WU_XING_ZHI[$this->lunar->getDayZhiExact()];
+    return LunarUtil::$WU_XING_GAN[$this->getDayGan()] . LunarUtil::$WU_XING_ZHI[$this->getDayZhi()];
   }
 
   /**
@@ -332,12 +356,30 @@ class EightChar
   }
 
   /**
+   * 获取日柱天干序号
+   * @return int 日柱天干序号，0-9
+   */
+  public function getDayGanIndex()
+  {
+    return (2 == $this->sect) ? $this->lunar->getDayGanIndexExact2() : $this->lunar->getDayGanIndexExact();
+  }
+
+  /**
+   * 获取日柱地支序号
+   * @return int 日柱地支序号，0-11
+   */
+  public function getDayZhiIndex()
+  {
+    return (2 == $this->sect) ? $this->lunar->getDayZhiIndexExact2() : $this->lunar->getDayZhiIndexExact();
+  }
+
+  /**
    * 获取日柱地势（长生十二神）
    * @return string 地势
    */
   public function getDayDiShi()
   {
-    return $this->getDiShi($this->lunar->getDayZhiIndexExact());
+    return $this->getDiShi($this->getDayZhiIndex());
   }
 
   /**
@@ -576,7 +618,7 @@ class EightChar
    */
   public function getDayXun()
   {
-    return $this->lunar->getDayXunExact();
+    return (2 == $this->sect) ? $this->lunar->getDayXunExact2() : $this->lunar->getDayXunExact();
   }
 
   /**
@@ -585,7 +627,7 @@ class EightChar
    */
   public function getDayXunKong()
   {
-    return $this->lunar->getDayXunKongExact();
+    return (2 == $this->sect) ? $this->lunar->getDayXunKongExact2() : $this->lunar->getDayXunKongExact();
   }
 
   /**

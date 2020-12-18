@@ -143,10 +143,16 @@ class Lunar
   private $dayGanIndex;
 
   /**
-   * 日对应的天干下标（最精确的，供八字用，晚子时算第二天），0-9
+   * 日对应的天干下标（八字流派1，晚子时日柱算明天），0-9
    * @var int
    */
   private $dayGanIndexExact;
+
+  /**
+   * 日对应的天干下标（八字流派2，晚子时日柱算当天），0-9
+   * @var int
+   */
+  private $dayGanIndexExact2;
 
   /**
    * 日对应的地支下标，0-11
@@ -155,10 +161,16 @@ class Lunar
   private $dayZhiIndex;
 
   /**
-   * 日对应的地支下标（最精确的，供八字用，晚子时算第二天），0-9
+   * 日对应的地支下标（八字流派1，晚子时日柱算明天），0-9
    * @var int
    */
   private $dayZhiIndexExact;
+
+  /**
+   * 日对应的地支下标（八字流派1，晚子时日柱算当天），0-9
+   * @var int
+   */
+  private $dayZhiIndexExact2;
 
   /**
    * 月对应的天干下标（以节交接当天起算），0-9
@@ -725,7 +737,9 @@ class Lunar
     $dayGanExact = $dayGanIndex;
     $dayZhiExact = $dayZhiIndex;
 
-    // 晚子时（夜子/子夜）应算作第二天
+    $this->dayGanIndexExact2 = $dayGanExact;
+    $this->dayZhiIndexExact2 = $dayZhiExact;
+
     $hm = ($this->hour < 10 ? '0' : '') . $this->hour . ':' . ($this->minute < 10 ? '0' : '') . $this->minute;
     if (strcmp($hm, '23:00') >= 0 && strcmp($hm, '23:59') <= 0) {
       $dayGanExact++;
@@ -961,12 +975,21 @@ class Lunar
   }
 
   /**
-   * 获取干支纪日（日柱，晚子时算第二天）
+   * 获取干支纪日（日柱，八字流派1，晚子时日柱算明天）
    * @return string 干支纪日（日柱），如己卯
    */
   public function getDayInGanZhiExact()
   {
     return $this->getDayGanExact() . $this->getDayZhiExact();
+  }
+
+  /**
+   * 获取干支纪日（日柱，八字流派2，晚子时日柱算当天）
+   * @return string 干支纪日（日柱），如己卯
+   */
+  public function getDayInGanZhiExact2()
+  {
+    return $this->getDayGanExact2() . $this->getDayZhiExact2();
   }
 
   /**
@@ -980,12 +1003,21 @@ class Lunar
   }
 
   /**
-   * 获取日天干（晚子时算第二天）
+   * 获取日天干（八字流派1，晚子时日柱算明天）
    * @return string 日天干，如甲
    */
   public function getDayGanExact()
   {
     return LunarUtil::$GAN[$this->dayGanIndexExact + 1];
+  }
+
+  /**
+   * 获取日天干（八字流派1，晚子时日柱算当天）
+   * @return string 日天干，如甲
+   */
+  public function getDayGanExact2()
+  {
+    return LunarUtil::$GAN[$this->dayGanIndexExact2 + 1];
   }
 
   /**
@@ -999,12 +1031,21 @@ class Lunar
   }
 
   /**
-   * 获取日地支（晚子时算第二天）
+   * 获取日地支（八字流派1，晚子时日柱算明天）
    * @return string 日地支，如卯
    */
   public function getDayZhiExact()
   {
     return LunarUtil::$ZHI[$this->dayZhiIndexExact + 1];
+  }
+
+  /**
+   * 获取日地支（八字流派1，晚子时日柱算当天）
+   * @return string 日地支，如卯
+   */
+  public function getDayZhiExact2()
+  {
+    return LunarUtil::$ZHI[$this->dayZhiIndexExact2 + 1];
   }
 
   /**
@@ -2369,9 +2410,19 @@ class Lunar
     return $this->dayGanIndexExact;
   }
 
+  public function getDayGanIndexExact2()
+  {
+    return $this->dayGanIndexExact2;
+  }
+
   public function getDayZhiIndexExact()
   {
     return $this->dayZhiIndexExact;
+  }
+
+  public function getDayZhiIndexExact2()
+  {
+    return $this->dayZhiIndexExact2;
   }
 
   public function getMonthGanIndexExact()
@@ -2646,12 +2697,21 @@ class Lunar
   }
 
   /**
-   * 获取日所在旬（晚子时算第二天）
+   * 获取日所在旬（八字流派1，晚子时日柱算明天）
    * @return string 旬
    */
   public function getDayXunExact()
   {
     return LunarUtil::getXun($this->getDayInGanZhiExact());
+  }
+
+  /**
+   * 获取日所在旬（八字流派2，晚子时日柱算当天）
+   * @return string 旬
+   */
+  public function getDayXunExact2()
+  {
+    return LunarUtil::getXun($this->getDayInGanZhiExact2());
   }
 
   /**
@@ -2664,12 +2724,21 @@ class Lunar
   }
 
   /**
-   * 获取值日空亡（晚子时算第二天）
+   * 获取值日空亡（八字流派1，晚子时日柱算明天）
    * @return string 空亡(旬空)
    */
   public function getDayXunKongExact()
   {
     return LunarUtil::getXunKong($this->getDayInGanZhiExact());
+  }
+
+  /**
+   * 获取值日空亡（八字流派2，晚子时日柱算当天）
+   * @return string 空亡(旬空)
+   */
+  public function getDayXunKongExact2()
+  {
+    return LunarUtil::getXunKong($this->getDayInGanZhiExact2());
   }
 
   /**
