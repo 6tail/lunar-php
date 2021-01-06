@@ -4,9 +4,6 @@ namespace com\nlf\calendar;
 
 use com\nlf\calendar\util\LunarUtil;
 
-date_default_timezone_set('PRC');
-bcscale(12);
-
 /**
  * 节气
  * @package com\nlf\calendar

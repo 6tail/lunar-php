@@ -281,3 +281,12 @@ $lunar = $solar->getLunar();
 $eightChar = $lunar->getEightChar();
 // 子丑
 echo $eightChar->getDayXunKong() . "\n";
+
+// 数九
+$lunar = Lunar::fromDate(new DateTime());
+echo $lunar->getShuJiu() . "\n";
+
+// 三伏
+$solar = Solar::fromYmd(2020, 7, 26);
+$lunar = $solar->getLunar();
+echo $lunar->getFu()->toFullString() . "\n";

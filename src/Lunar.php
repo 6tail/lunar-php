@@ -2405,6 +2405,46 @@ class Lunar
     return $this->timeZhiIndex;
   }
 
+  public function getDayGanIndex()
+  {
+    return $this->dayGanIndex;
+  }
+
+  public function getDayZhiIndex()
+  {
+    return $this->dayZhiIndex;
+  }
+
+  public function getMonthGanIndex()
+  {
+    return $this->monthGanIndex;
+  }
+
+  public function getMonthZhiIndex()
+  {
+    return $this->monthZhiIndex;
+  }
+
+  public function getYearGanIndex()
+  {
+    return $this->yearGanIndex;
+  }
+
+  public function getYearZhiIndex()
+  {
+    return $this->yearZhiIndex;
+  }
+
+  public function getYearGanIndexByLiChun()
+  {
+    return $this->yearGanIndexByLiChun;
+  }
+
+  public function getYearZhiIndexByLiChun()
+  {
+    return $this->yearZhiIndexByLiChun;
+  }
+
   public function getDayGanIndexExact()
   {
     return $this->dayGanIndexExact;
@@ -2757,6 +2797,97 @@ class Lunar
   public function getTimeXunKong()
   {
     return LunarUtil::getXunKong($this->getTimeInGanZhi());
+  }
+
+  public function getShuJiu()
+  {
+    try {
+      $currentCalendar = new DateTime($this->solar->getYear() . '-' . $this->solar->getMonth() . '-' . $this->solar->getDay() . ' 0:0:0');
+    } catch (Exception $e) {
+      return null;
+    }
+    $start = $this->jieQi[Lunar::$JIE_QI_APPEND];
+    try {
+      $startCalendar = new DateTime($start->getYear() . '-' . $start->getMonth() . '-' . $start->getDay() . ' 0:0:0');
+    } catch (Exception $e) {
+      return null;
+    }
+    if ($currentCalendar < $startCalendar) {
+      $start = $this->jieQi[Lunar::$JIE_QI_FIRST];
+      try {
+        $startCalendar = new DateTime($start->getYear() . '-' . $start->getMonth() . '-' . $start->getDay() . ' 0:0:0');
+      } catch (Exception $e) {
+        return null;
+      }
+    }
+    try {
+      $endCalendar = new DateTime($start->getYear() . '-' . $start->getMonth() . '-' . $start->getDay() . ' 0:0:0');
+    } catch (Exception $e) {
+      return null;
+    }
+    $endCalendar->modify('+81 day');
+    if ($currentCalendar < $startCalendar || $currentCalendar >= $endCalendar) {
+      return null;
+    }
+    $days = intval(floor(($currentCalendar->getTimestamp() - $startCalendar->getTimestamp()) / (60 * 60 * 24)));
+    return new ShuJiu(LunarUtil::$NUMBER[$days / 9 + 1] . '九', $days % 9 + 1);
+  }
+
+  public function getFu()
+  {
+    try {
+      $currentCalendar = new DateTime($this->solar->getYear() . '-' . $this->solar->getMonth() . '-' . $this->solar->getDay() . ' 0:0:0');
+    } catch (Exception $e) {
+      return null;
+    }
+    $xiaZhi = $this->jieQi['夏至'];
+    $liQiu = $this->jieQi['立秋'];
+    try {
+      $startCalendar = new DateTime($xiaZhi->getYear() . '-' . $xiaZhi->getMonth() . '-' . $xiaZhi->getDay() . ' 0:0:0');
+    } catch (Exception $e) {
+      return null;
+    }
+    $add = 6 - $xiaZhi->getLunar()->getDayGanIndex();
+    if ($add < 0) {
+      $add += 10;
+    }
+    $add += 20;
+    $startCalendar->modify('+' . $add . ' day');
+    if ($currentCalendar < $startCalendar) {
+      return null;
+    }
+    $seconds = 60 * 60 * 24;
+    $days = intval(floor(($currentCalendar->getTimestamp() - $startCalendar->getTimestamp()) / $seconds));
+    if ($days < 10) {
+      return new Fu('初伏', $days + 1);
+    }
+    $startCalendar->modify('+10 day');
+    $days = intval(floor(($currentCalendar->getTimestamp() - $startCalendar->getTimestamp()) / $seconds));
+    if ($days < 10) {
+      return new Fu('中伏', $days + 1);
+    }
+    $startCalendar->modify('+10 day');
+    $days = intval(floor(($currentCalendar->getTimestamp() - $startCalendar->getTimestamp()) / $seconds));
+    try {
+      $liQiuCalendar = new DateTime($liQiu->getYear() . '-' . $liQiu->getMonth() . '-' . $liQiu->getDay() . ' 0:0:0');
+    } catch (Exception $e) {
+      return null;
+    }
+    if ($liQiuCalendar <= $startCalendar) {
+      if ($days < 10) {
+        return new Fu('末伏', $days + 1);
+      }
+    } else {
+      if ($days < 10) {
+        return new Fu('中伏', $days + 11);
+      }
+      $startCalendar->modify('+10 day');
+      $days = intval(floor(($currentCalendar->getTimestamp() - $startCalendar->getTimestamp()) / $seconds));
+      if ($days < 10) {
+        return new Fu('末伏', $days + 1);
+      }
+    }
+    return null;
   }
 
 }

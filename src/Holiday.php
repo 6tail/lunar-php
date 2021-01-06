@@ -2,9 +2,6 @@
 
 namespace com\nlf\calendar;
 
-date_default_timezone_set('PRC');
-bcscale(12);
-
 /**
  * 节假日
  * @package com\nlf\calendar
