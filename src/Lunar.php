@@ -2234,10 +2234,10 @@ class Lunar
   /**
    * 获取最近的节气，如果未找到匹配的，返回null
    * @param $forward bool 是否顺推，true为顺推，false为逆推
-   * @param $conditions array 过滤条件，如果设置过滤条件，仅返回匹配该名称的
+   * @param $conditions array|null 过滤条件，如果设置过滤条件，仅返回匹配该名称的
    * @return JieQi|null 节气
    */
-  protected function getNearJieQi($forward, array $conditions)
+  protected function getNearJieQi($forward, $conditions)
   {
     $name = null;
     $near = null;
@@ -2829,7 +2829,7 @@ class Lunar
     if ($currentCalendar < $startCalendar || $currentCalendar >= $endCalendar) {
       return null;
     }
-    $days = intval(floor(($currentCalendar->getTimestamp() - $startCalendar->getTimestamp()) / (60 * 60 * 24)));
+    $days = intval(floor(($currentCalendar->getTimestamp() - $startCalendar->getTimestamp()) / 86400));
     return new ShuJiu(LunarUtil::$NUMBER[$days / 9 + 1] . '九', $days % 9 + 1);
   }
 
@@ -2856,7 +2856,7 @@ class Lunar
     if ($currentCalendar < $startCalendar) {
       return null;
     }
-    $seconds = 60 * 60 * 24;
+    $seconds = 86400;
     $days = intval(floor(($currentCalendar->getTimestamp() - $startCalendar->getTimestamp()) / $seconds));
     if ($days < 10) {
       return new Fu('初伏', $days + 1);
@@ -2888,6 +2888,45 @@ class Lunar
       }
     }
     return null;
+  }
+
+  /**
+   * 获取六曜
+   * @return string 六曜
+   */
+  public function getLiuYao()
+  {
+    return LunarUtil::$LIU_YAO[(abs($this->month) + $this->day - 2) % 6];
+  }
+
+  /**
+   * 获取物候
+   * @return string 物候
+   */
+  public function getWuHou()
+  {
+    $jieQi = $this->getPrevJieQi();
+    $name = $jieQi->getName();
+    $offset = 0;
+    for ($i = 0, $j = count(Lunar::$JIE_QI); $i < $j; $i++) {
+      if (strcmp($name, Lunar::$JIE_QI[$i]) === 0) {
+        $offset = $i;
+        break;
+      }
+    }
+    try {
+      $currentCalendar = new DateTime($this->solar->getYear() . '-' . $this->solar->getMonth() . '-' . $this->solar->getDay() . ' 0:0:0');
+    } catch (Exception $e) {
+      return '';
+    }
+    $startSolar = $jieQi->getSolar();
+    try {
+      $startCalendar = new DateTime($startSolar->getYear() . '-' . $startSolar->getMonth() . '-' . $startSolar->getDay() . ' 0:0:0');
+    } catch (Exception $e) {
+      return '';
+    }
+    $days = intval(floor(($currentCalendar->getTimestamp() - $startCalendar->getTimestamp()) / 86400));
+    return LunarUtil::$WU_HOU[$offset * 3 + floor($days / 5)];
   }
 
 }

@@ -290,3 +290,10 @@ echo $lunar->getShuJiu() . "\n";
 $solar = Solar::fromYmd(2020, 7, 26);
 $lunar = $solar->getLunar();
 echo $lunar->getFu()->toFullString() . "\n";
+
+// 六曜
+$lunar = Lunar::fromDate(new DateTime());
+echo $lunar->getLiuYao() . "\n";
+
+// 物候
+echo $lunar->getWuHou() . "\n";
