@@ -1198,7 +1198,7 @@ class LunarUtil
     $month = LunarUtil::hex(LunarUtil::getJiaZiIndex($monthGanZhi));
     $right = LunarUtil::$DAY_YI_JI;
     $index = strpos($right, $day . '=');
-    while ($index) {
+    while ($index > -1) {
       $right = substr($right, $index + 3);
       $left = $right;
       if (strpos($left, '=')) {
@@ -1243,7 +1243,7 @@ class LunarUtil
     $month = LunarUtil::hex(LunarUtil::getJiaZiIndex($monthGanZhi));
     $right = LunarUtil::$DAY_YI_JI;
     $index = strpos($right, $day . '=');
-    while ($index) {
+    while ($index > -1) {
       $right = substr($right, $index + 3);
       $left = $right;
       if (strpos($left, '=')) {
