@@ -2,6 +2,8 @@
 
 lunar is a calendar library for Solar and Chinese Lunar.
 
+This version is based on composer, you can use [single file version](https://github.com/6tail/lunar-php-standalone) also。
+
 [简体中文](https://github.com/6tail/lunar-php/blob/master/README.md)
 
 ## Example
