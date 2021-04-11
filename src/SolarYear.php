@@ -3,10 +3,8 @@
 namespace com\nlf\calendar;
 
 use DateTime;
-use Exception;
 
 date_default_timezone_set('PRC');
-bcscale(12);
 
 /**
  * 阳历年
@@ -63,7 +61,7 @@ class SolarYear
    */
   public static function fromDate($date)
   {
-    $year = (int)date_format($date, 'Y');
+    $year = intval(date_format($date, 'Y'));
     return new SolarYear($year);
   }
 
@@ -74,7 +72,7 @@ class SolarYear
 
   /**
    * 获取本年的月份
-   * @return array
+   * @return SolarMonth[]
    */
   public function getMonths()
   {
@@ -97,11 +95,7 @@ class SolarYear
     if (0 === $years) {
       return new SolarYear($this->year);
     }
-    try {
-      $date = new DateTime($this->year . '-1-1');
-    } catch (Exception $e) {
-      return null;
-    }
+    $date = DateTime::createFromFormat('Y-n-j',sprintf('%d-1-1', $this->year));
     $date->modify($years . ' year');
     return SolarYear::fromDate($date);
   }

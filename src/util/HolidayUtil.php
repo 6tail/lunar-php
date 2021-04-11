@@ -1,10 +1,6 @@
 <?php
 
-
 namespace com\nlf\calendar\util;
-
-
-
 
 use com\nlf\calendar\Holiday;
 

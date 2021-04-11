@@ -1,30 +1,15 @@
 <?php
 
 namespace com\nlf\calendar\util;
+
+use DateTime;
+
 /**
- * 阳历工具，基准日期为1901年1月1日，对应农历1900年十一月十一
+ * 阳历工具
  * @package com\nlf\calendar\util
  */
 class SolarUtil
 {
-  /**
-   * 阳历基准年
-   * @var int
-   */
-  public static $BASE_YEAR = 1901;
-
-  /**
-   * 阳历基准月
-   * @var int
-   */
-  public static $BASE_MONTH = 1;
-
-  /**
-   * 阳历基准日
-   * @var int
-   */
-  public static $BASE_DAY = 1;
-
   /**
    * 星期
    * @var array
@@ -155,17 +140,7 @@ class SolarUtil
    */
   public static function isLeapYear($year)
   {
-    $leap = false;
-    if ($year % 4 == 0) {
-      $leap = true;
-    }
-    if ($year % 100 == 0) {
-      $leap = false;
-    }
-    if ($year % 400 == 0) {
-      $leap = true;
-    }
-    return $leap;
+    return ($year%4 == 0 && $year%100 != 0) || ($year%400 == 0);
   }
 
   /**
@@ -194,7 +169,7 @@ class SolarUtil
   public static function getWeeksOfMonth($year, $month, $start)
   {
     $days = SolarUtil::getDaysOfMonth($year, $month);
-    $week = date('w', strtotime($year . '-' . $month . '-1'));
+    $week = intval(DateTime::createFromFormat('Y-n-j G:i:s',sprintf('%d-%d-1 0:00:00', $year, $month))->format('w'));
     return ceil(($days + $week - $start) / count(SolarUtil::$WEEK));
   }
 }

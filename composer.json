@@ -14,6 +14,9 @@
         "php": ">=5.3",
         "ext-bcmath": "*"
     },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
     "autoload": {
         "psr-4": {
             "com\\nlf\\calendar\\": "src/"

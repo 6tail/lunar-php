@@ -4,10 +4,8 @@ namespace com\nlf\calendar;
 
 use com\nlf\calendar\util\SolarUtil;
 use DateTime;
-use Exception;
 
 date_default_timezone_set('PRC');
-bcscale(12);
 
 /**
  * 阳历月
@@ -44,6 +42,9 @@ class SolarMonth
     return $this->toString();
   }
 
+  /**
+   * @return string
+   */
   public function toFullString()
   {
     return $this->year . '年' . $this->month . '月';
@@ -67,8 +68,8 @@ class SolarMonth
    */
   public static function fromDate($date)
   {
-    $year = (int)date_format($date, 'Y');
-    $month = (int)date_format($date, 'n');
+    $year = intval(date_format($date, 'Y'));
+    $month = intval(date_format($date, 'n'));
     return new SolarMonth($year, $month);
   }
 
@@ -84,7 +85,7 @@ class SolarMonth
 
   /**
    * 获取本月的阳历日期列表
-   * @return array
+   * @return Solar[]
    */
   public function getDays()
   {
@@ -105,11 +106,7 @@ class SolarMonth
    */
   public function next($months)
   {
-    try {
-      $date = new DateTime($this->year . '-' . $this->month . '-1');
-    } catch (Exception $e) {
-      return null;
-    }
+    $date = DateTime::createFromFormat('Y-n-j',sprintf('%d-%d-1', $this->year, $this->month));
     $date->modify($months . ' month');
     return SolarMonth::fromDate($date);
   }

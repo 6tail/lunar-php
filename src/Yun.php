@@ -4,7 +4,6 @@ namespace com\nlf\calendar;
 
 use com\nlf\calendar\util\LunarUtil;
 use DateTime;
-use Exception;
 
 date_default_timezone_set('PRC');
 bcscale(12);
@@ -80,31 +79,25 @@ class Yun
     // 阳男阴女顺推，阴男阳女逆推
     $start = $this->forward ? $current : $prev->getSolar();
     $end = $this->forward ? $next->getSolar() : $current;
-    // 时辰差
-    $hourDiff = LunarUtil::getTimeZhiIndex(substr($end->toYmdHms(), 11, 5)) - LunarUtil::getTimeZhiIndex(substr($start->toYmdHms(), 11, 5));
 
-    try {
-      $endCalendar = new DateTime($end->getYear() . '-' . $end->getMonth() . '-' . $end->getDay());
-    } catch (Exception $e) {
-      return null;
-    }
-    $endCalendar->setTime(0, 0, 0);
-    try {
-      $startCalendar = new DateTime($start->getYear() . '-' . $start->getMonth() . '-' . $start->getDay());
-    } catch (Exception $e) {
-      return null;
-    }
-    $startCalendar->setTime(0, 0, 0);
+    $endTimeZhiIndex = ($end->getHour() == 23) ? 11 : LunarUtil::getTimeZhiIndex(substr($end->toYmdHms(), 11, 5));
+    $startTimeZhiIndex = ($start->getHour() == 23) ? 11 : LunarUtil::getTimeZhiIndex(substr($start->toYmdHms(), 11, 5));
+    // 时辰差
+    $hourDiff = $endTimeZhiIndex - $startTimeZhiIndex;
+
+    $endCalendar = DateTime::createFromFormat('Y-n-j G:i:s',sprintf('%d-%d-%d 0:00:00', $end->getYear(), $end->getMonth(), $end->getDay()));
+    $startCalendar = DateTime::createFromFormat('Y-n-j G:i:s',sprintf('%d-%d-%d 0:00:00', $start->getYear(), $start->getMonth(), $start->getDay()));
+
     // 天数差
-    $dayDiff = intval(floor(($endCalendar->getTimestamp() - $startCalendar->getTimestamp()) / 86400));
+    $dayDiff = $endCalendar->diff($startCalendar)->days;
     if ($hourDiff < 0) {
       $hourDiff += 12;
       $dayDiff--;
     }
-    $monthDiff = intval(floor($hourDiff * 10 / 30));
+    $monthDiff = (int)($hourDiff * 10 / 30);
     $month = $dayDiff * 4 + $monthDiff;
     $day = $hourDiff * 10 - $monthDiff * 30;
-    $year = intval(floor($month / 12));
+    $year = (int)($month / 12);
     $month = $month - $year * 12;
     $this->startYear = $year;
     $this->startMonth = $month;
@@ -172,11 +165,7 @@ class Yun
   public function getStartSolar()
   {
     $birth = $this->lunar->getSolar();
-    try {
-      $date = new DateTime($birth->getYear() . '-' . $birth->getMonth() . '-' . $birth->getDay());
-    } catch (Exception $e) {
-      return null;
-    }
+    $date = DateTime::createFromFormat('Y-n-j G:i:s',sprintf('%d-%d-%d 0:00:00', $birth->getYear(), $birth->getMonth(), $birth->getDay()));
     $date->modify($this->startYear . ' year');
     $date->modify($this->startMonth . ' month');
     $date->modify($this->startDay . ' day');

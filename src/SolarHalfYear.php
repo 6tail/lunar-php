@@ -3,7 +3,6 @@
 namespace com\nlf\calendar;
 
 use DateTime;
-use Exception;
 
 date_default_timezone_set('PRC');
 bcscale(12);
@@ -71,8 +70,8 @@ class SolarHalfYear
    */
   public static function fromDate($date)
   {
-    $year = (int)date_format($date, 'Y');
-    $month = (int)date_format($date, 'n');
+    $year = intval(date_format($date, 'Y'));
+    $month = intval(date_format($date, 'n'));
     return new SolarHalfYear($year, $month);
   }
 
@@ -119,11 +118,7 @@ class SolarHalfYear
     if (0 === $halfYears) {
       return new SolarHalfYear($this->year, $this->month);
     }
-    try {
-      $date = new DateTime($this->year . '-' . $this->month . '-1');
-    } catch (Exception $e) {
-      return null;
-    }
+    $date = DateTime::createFromFormat('Y-n-j',sprintf('%d-%d-1', $this->year, $this->month));
     $date->modify((SolarHalfYear::$MONTH_COUNT * $halfYears) . ' month');
     return SolarHalfYear::fromDate($date);
   }

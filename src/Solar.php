@@ -74,37 +74,34 @@ class Solar
     $this->hour = $hour;
     $this->minute = $minute;
     $this->second = $second;
-    try {
-      $this->calendar = new DateTime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
-    } catch (Exception $e) {
-    }
+    $this->calendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d %d:%02d:%02d', $year, $month, $day, $hour, $minute, $second));
   }
 
   public static function fromDate($date)
   {
-    $year = (int)date_format($date, 'Y');
-    $month = (int)date_format($date, 'n');
-    $day = (int)date_format($date, 'j');
-    $hour = (int)date_format($date, 'G');
-    $minute = (int)date_format($date, 'i');
-    $second = (int)date_format($date, 's');
+    $year = intval(date_format($date, 'Y'));
+    $month = intval(date_format($date, 'n'));
+    $day = intval(date_format($date, 'j'));
+    $hour = intval(date_format($date, 'G'));
+    $minute = intval(date_format($date, 'i'));
+    $second = intval(date_format($date, 's'));
     return new Solar($year, $month, $day, $hour, $minute, $second);
   }
 
   public static function fromJulianDay($julianDay)
   {
-    $d = intval(floor($julianDay + 0.5));
+    $d = (int)($julianDay + 0.5);
     $f = $julianDay + 0.5 - $d;
 
     if ($d >= 2299161) {
-      $c = intval(floor(($d - 1867216.25) / 36524.25));
-      $d += 1 + $c - intval(floor($c / 4));
+      $c = (int)(($d - 1867216.25) / 36524.25);
+      $d += 1 + $c - (int)($c / 4);
     }
     $d += 1524;
-    $year = intval(floor(($d - 122.1) / 365.25));
-    $d -= intval(floor(365.25 * $year));
-    $month = intval(floor($d / 30.601));
-    $d -= intval(floor(30.601 * $month));
+    $year = (int)(($d - 122.1) / 365.25);
+    $d -= (int)(365.25 * $year);
+    $month = (int)($d / 30.601);
+    $d -= (int)(30.601 * $month);
     $day = $d;
     if ($month > 13) {
       $month -= 13;
@@ -114,11 +111,11 @@ class Solar
       $year -= 4716;
     }
     $f *= 24;
-    $hour = intval(floor($f));
+    $hour = (int)$f;
 
     $f -= $hour;
     $f *= 60;
-    $minute = intval(floor($f));
+    $minute = (int)$f;
 
     $f -= $minute;
     $f *= 60;
@@ -128,12 +125,12 @@ class Solar
   }
 
   /**
-   * 八字转阳历，默认流派
+   * 通过八字获取阳历列表（晚子时日柱按当天，起始年为1900）
    * @param string $yearGanZhi 年柱
    * @param string $monthGanZhi 月柱
    * @param string $dayGanZhi 日柱
    * @param string $timeGanZhi 时柱
-   * @return Solar[]
+   * @return Solar[] 符合的阳历列表
    * @throws Exception
    */
   public static function fromBaZi($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi)
@@ -142,16 +139,32 @@ class Solar
   }
 
   /**
-   * 八字转阳历
+   * 通过八字获取阳历列表（起始年为1900）
    * @param string $yearGanZhi 年柱
    * @param string $monthGanZhi 月柱
    * @param string $dayGanZhi 日柱
    * @param string $timeGanZhi 时柱
    * @param int sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
-   * @return Solar[]
+   * @return Solar[] 符合的阳历列表
    * @throws Exception
    */
   public static function fromBaZiBySect($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect)
+  {
+    return self::fromBaZiBySectAndBaseYear($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect, 1900);
+  }
+
+  /**
+   * 通过八字获取阳历列表
+   * @param string $yearGanZhi 年柱
+   * @param string $monthGanZhi 月柱
+   * @param string $dayGanZhi 日柱
+   * @param string $timeGanZhi 时柱
+   * @param int sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
+   * @param int $baseYear 起始年
+   * @return Solar[]
+   * @throws Exception
+   */
+  public static function fromBaZiBySectAndBaseYear($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect, $baseYear)
   {
     $sect = (1 == $sect) ? 1 : 2;
     $l = array();
@@ -169,17 +182,14 @@ class Solar
         $hour = ($i - 1) * 2;
       }
     }
-    while ($startYear >= SolarUtil::$BASE_YEAR - 1) {
+    while ($startYear >= $baseYear) {
       $year = $startYear - 1;
       $counter = 0;
       $month = 12;
       $found = false;
       while ($counter < 15) {
-        if ($year >= SolarUtil::$BASE_YEAR) {
+        if ($year >= $baseYear) {
           $day = 1;
-          if ($year == SolarUtil::$BASE_YEAR && $month == SolarUtil::$BASE_MONTH) {
-            $day = SolarUtil::$BASE_DAY;
-          }
           $solar = Solar::fromYmdHms($year, $month, $day, $hour, 0, 0);
           $lunar = $solar->getLunar();
           if (strcmp($lunar->getYearInGanZhiExact(), $yearGanZhi) == 0 && strcmp($lunar->getMonthInGanZhiExact(), $monthGanZhi) == 0) {
@@ -202,9 +212,6 @@ class Solar
           $year--;
         }
         $day = 1;
-        if ($year == SolarUtil::$BASE_YEAR && $month == SolarUtil::$BASE_MONTH) {
-          $day = SolarUtil::$BASE_DAY;
-        }
         $solar = Solar::fromYmdHms($year, $month, $day, $hour, 0, 0);
         while ($counter < 61) {
           $lunar = $solar->getLunar();
@@ -232,19 +239,17 @@ class Solar
     return new Solar($year, $month, $day, $hour, $minute, $second);
   }
 
+  /**
+   * @return string
+   */
   public function toYmd()
   {
-    $month = $this->month;
-    $day = $this->day;
-    return $this->year . '-' . ($month < 10 ? '0' : '') . $month . '-' . ($day < 10 ? '0' : '') . $day;
+    return sprintf('%04d-%02d-%02d', $this->year, $this->month, $this->day);
   }
 
   public function toYmdHms()
   {
-    $hour = $this->hour;
-    $minute = $this->minute;
-    $second = $this->second;
-    return $this->toYmd() . ' ' . ($hour < 10 ? '0' : '') . $hour . ':' . ($minute < 10 ? '0' : '') . $minute . ':' . ($second < 10 ? '0' : '') . $second;
+    return $this->toYmd() . ' ' . sprintf('%02d:%02d:%02d', $this->hour, $this->minute, $this->second);
   }
 
   public function toFullString()
@@ -298,7 +303,7 @@ class Solar
     $d = $this->day + (($this->second / 60 + $this->minute) / 60 + $this->hour) / 24;
     $n = 0;
     $g = false;
-    if ($y * 372 + $m * 31 + intval(floor($d)) >= 588829) {
+    if ($y * 372 + $m * 31 + (int)$d >= 588829) {
       $g = true;
     }
     if ($m <= 2) {
@@ -306,10 +311,10 @@ class Solar
       $y--;
     }
     if ($g) {
-      $n = intval(floor($y / 100));
-      $n = 2 - $n + intval(floor($n / 4));
+      $n = (int)($y / 100);
+      $n = 2 - $n + (int)($n / 4);
     }
-    return intval(floor(365.25 * ($y + 4716))) + intval(floor(30.6001 * ($m + 1))) + $d + $n - 1524.5;
+    return (int)(365.25 * ($y + 4716)) + (int)(30.6001 * ($m + 1)) + $d + $n - 1524.5;
   }
 
   public function getLunar()
@@ -339,7 +344,7 @@ class Solar
 
   public function getWeek()
   {
-    return (int)$this->calendar->format('w');
+    return intval($this->calendar->format('w'));
   }
 
   public function getWeekInChinese()
@@ -380,13 +385,15 @@ class Solar
   public function getFestivals()
   {
     $l = array();
-    if (!empty(SolarUtil::$FESTIVAL[$this->month . '-' . $this->day])) {
-      $l[] = SolarUtil::$FESTIVAL[$this->month . '-' . $this->day];
+    $key = $this->month . '-' . $this->day;
+    if (!empty(SolarUtil::$FESTIVAL[$key])) {
+      $l[] = SolarUtil::$FESTIVAL[$key];
     }
     $weeks = intval(ceil($this->day / 7.0));
     $week = $this->getWeek();
-    if (!empty(SolarUtil::$WEEK_FESTIVAL[$this->month . '-' . $weeks . '-' . $week])) {
-      $l[] = SolarUtil::$WEEK_FESTIVAL[$this->month . '-' . $weeks . '-' . $week];
+    $key = $this->month . '-' . $weeks . '-' . $week;
+    if (!empty(SolarUtil::$WEEK_FESTIVAL[$key])) {
+      $l[] = SolarUtil::$WEEK_FESTIVAL[$key];
     }
     return $l;
   }
@@ -394,8 +401,11 @@ class Solar
   public function getOtherFestivals()
   {
     $l = array();
-    if (!empty(SolarUtil::$OTHER_FESTIVAL[$this->month . '-' . $this->day])) {
-      $l[] = SolarUtil::$OTHER_FESTIVAL[$this->month . '-' . $this->day];
+    $key = $this->month . '-' . $this->day;
+    if (!empty(SolarUtil::$OTHER_FESTIVAL[$key])) {
+      foreach (SolarUtil::$OTHER_FESTIVAL[$key] as $f) {
+        $l[] = $f;
+      }
     }
     return $l;
   }
@@ -410,11 +420,7 @@ class Solar
     if ($days == 0) {
       return Solar::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
     }
-    try {
-      $calendar = new DateTime($this->year . '-' . $this->month . '-' . $this->day . ' ' . $this->hour . ':' . $this->minute . ':' . $this->second);
-    } catch (Exception $e) {
-      return null;
-    }
+    $calendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d %d:%02d:%02d', $this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second));
     $calendar->modify(($days > 0 ? '+' : '') . $days . ' day');
     return Solar::fromDate($calendar);
   }
@@ -429,22 +435,18 @@ class Solar
     if ($days == 0) {
       return Solar::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
     }
-    try {
-      $calendar = new DateTime($this->year . '-' . $this->month . '-' . $this->day . ' ' . $this->hour . ':' . $this->minute . ':' . $this->second);
-    } catch (Exception $e) {
-      return null;
-    }
+    $calendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d %d:%02d:%02d', $this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second));
     $rest = abs($days);
     $add = $days < 1 ? -1 : 1;
     while ($rest > 0) {
       $calendar->modify(($add > 0 ? '+' : '') . $add . ' day');
       $work = true;
-      $year = (int)date_format($calendar, 'Y');
-      $month = (int)date_format($calendar, 'n');
-      $day = (int)date_format($calendar, 'j');
+      $year = intval(date_format($calendar, 'Y'));
+      $month = intval(date_format($calendar, 'n'));
+      $day = intval(date_format($calendar, 'j'));
       $holiday = HolidayUtil::getHolidayByYmd($year, $month, $day);
       if (null == $holiday) {
-        $week = (int)$calendar->format('w');
+        $week = intval($calendar->format('w'));
         if (0 == $week || 6 == $week) {
           $work = false;
         }
