@@ -2,8 +2,6 @@
 
 namespace com\nlf\calendar;
 
-use com\nlf\calendar\util\LunarUtil;
-
 /**
  * 节气
  * @package com\nlf\calendar
@@ -46,15 +44,13 @@ class JieQi
   public function setName($name)
   {
     $this->name = $name;
-    foreach (LunarUtil::$JIE as $key) {
-      if ($key == $name) {
-        $this->jie = true;
-        return;
-      }
-    }
-    foreach (LunarUtil::$QI as $key) {
-      if ($key == $name) {
-        $this->qi = true;
+    for ($i = 0, $j = count(Lunar::$JIE_QI); $i < $j; $i++) {
+      if (strcmp($name, Lunar::$JIE_QI[$i]) == 0) {
+        if ($i % 2 == 0) {
+          $this->qi = true;
+        } else {
+          $this->jie = true;
+        }
         return;
       }
     }

@@ -127,7 +127,7 @@ class EightChar
 
   /**
    * 获取年柱地支藏干，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
-   * @return string 天干
+   * @return string[] 天干
    */
   public function getYearHideGan()
   {
@@ -161,6 +161,11 @@ class EightChar
     return LunarUtil::$SHI_SHEN_GAN[$this->getDayGan() . $this->getYearGan()];
   }
 
+  /**
+   * 获取十神地支
+   * @param $zhi string 地支
+   * @return string[]
+   */
   private function getShiShenZhi($zhi)
   {
     $hideGan = LunarUtil::$ZHI_HIDE_GAN[$zhi];
@@ -173,7 +178,7 @@ class EightChar
 
   /**
    * 获取年柱地支十神，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
-   * @return array 十神
+   * @return string[] 十神
    */
   public function getYearShiShenZhi()
   {
@@ -231,7 +236,7 @@ class EightChar
 
   /**
    * 获取月柱地支藏干，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
-   * @return string 天干
+   * @return string[] 天干
    */
   public function getMonthHideGan()
   {
@@ -312,7 +317,7 @@ class EightChar
 
   /**
    * 获取日柱地支藏干，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
-   * @return string 天干
+   * @return string[] 天干
    */
   public function getDayHideGan()
   {
@@ -411,7 +416,7 @@ class EightChar
 
   /**
    * 获取时柱地支藏干，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
-   * @return string 天干
+   * @return string[] 天干
    */
   public function getTimeHideGan()
   {

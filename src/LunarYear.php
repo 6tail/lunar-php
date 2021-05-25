@@ -117,13 +117,13 @@ class LunarYear
   {
     // 节气(中午12点，长度25)
     $jq = array();
-    // 合朔，即每月初一(中午12点，长度15)
+    // 合朔，即每月初一(中午12点，长度16)
     $hs = array();
-    // 每月天数(长度14)
+    // 每月天数(长度15)
     $dayCounts = array();
 
     $year = $this->year - 2000;
-    // 从上年的大雪到下年的大寒
+    // 从上年的大雪到下年的立春
     for ($i = 0, $j = count(Lunar::$JIE_QI_IN_USE); $i < $j; $i++) {
       // 精确的节气
       $t = 36525 * ShouXingUtil::saLonT(($year + (17 + $i) * 15.0 / 360) * 2 * M_PI);
@@ -141,11 +141,11 @@ class LunarYear
       $w -= 29.5306;
     }
     // 递推每月初一
-    for ($i = 0; $i < 15; $i++) {
+    for ($i = 0; $i < 16; $i++) {
       $hs[] = ShouXingUtil::calcShuo($w + 29.5306 * $i);
     }
     // 每月天数
-    for ($i = 0; $i < 14; $i++) {
+    for ($i = 0; $i < 15; $i++) {
       $dayCounts[] = (int)($hs[$i + 1] - $hs[$i]);
     }
     $leap = -1;
@@ -159,7 +159,7 @@ class LunarYear
 
     $y = $this->year - 1;
     $m = 11;
-    for ($i = 0; $i < 14; $i++) {
+    for ($i = 0; $i < count($dayCounts); $i++) {
       $isLeap = false;
       if ($i == $leap) {
         $isLeap = true;

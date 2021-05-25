@@ -68,6 +68,11 @@ class Solar
 
   function __construct($year, $month, $day, $hour, $minute, $second)
   {
+    if ($year === 1582 && $month == 10) {
+      if ($day >= 15) {
+        $day -= 10;
+      }
+    }
     $this->year = $year;
     $this->month = $month;
     $this->day = $day;
@@ -244,7 +249,13 @@ class Solar
    */
   public function toYmd()
   {
-    return sprintf('%04d-%02d-%02d', $this->year, $this->month, $this->day);
+    $d = $this->day;
+    if ($this->year === 1582 && $this->month == 10) {
+      if ($d >= 5) {
+        $d += 10;
+      }
+    }
+    return sprintf('%04d-%02d-%02d', $this->year, $this->month, $d);
   }
 
   public function toYmdHms()

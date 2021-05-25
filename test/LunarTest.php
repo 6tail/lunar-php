@@ -51,4 +51,81 @@ class LunarTest extends TestCase
     $this->assertEquals('2039-01-23', $lunar->getSolar()->toString());
   }
 
+
+  public function test7()
+  {
+    $lunar = Lunar::fromYmdHms(2020, -4, 2, 13, 0, 0);
+    $this->assertEquals('二〇二〇年闰四月初二', $lunar->toString());
+    $this->assertEquals('2020-05-24', $lunar->getSolar()->toString());
+  }
+
+
+  public function test8()
+  {
+    $lunar = Lunar::fromYmdHms(2020, 12, 10, 13, 0, 0);
+    $this->assertEquals('二〇二〇年腊月初十', $lunar->toString());
+    $this->assertEquals('2021-01-22', $lunar->getSolar()->toString());
+  }
+
+
+  public function test9()
+  {
+    $lunar = Lunar::fromYmdHms(1500, 1, 1, 12, 0, 0);
+    $this->assertEquals('1500-01-31', $lunar->getSolar()->toString());
+  }
+
+
+  public function test10()
+  {
+    $lunar = Lunar::fromYmdHms(1500, 12, 29, 12, 0, 0);
+    $this->assertEquals('1501-01-18', $lunar->getSolar()->toString());
+  }
+
+  public function test11()
+  {
+    $solar = new Solar(1500, 1, 1, 12, 0, 0);
+    $this->assertEquals('一四九九年腊月初一', $solar->getLunar()->toString());
+  }
+
+
+  public function test12()
+  {
+    $solar = new Solar(1500, 12, 31, 12, 0, 0);
+    $this->assertEquals('一五〇〇年腊月十一', $solar->getLunar()->toString());
+  }
+
+
+  public function test13()
+  {
+    $solar = new Solar(1582, 10, 4, 12, 0, 0);
+    $this->assertEquals('一五八二年九月十八', $solar->getLunar()->toString());
+  }
+
+
+  public function test14()
+  {
+    $solar = new Solar(1582, 10, 15, 12, 0, 0);
+    $this->assertEquals('一五八二年九月十九', $solar->getLunar()->toString());
+  }
+
+
+  public function test15()
+  {
+    $lunar = Lunar::fromYmdHms(1582, 9, 18, 12, 0, 0);
+    $this->assertEquals('1582-10-04', $lunar->getSolar()->toString());
+  }
+
+
+  public function test16()
+  {
+    $lunar = Lunar::fromYmdHms(1582, 9, 19, 12, 0, 0);
+    $this->assertEquals('1582-10-15', $lunar->getSolar()->toString());
+  }
+
+
+  public function test17()
+  {
+    $lunar = Lunar::fromYmdHms(2019, 12, 12, 11, 22, 0);
+    $this->assertEquals('2020-01-06', $lunar->getSolar()->toString());
+  }
 }
