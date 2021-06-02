@@ -987,7 +987,7 @@ class Lunar
   /**
    * 获取节日，有可能一天会有多个节日
    *
-   * @return array 节日列表，如春节
+   * @return string[] 节日列表，如春节
    */
   public function getFestivals()
   {
@@ -995,6 +995,9 @@ class Lunar
     $key = $this->month . '-' . $this->day;
     if (!empty(LunarUtil::$FESTIVAL[$key])) {
       $l[] = LunarUtil::$FESTIVAL[$key];
+    }
+    if (abs($this->month) == 12 && $this->day >= 29 && $this->year != $this->next(1)->getYear()) {
+      $l[] = '除夕';
     }
     return $l;
   }
