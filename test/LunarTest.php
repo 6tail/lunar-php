@@ -158,4 +158,124 @@ class LunarTest extends TestCase
     $this->assertEquals('除夕', $fs[0]);
   }
 
+  public function test22()
+  {
+    $lunar = Lunar::fromYmd(2022, 1, 1);
+    $this->assertEquals('五黄土玉衡', $lunar->getYearNineStar()->toString());
+  }
+
+  public function test23()
+  {
+    $lunar = Lunar::fromYmd(2033, 1, 1);
+    $this->assertEquals('三碧木天玑', $lunar->getYearNineStar()->toString());
+  }
+
+  public function test24()
+  {
+    $lunar = Lunar::fromYmd(2033, -11, 1);
+    $this->assertEquals('2033-12-22', $lunar->getSolar()->toString());
+  }
+
+  public function test25()
+  {
+    $solar = Solar::fromYmdHms(2021, 6, 7, 21, 18, 0);
+    $this->assertEquals('二〇二一年四月廿七', $solar->getLunar()->toString());
+  }
+
+  public function test26()
+  {
+    $lunar = Lunar::fromYmdHms(2021, 6, 7, 21, 18, 0);
+    $this->assertEquals('2021-07-16', $lunar->getSolar()->toString());
+  }
+
+  public function test27()
+  {
+    $solar = Solar::fromYmd(1989, 4, 28);
+    $this->assertEquals(23, $solar->getLunar()->getDay());
+  }
+
+  public function test28()
+  {
+    $solar = Solar::fromYmd(1990, 10, 8);
+    $this->assertEquals('乙酉', $solar->getLunar()->getMonthInGanZhiExact());
+  }
+
+  public function test29()
+  {
+    $solar = Solar::fromYmd(1990, 10, 9);
+    $this->assertEquals('丙戌', $solar->getLunar()->getMonthInGanZhiExact());
+  }
+
+  public function test30()
+  {
+    $solar = Solar::fromYmd(1990, 10, 8);
+    $this->assertEquals('丙戌', $solar->getLunar()->getMonthInGanZhi());
+  }
+
+  public function test31()
+  {
+    $solar = Solar::fromYmdHms(1987, 4, 17, 9, 0, 0);
+    $this->assertEquals('一九八七年三月二十', $solar->getLunar()->toString());
+  }
+
+  public function test32()
+  {
+    $lunar = Lunar::fromYmd(2034, 1, 1);
+    $this->assertEquals('2034-02-19', $lunar->getSolar()->toString());
+  }
+
+  public function test33()
+  {
+    $lunar = Lunar::fromYmd(2033, 12, 1);
+    $this->assertEquals('2034-01-20', $lunar->getSolar()->toString());
+  }
+
+  public function test34()
+  {
+    $lunar = Lunar::fromYmd(37, -12, 1);
+    $this->assertEquals('闰腊', $lunar->getMonthInChinese());
+  }
+
+  public function test35()
+  {
+    $lunar = Lunar::fromYmd(56, -12, 1);
+    $this->assertEquals('闰腊', $lunar->getMonthInChinese());
+
+    $lunar = Lunar::fromYmd(75, -11, 1);
+    $this->assertEquals('闰冬', $lunar->getMonthInChinese());
+
+    $lunar = Lunar::fromYmd(94, -11, 1);
+    $this->assertEquals('闰冬', $lunar->getMonthInChinese());
+
+    $lunar = Lunar::fromYmd(94, 12, 1);
+    $this->assertEquals('腊', $lunar->getMonthInChinese());
+
+    $lunar = Lunar::fromYmd(113, 12, 1);
+    $this->assertEquals('腊', $lunar->getMonthInChinese());
+
+    $lunar = Lunar::fromYmd(113, -12, 1);
+    $this->assertEquals('闰腊', $lunar->getMonthInChinese());
+
+    $lunar = Lunar::fromYmd(5552, -12, 1);
+    $this->assertEquals('闰腊', $lunar->getMonthInChinese());
+  }
+
+  public function test36()
+  {
+    $solar = Solar::fromYmd(5553, 1, 22);
+    $this->assertEquals('五五五二年闰腊月初二', $solar->getLunar()->toString());
+  }
+
+  public function test37()
+  {
+    $solar = Solar::fromYmd(7013, 12, 24);
+    $this->assertEquals('七〇一三年闰冬月初四', $solar->getLunar()->toString());
+  }
+
+  public function test38()
+  {
+    $lunar = Lunar::fromYmd(7013, -11, 4);
+    $this->assertEquals('7013-12-24', $lunar->getSolar()->toString());
+  }
+
 }

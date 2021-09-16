@@ -97,7 +97,7 @@ class SolarSeason
 
   /**
    * 获取本季度的月份
-   * @return array
+   * @return SolarMonth[]
    */
   public function getMonths()
   {

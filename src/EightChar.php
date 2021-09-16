@@ -272,7 +272,7 @@ class EightChar
 
   /**
    * 获取月柱地支十神，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
-   * @return array 十神
+   * @return string[] 十神
    */
   public function getMonthShiShenZhi()
   {
@@ -353,7 +353,7 @@ class EightChar
 
   /**
    * 获取日柱地支十神，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
-   * @return array 十神
+   * @return string[] 十神
    */
   public function getDayShiShenZhi()
   {
@@ -452,7 +452,7 @@ class EightChar
 
   /**
    * 获取时柱地支十神，由于藏干分主气、余气、杂气，所以返回结果可能为1到3个元素
-   * @return array 十神
+   * @return string[] 十神
    */
   public function getTimeShiShenZhi()
   {

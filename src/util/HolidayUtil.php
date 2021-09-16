@@ -152,7 +152,7 @@ class HolidayUtil
    * 获取指定年月的节假日列表
    * @param int $year 年
    * @param int $month 月，1-12
-   * @return array
+   * @return Holiday[]
    */
   public static function getHolidaysByYm($year, $month)
   {
@@ -162,7 +162,7 @@ class HolidayUtil
   /**
    * 获取指定年的节假日列表
    * @param int $year 年
-   * @return array
+   * @return Holiday[]
    */
   public static function getHolidaysByYear($year)
   {
@@ -172,7 +172,7 @@ class HolidayUtil
   /**
    * 获取指定年月日的节假日列表
    * @param string $ymd 年、年月、年月日
-   * @return array 节假日列表
+   * @return Holiday[] 节假日列表
    */
   public static function getHolidays($ymd)
   {
@@ -184,7 +184,7 @@ class HolidayUtil
    * @param int $year 年
    * @param int $month 月，1-12
    * @param int $day 日，1-31
-   * @return array
+   * @return Holiday[]
    */
   public static function getHolidaysByTargetYmd($year, $month, $day)
   {
@@ -194,7 +194,7 @@ class HolidayUtil
   /**
    * 获取指定节日（仅节日当天）的相关节假日列表
    * @param string $ymd 年月日
-   * @return array
+   * @return Holiday[]
    */
   public static function getHolidaysByTarget($ymd)
   {

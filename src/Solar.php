@@ -68,7 +68,7 @@ class Solar
 
   function __construct($year, $month, $day, $hour, $minute, $second)
   {
-    if ($year === 1582 && $month == 10) {
+    if ($year == 1582 && $month == 10) {
       if ($day >= 15) {
         $day -= 10;
       }
@@ -250,7 +250,7 @@ class Solar
   public function toYmd()
   {
     $d = $this->day;
-    if ($this->year === 1582 && $this->month == 10) {
+    if ($this->year == 1582 && $this->month == 10) {
       if ($d >= 5) {
         $d += 10;
       }

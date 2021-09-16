@@ -96,14 +96,14 @@ class SolarHalfYear
 
   /**
    * 获取本半年的月份
-   * @return array
+   * @return SolarMonth[]
    */
   public function getMonths()
   {
     $l = array();
     $index = $this->getIndex() - 1;
     for ($i = 0; $i < SolarHalfYear::$MONTH_COUNT; $i++) {
-      $l[] = new SolarHalfYear($this->year, SolarHalfYear::$MONTH_COUNT * $index + $i + 1);
+      $l[] = new SolarMonth($this->year, SolarHalfYear::$MONTH_COUNT * $index + $i + 1);
     }
     return $l;
   }

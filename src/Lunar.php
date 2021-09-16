@@ -25,7 +25,7 @@ class Lunar
    * 实际的节气表
    * @var string[]
    */
-  public static $JIE_QI_IN_USE = array('DA_XUE', '冬至', '小寒', '大寒', '立春', '雨水', '惊蛰', '春分', '清明', '谷雨', '立夏', '小满', '芒种', '夏至', '小暑', '大暑', '立秋', '处暑', '白露', '秋分', '寒露', '霜降', '立冬', '小雪', '大雪', 'DONG_ZHI', 'XIAO_HAN', 'DA_HAN', 'LI_CHUN');
+  public static $JIE_QI_IN_USE = array('DA_XUE', '冬至', '小寒', '大寒', '立春', '雨水', '惊蛰', '春分', '清明', '谷雨', '立夏', '小满', '芒种', '夏至', '小暑', '大暑', '立秋', '处暑', '白露', '秋分', '寒露', '霜降', '立冬', '小雪', '大雪', 'DONG_ZHI', 'XIAO_HAN', 'DA_HAN', 'LI_CHUN', 'YU_SHUI', 'JING_ZHE');
 
   /**
    * 年
@@ -855,6 +855,10 @@ class Lunar
       $jq = '立春';
     } else if (strcmp('DA_XUE', $jq) == 0) {
       $jq = '大雪';
+    } else if (strcmp('YU_SHUI', $jq) == 0) {
+      $jq = '雨水';
+    } else if (strcmp('JING_ZHE', $jq) == 0) {
+      $jq = '惊蛰';
     }
     return $jq;
   }
@@ -1519,7 +1523,7 @@ class Lunar
 
   /**
    * 获取八字，男性也称乾造，女性也称坤造（以立春交接时刻作为新年的开始）
-   * @return array 八字（男性也称乾造，女性也称坤造）
+   * @return string[] 八字（男性也称乾造，女性也称坤造）
    */
   public function getBaZi()
   {
@@ -1534,7 +1538,7 @@ class Lunar
 
   /**
    * 获取八字五行
-   * @return array 八字五行
+   * @return string[] 八字五行
    */
   public function getBaZiWuXing()
   {
@@ -1549,7 +1553,7 @@ class Lunar
 
   /**
    * 获取八字纳音
-   * @return array 八字纳音
+   * @return string[] 八字纳音
    */
   public function getBaZiNaYin()
   {
@@ -1564,7 +1568,7 @@ class Lunar
 
   /**
    * 获取八字天干十神，日柱十神为日主，其余三柱根据天干十神表查询
-   * @return array 八字天干十神
+   * @return string[] 八字天干十神
    */
   public function getBaZiShiShenGan()
   {
@@ -1579,7 +1583,7 @@ class Lunar
 
   /**
    * 获取八字地支十神，根据地支十神表查询
-   * @return array 八字地支十神
+   * @return string[] 八字地支十神
    */
   public function getBaZiShiShenZhi()
   {
@@ -1598,7 +1602,7 @@ class Lunar
 
   /**
    * 获取八字年支十神
-   * @return array 八字年支十神
+   * @return string[] 八字年支十神
    */
   public function getBaZiShiShenYearZhi()
   {
@@ -1607,7 +1611,7 @@ class Lunar
 
   /**
    * 获取八字月支十神
-   * @return array 八字月支十神
+   * @return string[] 八字月支十神
    */
   public function getBaZiShiShenMonthZhi()
   {
@@ -1616,7 +1620,7 @@ class Lunar
 
   /**
    * 获取八字日支十神
-   * @return array 八字日支十神
+   * @return string[] 八字日支十神
    */
   public function getBaZiShiShenDayZhi()
   {
@@ -1625,7 +1629,7 @@ class Lunar
 
   /**
    * 获取八字时支十神
-   * @return array 八字时支十神
+   * @return string[] 八字时支十神
    */
   public function getBaZiShiShenTimeZhi()
   {
@@ -1730,7 +1734,7 @@ class Lunar
 
   /**
    * 获取每日宜
-   * @return array 宜
+   * @return string[] 宜
    */
   public function getDayYi()
   {
@@ -1739,7 +1743,7 @@ class Lunar
 
   /**
    * 获取时宜
-   * @return array 宜
+   * @return string[] 宜
    */
   public function getTimeYi()
   {
@@ -1748,7 +1752,7 @@ class Lunar
 
   /**
    * 获取每日忌
-   * @return array 忌
+   * @return string[] 忌
    */
   public function getDayJi()
   {
@@ -1757,7 +1761,7 @@ class Lunar
 
   /**
    * 获取时忌
-   * @return array 忌
+   * @return string[] 忌
    */
   public function getTimeJi()
   {
@@ -1766,7 +1770,7 @@ class Lunar
 
   /**
    * 获取日吉神（宜趋），如果没有，返回['无']
-   * @return array 吉神
+   * @return string[] 吉神
    */
   public function getDayJiShen()
   {
@@ -1775,7 +1779,7 @@ class Lunar
 
   /**
    * 获取日凶煞（宜忌），如果没有，返回['无']
-   * @return array 凶煞
+   * @return string[] 凶煞
    */
   public function getDayXiongSha()
   {
@@ -2526,7 +2530,7 @@ class Lunar
     $startSolar = $jieQi->getSolar();
     $startCalendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d 0:00:00', $startSolar->getYear(), $startSolar->getMonth(), $startSolar->getDay()));
     $days = $currentCalendar->diff($startCalendar)->days;
-    return LunarUtil::$WU_HOU[$offset * 3 + floor($days / 5)];
+    return LunarUtil::$WU_HOU[($offset * 3 + floor($days / 5)) % count(LunarUtil::$WU_HOU)];
   }
 
 }

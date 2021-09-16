@@ -1,6 +1,7 @@
 <?php
 
 use com\nlf\calendar\Solar;
+use com\nlf\calendar\util\SolarUtil;
 use PHPUnit\Framework\TestCase;
 
 class SolarTest extends TestCase
@@ -40,6 +41,11 @@ class SolarTest extends TestCase
     $solar = Solar::fromYmd(2020, 1, 17);
     $this->assertEquals('2020-01-18', $solar->next(1)->toString());
     $this->assertEquals('2020-01-19', $solar->nextWorkday(1)->toString());
+  }
+
+  public function test10()
+  {
+    $this->assertEquals(false, SolarUtil::isLeapYear(1500));
   }
 
 }

@@ -184,12 +184,21 @@ class DaYun
   }
 
   /**
-   * 获取流年
+   * 获取10轮流年
    * @return LiuNian[]
    */
   public function getLiuNian()
   {
-    $n = 10;
+    return $this->getLiuNianBy(10);
+  }
+
+  /**
+   * 获取流年
+   * @param $n int 轮数
+   * @return LiuNian[]
+   */
+  public function getLiuNianBy($n)
+  {
     if ($this->index < 1) {
       $n = $this->endYear - $this->startYear + 1;
     }
@@ -201,12 +210,21 @@ class DaYun
   }
 
   /**
-   * 获取小运
+   * 获取10轮小运
    * @return XiaoYun[]
    */
   public function getXiaoYun()
   {
-    $n = 10;
+    return $this->getXiaoYunBy(10);
+  }
+
+  /**
+   * 获取小运
+   * @param $n int 轮数
+   * @return XiaoYun[]
+   */
+  public function getXiaoYunBy($n)
+  {
     if ($this->index < 1) {
       $n = $this->endYear - $this->startYear + 1;
     }

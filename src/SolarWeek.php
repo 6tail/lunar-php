@@ -210,7 +210,7 @@ class SolarWeek
 
   /**
    * 获取本周的阳历日期列表（可能跨月）
-   * @return array
+   * @return Solar[]
    */
   public function getDays()
   {
@@ -228,7 +228,7 @@ class SolarWeek
 
   /**
    * 获取本周的阳历日期列表（仅限当月）
-   * @return array
+   * @return Solar[]
    */
   public function getDaysInMonth()
   {

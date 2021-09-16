@@ -70,6 +70,13 @@ class Yun
 
   private function computeStart()
   {
+    echo "************";
+    echo $this->lunar->toString() . "\n";
+    echo $this->lunar->getSolar()->toYmdHms() . "\n";
+    $jieQi = $this->lunar->getJieQiTable();
+    foreach ($jieQi as $key => $value) {
+      echo $key . ' = ' . $value->toYmdHms() . "\n";
+    }
     // 上节
     $prev = $this->lunar->getPrevJie();
     // 下节
@@ -173,12 +180,21 @@ class Yun
   }
 
   /**
-   * 获取大运
+   * 获取10轮大运
    * @return DaYun[]
    */
   public function getDaYun()
   {
-    $n = 10;
+    return $this->getDaYunBy(10);
+  }
+
+  /**
+   * 获取大运
+   * @param $n int 轮数
+   * @return DaYun[]
+   */
+  public function getDaYunBy($n)
+  {
     $l = array();
     for ($i = 0; $i < $n; $i++) {
       $l[] = new DaYun($this, $i);

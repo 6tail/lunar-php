@@ -1080,7 +1080,7 @@ class LunarUtil
    * 获取日宜
    * @param string $monthGanZhi 月干支
    * @param string $dayGanZhi 日干支
-   * @return array 宜
+   * @return string[] 宜
    */
   public static function getDayYi($monthGanZhi, $dayGanZhi)
   {
@@ -1125,7 +1125,7 @@ class LunarUtil
    * 获取日忌
    * @param string $monthGanZhi 月干支
    * @param string $dayGanZhi 日干支
-   * @return array 忌
+   * @return string[] 忌
    */
   public static function getDayJi($monthGanZhi, $dayGanZhi)
   {
@@ -1169,7 +1169,7 @@ class LunarUtil
    * 获取日吉神
    * @param int $lunarMonth 月
    * @param string $dayGanZhi 日干支
-   * @return array 吉神
+   * @return string[] 吉神
    */
   public static function getDayJiShen($lunarMonth, $dayGanZhi)
   {
@@ -1198,7 +1198,7 @@ class LunarUtil
    * 获取日凶煞
    * @param int $lunarMonth 月
    * @param string $dayGanZhi 日干支
-   * @return array 凶煞
+   * @return string[] 凶煞
    */
   public static function getDayXiongSha($lunarMonth, $dayGanZhi)
   {
@@ -1227,7 +1227,7 @@ class LunarUtil
    * 获取时宜
    * @param string $dayGanZhi 日干支
    * @param string $timeGanZhi 时辰干支
-   * @return array 宜
+   * @return string[] 宜
    */
   public static function getTimeYi($dayGanZhi, $timeGanZhi)
   {
@@ -1256,7 +1256,7 @@ class LunarUtil
    * 获取时忌
    * @param string $dayGanZhi 日干支
    * @param string $timeGanZhi 时辰干支
-   * @return array 忌
+   * @return string[] 忌
    */
   public static function getTimeJi($dayGanZhi, $timeGanZhi)
   {
