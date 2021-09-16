@@ -70,13 +70,6 @@ class Yun
 
   private function computeStart()
   {
-    echo "************";
-    echo $this->lunar->toString() . "\n";
-    echo $this->lunar->getSolar()->toYmdHms() . "\n";
-    $jieQi = $this->lunar->getJieQiTable();
-    foreach ($jieQi as $key => $value) {
-      echo $key . ' = ' . $value->toYmdHms() . "\n";
-    }
     // 上节
     $prev = $this->lunar->getPrevJie();
     // 下节
