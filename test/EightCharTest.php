@@ -234,4 +234,20 @@ class EightCharTest extends TestCase
     $this->assertEquals('1990-04-15', $eightChar->getYun(1)->getStartSolar()->toYmd());
   }
 
+  public function test7()
+  {
+    $solar = Solar::fromYmdHms(2053, 2, 18, 13, 0, 0);
+    $lunar = $solar->getLunar();
+    $eightChar = $lunar->getEightChar();
+    $this->assertEquals('癸酉 甲寅 乙酉 癸未', $eightChar->toString());
+  }
+
+  public function test8()
+  {
+    $solar = Solar::fromYmdHms(8071, 12, 30, 13, 0, 0);
+    $lunar = $solar->getLunar();
+    $eightChar = $lunar->getEightChar();
+    $this->assertEquals('辛卯 庚子 己丑 辛未', $eightChar->toString());
+  }
+
 }

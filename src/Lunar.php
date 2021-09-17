@@ -288,6 +288,14 @@ class Lunar
     $yearGanIndex = $offset % 10;
     $yearZhiIndex = $offset % 12;
 
+    if ($yearGanIndex < 0) {
+      $yearGanIndex += 10;
+    }
+
+    if ($yearZhiIndex < 0) {
+      $yearZhiIndex += 12;
+    }
+
     //以立春作为新一年的开始的干支纪年
     $g = $yearGanIndex;
     $z = $yearZhiIndex;
