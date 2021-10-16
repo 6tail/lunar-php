@@ -2541,4 +2541,33 @@ class Lunar
     return LunarUtil::$WU_HOU[($offset * 3 + floor($days / 5)) % count(LunarUtil::$WU_HOU)];
   }
 
+  public function getDayLu()
+  {
+    $gan = LunarUtil::$LU[$this->getDayGan()];
+    $zhi = null;
+    if(!empty(LunarUtil::$LU[$this->getDayZhi()]))
+    {
+      $zhi = LunarUtil::$LU[$this->getDayZhi()];
+    }
+    $lu = $gan . '命互禄';
+    if (null != $zhi) {
+      $lu .= ' ' . $zhi . '命进禄';
+    }
+    return $lu;
+  }
+
+  public function getTime() {
+    return LunarTime::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
+  }
+
+  public function getTimes()
+  {
+    $l = array();
+    $l[] = LunarTime::fromYmdHms($this->year, $this->month, $this->day, 0, 0, 0);
+    for($i = 0; $i < 12; $i++){
+      $l[] = LunarTime::fromYmdHms($this->year, $this->month, $this->day, ($i+1)*2-1, 0, 0);
+    }
+    return $l;
+  }
+
 }

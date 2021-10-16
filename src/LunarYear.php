@@ -2,6 +2,7 @@
 
 namespace com\nlf\calendar;
 
+use com\nlf\calendar\util\LunarUtil;
 use com\nlf\calendar\util\ShouXingUtil;
 
 date_default_timezone_set('PRC');
@@ -221,4 +222,39 @@ class LunarYear
     }
   }
 
+  public function getZhiShui()
+  {
+    $offset = 4 - Solar::fromJulianDay($this->getMonth(1)->getFirstJulianDay())->getLunar()->getDayZhiIndex();
+    if ($offset < 0) {
+      $offset += 12;
+    }
+    return LunarUtil::$NUMBER[$offset+1] . '龙治水';
+  }
+
+  public function getFenBing()
+  {
+    $offset = 2 - Solar::fromJulianDay($this->getMonth(1)->getFirstJulianDay())->getLunar()->getDayGanIndex();
+    if ($offset < 0) {
+      $offset += 10;
+    }
+    return LunarUtil::$NUMBER[$offset+1] . '人分饼';
+  }
+
+  public function getGengTian()
+  {
+    $offset = 1 - Solar::fromJulianDay($this->getMonth(1)->getFirstJulianDay())->getLunar()->getDayZhiIndex();
+    if ($offset < 0) {
+      $offset += 12;
+    }
+    return LunarUtil::$NUMBER[$offset+1] . '牛耕田';
+  }
+
+  public function getDeJin()
+  {
+    $offset = 7 - Solar::fromJulianDay($this->getMonth(1)->getFirstJulianDay())->getLunar()->getDayGanIndex();
+    if ($offset < 0) {
+      $offset += 10;
+    }
+    return LunarUtil::$NUMBER[$offset+1] . '日得金';
+  }
 }

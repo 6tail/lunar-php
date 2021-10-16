@@ -302,4 +302,16 @@ class LunarTest extends TestCase
     $this->assertEquals('猴', $solar->getLunar()->getYearShengXiao());
   }
 
+  public function test45()
+  {
+    $solar = Solar::fromYmd(2017, 2, 15);
+    $this->assertEquals('子命互禄 辛命进禄', $solar->getLunar()->getDayLu());
+  }
+
+  public function test46()
+  {
+    $solar = Solar::fromYmd(2017, 2, 16);
+    $this->assertEquals('寅命互禄', $solar->getLunar()->getDayLu());
+  }
+
 }
