@@ -4,7 +4,6 @@ namespace com\nlf\calendar;
 
 use DateTime;
 
-date_default_timezone_set('PRC');
 
 /**
  * 阳历年
@@ -61,7 +60,8 @@ class SolarYear
    */
   public static function fromDate($date)
   {
-    $year = intval(date_format($date, 'Y'));
+    $calendar = ExactDate::fromDate($date);
+    $year = intval(date_format($calendar, 'Y'));
     return new SolarYear($year);
   }
 
@@ -95,7 +95,7 @@ class SolarYear
     if (0 === $years) {
       return new SolarYear($this->year);
     }
-    $date = DateTime::createFromFormat('Y-n-j',sprintf('%d-1-1', $this->year));
+    $date = ExactDate::fromYmd($this->year, 1, 1);
     $date->modify($years . ' year');
     return SolarYear::fromDate($date);
   }

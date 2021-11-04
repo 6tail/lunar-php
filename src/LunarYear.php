@@ -5,7 +5,6 @@ namespace com\nlf\calendar;
 use com\nlf\calendar\util\LunarUtil;
 use com\nlf\calendar\util\ShouXingUtil;
 
-date_default_timezone_set('PRC');
 bcscale(12);
 
 /**

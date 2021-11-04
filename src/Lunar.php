@@ -6,7 +6,6 @@ use com\nlf\calendar\util\LunarUtil;
 use com\nlf\calendar\util\SolarUtil;
 use DateTime;
 
-date_default_timezone_set('PRC');
 bcscale(12);
 
 /**
@@ -245,7 +244,11 @@ class Lunar
    */
   public static function fromDate($date)
   {
-    $c = DateTime::createFromFormat('Y-n-j G:i:s', $date->format('Y-n-j') . ' 0:00:00');
+    $c = ExactDate::fromDate($date);
+    $hour = intval($c->format('G'));
+    $minute = intval($c->format('i'));
+    $second = intval($c->format('s'));
+    $c->setTime(0, 0, 0, 0);
     $lunarYear = 0;
     $lunarMonth = 0;
     $lunarDay = 0;
@@ -263,7 +266,7 @@ class Lunar
         break;
       }
     }
-    return new Lunar($lunarYear, $lunarMonth, $lunarDay, intval($date->format('G')), intval($date->format('i')), intval($date->format('s')), Solar::fromDate($date), $ly);
+    return new Lunar($lunarYear, $lunarMonth, $lunarDay, $hour, $minute, $second, Solar::fromDate($date), $ly);
   }
 
   /**
@@ -786,7 +789,7 @@ class Lunar
    */
   public function getYearInChinese()
   {
-    $y = ($this->year . '');
+    $y = $this->year . '';
     $s = '';
     for ($i = 0, $j = strlen($y); $i < $j; $i++) {
       $s .= LunarUtil::$NUMBER[ord(substr($y, $i, 1)) - 48];
@@ -1027,6 +1030,10 @@ class Lunar
       foreach (LunarUtil::$OTHER_FESTIVAL[$key] as $f) {
         $l[] = $f;
       }
+    }
+    $qm = $this->jieQi['清明'];
+    if (strcmp($this->solar->toYmd(), $qm->next(-1)->toYmd()) == 0) {
+      $l[] = '寒食节';
     }
     return $l;
   }
@@ -2450,14 +2457,14 @@ class Lunar
 
   public function getShuJiu()
   {
-    $currentCalendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d 0:00:00', $this->solar->getYear(), $this->solar->getMonth(), $this->solar->getDay()));
+    $currentCalendar = ExactDate::fromYmd($this->solar->getYear(), $this->solar->getMonth(), $this->solar->getDay());
     $start = $this->jieQi['DONG_ZHI'];
-    $startCalendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d 0:00:00', $start->getYear(), $start->getMonth(), $start->getDay()));
+    $startCalendar = ExactDate::fromYmd($start->getYear(), $start->getMonth(), $start->getDay());
     if ($currentCalendar < $startCalendar) {
       $start = $this->jieQi['冬至'];
-      $startCalendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d 0:00:00', $start->getYear(), $start->getMonth(), $start->getDay()));
+      $startCalendar = ExactDate::fromYmd($start->getYear(), $start->getMonth(), $start->getDay());
     }
-    $endCalendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d 0:00:00', $start->getYear(), $start->getMonth(), $start->getDay()));
+    $endCalendar = ExactDate::fromYmd($start->getYear(), $start->getMonth(), $start->getDay());
     $endCalendar->modify('+81 day');
     if ($currentCalendar < $startCalendar || $currentCalendar >= $endCalendar) {
       return null;
@@ -2468,10 +2475,10 @@ class Lunar
 
   public function getFu()
   {
-    $currentCalendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d 0:00:00', $this->solar->getYear(), $this->solar->getMonth(), $this->solar->getDay()));
+    $currentCalendar = ExactDate::fromYmd($this->solar->getYear(), $this->solar->getMonth(), $this->solar->getDay());
     $xiaZhi = $this->jieQi['夏至'];
     $liQiu = $this->jieQi['立秋'];
-    $startCalendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d 0:00:00', $xiaZhi->getYear(), $xiaZhi->getMonth(), $xiaZhi->getDay()));
+    $startCalendar = ExactDate::fromYmd($xiaZhi->getYear(), $xiaZhi->getMonth(), $xiaZhi->getDay());
     $add = 6 - $xiaZhi->getLunar()->getDayGanIndex();
     if ($add < 0) {
       $add += 10;
@@ -2492,7 +2499,7 @@ class Lunar
     }
     $startCalendar->modify('+10 day');
     $days = $currentCalendar->diff($startCalendar)->days;
-    $liQiuCalendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d 0:00:00', $liQiu->getYear(), $liQiu->getMonth(), $liQiu->getDay()));
+    $liQiuCalendar = ExactDate::fromYmd($liQiu->getYear(), $liQiu->getMonth(), $liQiu->getDay());
     if ($liQiuCalendar <= $startCalendar) {
       if ($days < 10) {
         return new Fu('末伏', $days + 1);
@@ -2534,9 +2541,9 @@ class Lunar
         break;
       }
     }
-    $currentCalendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d 0:00:00', $this->solar->getYear(), $this->solar->getMonth(), $this->solar->getDay()));
+    $currentCalendar = ExactDate::fromYmd($this->solar->getYear(), $this->solar->getMonth(), $this->solar->getDay());
     $startSolar = $jieQi->getSolar();
-    $startCalendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d 0:00:00', $startSolar->getYear(), $startSolar->getMonth(), $startSolar->getDay()));
+    $startCalendar = ExactDate::fromYmd($startSolar->getYear(), $startSolar->getMonth(), $startSolar->getDay());
     $days = $currentCalendar->diff($startCalendar)->days;
     return LunarUtil::$WU_HOU[($offset * 3 + floor($days / 5)) % count(LunarUtil::$WU_HOU)];
   }
@@ -2545,8 +2552,7 @@ class Lunar
   {
     $gan = LunarUtil::$LU[$this->getDayGan()];
     $zhi = null;
-    if(!empty(LunarUtil::$LU[$this->getDayZhi()]))
-    {
+    if (!empty(LunarUtil::$LU[$this->getDayZhi()])) {
       $zhi = LunarUtil::$LU[$this->getDayZhi()];
     }
     $lu = $gan . '命互禄';
@@ -2556,18 +2562,36 @@ class Lunar
     return $lu;
   }
 
-  public function getTime() {
+  /**
+   * 获取时辰
+   * @return LunarTime 时辰
+   */
+  public function getTime()
+  {
     return LunarTime::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
   }
 
+  /**
+   * 获取时辰列表
+   * @return LunarTime[] 时辰列表
+   */
   public function getTimes()
   {
     $l = array();
     $l[] = LunarTime::fromYmdHms($this->year, $this->month, $this->day, 0, 0, 0);
-    for($i = 0; $i < 12; $i++){
-      $l[] = LunarTime::fromYmdHms($this->year, $this->month, $this->day, ($i+1)*2-1, 0, 0);
+    for ($i = 0; $i < 12; $i++) {
+      $l[] = LunarTime::fromYmdHms($this->year, $this->month, $this->day, ($i + 1) * 2 - 1, 0, 0);
     }
     return $l;
+  }
+
+  /**
+   * 获取佛历
+   * @return Foto 佛历
+   */
+  public function getFoto()
+  {
+    return Foto::fromLunar($this);
   }
 
 }

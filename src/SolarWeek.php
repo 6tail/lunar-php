@@ -5,7 +5,6 @@ namespace com\nlf\calendar;
 use com\nlf\calendar\util\SolarUtil;
 use DateTime;
 
-date_default_timezone_set('PRC');
 bcscale(12);
 
 /**
@@ -83,9 +82,10 @@ class SolarWeek
    */
   public static function fromDate($date, $start)
   {
-    $year = intval(date_format($date, 'Y'));
-    $month = intval(date_format($date, 'n'));
-    $day = intval(date_format($date, 'j'));
+    $calendar = ExactDate::fromDate($date);
+    $year = intval(date_format($calendar, 'Y'));
+    $month = intval(date_format($calendar, 'n'));
+    $day = intval(date_format($calendar, 'j'));
     return new SolarWeek($year, $month, $day, $start);
   }
 
@@ -115,7 +115,7 @@ class SolarWeek
    */
   public function getIndex()
   {
-    $firstDayWeek = intval(DateTime::createFromFormat('Y-n-j G:i:s',sprintf('%d-%d-1 0:00:00', $this->year, $this->month))->format('w'));
+    $firstDayWeek = intval(ExactDate::fromYmd($this->year, $this->month, 1)->format('w'));
     if ($firstDayWeek === 0) {
       $firstDayWeek = 7;
     }
@@ -135,7 +135,7 @@ class SolarWeek
     }
     if ($separateMonth) {
       $n = $weeks;
-      $date = DateTime::createFromFormat('Y-n-j',sprintf('%d-%d-%d', $this->year, $this->month, $this->day));
+      $date = ExactDate::fromYmd($this->year, $this->month, $this->day);
       $week = SolarWeek::fromDate($date, $this->start);
       $month = $this->month;
       $plus = $n > 0;
@@ -151,7 +151,7 @@ class SolarWeek
               $week = SolarWeek::fromYmd($firstDay->getYear(), $firstDay->getMonth(), $firstDay->getDay(), $this->start);
               $weekMonth = $week->getMonth();
             } else {
-              $date = DateTime::createFromFormat('Y-n-j',sprintf('%d-%d-1', $week->year, $week->month));
+              $date = ExactDate::fromYmd($week->year, $week->month, 1);
               $week = SolarWeek::fromDate($date, $this->start);
             }
           } else {
@@ -161,7 +161,7 @@ class SolarWeek
               $week = SolarWeek::fromYmd($lastDay->getYear(), $lastDay->getMonth(), $lastDay->getDay(), $this->start);
               $weekMonth = $week->getMonth();
             } else {
-              $date = DateTime::createFromFormat('Y-n-j',sprintf('%d-%d-%d', $this->year, $this->month, SolarUtil::getDaysOfMonth($week->getYear(), $week->getMonth())));
+              $date = ExactDate::fromYmd($this->year, $this->month, SolarUtil::getDaysOfMonth($week->getYear(), $week->getMonth()));
               $week = SolarWeek::fromDate($date, $this->start);
             }
           }
@@ -171,7 +171,7 @@ class SolarWeek
       }
       return $week;
     } else {
-      $date = DateTime::createFromFormat('Y-n-j',sprintf('%d-%d-%d', $this->year, $this->month, $this->day));
+      $date = ExactDate::fromYmd($this->year, $this->month, $this->day);
       $date->modify(($weeks * 7) . ' day');
       return SolarWeek::fromDate($date, $this->start);
     }
@@ -183,7 +183,7 @@ class SolarWeek
    */
   public function getFirstDay()
   {
-    $date = DateTime::createFromFormat('Y-n-j',sprintf('%d-%d-%d', $this->year, $this->month, $this->day));
+    $date = ExactDate::fromYmd($this->year, $this->month, $this->day);
     $week = intval($date->format('w'));
     $prev = $week - $this->start;
     if ($prev < 0) {

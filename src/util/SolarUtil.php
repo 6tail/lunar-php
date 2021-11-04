@@ -2,7 +2,7 @@
 
 namespace com\nlf\calendar\util;
 
-use DateTime;
+use com\nlf\calendar\ExactDate;
 
 /**
  * 阳历工具
@@ -168,7 +168,7 @@ class SolarUtil
   public static function getWeeksOfMonth($year, $month, $start)
   {
     $days = SolarUtil::getDaysOfMonth($year, $month);
-    $week = intval(DateTime::createFromFormat('Y-n-j G:i:s',sprintf('%d-%d-1 0:00:00', $year, $month))->format('w'));
+    $week = intval(ExactDate::fromYmd($year, $month, 1)->format('w'));
     return ceil(($days + $week - $start) / count(SolarUtil::$WEEK));
   }
 }

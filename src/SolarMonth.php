@@ -5,7 +5,6 @@ namespace com\nlf\calendar;
 use com\nlf\calendar\util\SolarUtil;
 use DateTime;
 
-date_default_timezone_set('PRC');
 
 /**
  * 阳历月
@@ -68,8 +67,9 @@ class SolarMonth
    */
   public static function fromDate($date)
   {
-    $year = intval(date_format($date, 'Y'));
-    $month = intval(date_format($date, 'n'));
+    $calendar = ExactDate::fromDate($date);
+    $year = intval(date_format($calendar, 'Y'));
+    $month = intval(date_format($calendar, 'n'));
     return new SolarMonth($year, $month);
   }
 
@@ -106,7 +106,7 @@ class SolarMonth
    */
   public function next($months)
   {
-    $date = DateTime::createFromFormat('Y-n-j',sprintf('%d-%d-1', $this->year, $this->month));
+    $date = ExactDate::fromYmd($this->year, $this->month, 1);
     $date->modify($months . ' month');
     return SolarMonth::fromDate($date);
   }

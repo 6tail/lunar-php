@@ -5,7 +5,6 @@ namespace com\nlf\calendar;
 use com\nlf\calendar\util\LunarUtil;
 use DateTime;
 
-date_default_timezone_set('PRC');
 bcscale(12);
 
 /**
@@ -85,8 +84,8 @@ class Yun
     // 时辰差
     $hourDiff = $endTimeZhiIndex - $startTimeZhiIndex;
 
-    $endCalendar = DateTime::createFromFormat('Y-n-j G:i:s',sprintf('%d-%d-%d 0:00:00', $end->getYear(), $end->getMonth(), $end->getDay()));
-    $startCalendar = DateTime::createFromFormat('Y-n-j G:i:s',sprintf('%d-%d-%d 0:00:00', $start->getYear(), $start->getMonth(), $start->getDay()));
+    $endCalendar = ExactDate::fromYmd($end->getYear(), $end->getMonth(), $end->getDay());
+    $startCalendar = ExactDate::fromYmd($start->getYear(), $start->getMonth(), $start->getDay());
 
     // 天数差
     $dayDiff = $endCalendar->diff($startCalendar)->days;
@@ -165,7 +164,7 @@ class Yun
   public function getStartSolar()
   {
     $birth = $this->lunar->getSolar();
-    $date = DateTime::createFromFormat('Y-n-j G:i:s',sprintf('%d-%d-%d 0:00:00', $birth->getYear(), $birth->getMonth(), $birth->getDay()));
+    $date = ExactDate::fromYmd($birth->getYear(), $birth->getMonth(), $birth->getDay());
     $date->modify($this->startYear . ' year');
     $date->modify($this->startMonth . ' month');
     $date->modify($this->startDay . ' day');

@@ -4,7 +4,6 @@ namespace com\nlf\calendar;
 
 use DateTime;
 
-date_default_timezone_set('PRC');
 bcscale(12);
 
 /**
@@ -71,8 +70,9 @@ class SolarSeason
    */
   public static function fromDate($date)
   {
-    $year = intval(date_format($date, 'Y'));
-    $month = intval(date_format($date, 'n'));
+    $calendar = ExactDate::fromDate($date);
+    $year = intval(date_format($calendar, 'Y'));
+    $month = intval(date_format($calendar, 'n'));
     return new SolarSeason($year, $month);
   }
 
@@ -119,7 +119,7 @@ class SolarSeason
     if (0 === $seasons) {
       return new SolarSeason($this->year, $this->month);
     }
-    $date = DateTime::createFromFormat('Y-n-j',sprintf('%d-%d-1', $this->year, $this->month));
+    $date = ExactDate::fromYmd($this->year, $this->month, 1);
     $date->modify((SolarSeason::$MONTH_COUNT * $seasons) . ' month');
     return SolarSeason::fromDate($date);
   }

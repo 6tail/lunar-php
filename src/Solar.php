@@ -8,7 +8,6 @@ use com\nlf\calendar\util\SolarUtil;
 use DateTime;
 use Exception;
 
-date_default_timezone_set('PRC');
 bcscale(12);
 
 /**
@@ -79,17 +78,18 @@ class Solar
     $this->hour = $hour;
     $this->minute = $minute;
     $this->second = $second;
-    $this->calendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d %d:%02d:%02d', $year, $month, $day, $hour, $minute, $second));
+    $this->calendar = ExactDate::fromYmdHms($year, $month, $day, $hour, $minute, $second);
   }
 
   public static function fromDate($date)
   {
-    $year = intval(date_format($date, 'Y'));
-    $month = intval(date_format($date, 'n'));
-    $day = intval(date_format($date, 'j'));
-    $hour = intval(date_format($date, 'G'));
-    $minute = intval(date_format($date, 'i'));
-    $second = intval(date_format($date, 's'));
+    $calendar = ExactDate::fromDate($date);
+    $year = intval($calendar -> format('Y'));
+    $month = intval($calendar -> format('n'));
+    $day = intval($calendar -> format('j'));
+    $hour = intval($calendar -> format('G'));
+    $minute = intval($calendar -> format('i'));
+    $second = intval($calendar -> format('s'));
     return new Solar($year, $month, $day, $hour, $minute, $second);
   }
 
@@ -440,7 +440,7 @@ class Solar
     if ($days == 0) {
       return Solar::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
     }
-    $calendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d %d:%02d:%02d', $this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second));
+    $calendar = ExactDate::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
     $calendar->modify(($days > 0 ? '+' : '') . $days . ' day');
     return Solar::fromDate($calendar);
   }
@@ -455,15 +455,15 @@ class Solar
     if ($days == 0) {
       return Solar::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
     }
-    $calendar = DateTime::createFromFormat('Y-n-j G:i:s', sprintf('%d-%d-%d %d:%02d:%02d', $this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second));
+    $calendar = ExactDate::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
     $rest = abs($days);
     $add = $days < 1 ? -1 : 1;
     while ($rest > 0) {
       $calendar->modify(($add > 0 ? '+' : '') . $add . ' day');
       $work = true;
-      $year = intval(date_format($calendar, 'Y'));
-      $month = intval(date_format($calendar, 'n'));
-      $day = intval(date_format($calendar, 'j'));
+      $year = intval($calendar -> format('Y'));
+      $month = intval($calendar -> format('n'));
+      $day = intval($calendar -> format('j'));
       $holiday = HolidayUtil::getHolidayByYmd($year, $month, $day);
       if (null == $holiday) {
         $week = intval($calendar->format('w'));
