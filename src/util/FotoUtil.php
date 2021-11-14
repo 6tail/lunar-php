@@ -47,7 +47,7 @@ class FotoUtil
     $JW = '犯者三年内夫妇俱亡';
 
     $Y = new FotoFestival('杨公忌');
-    $T = new FotoFestival('四天王巡行', "", true);
+    $T = new FotoFestival('四天王巡行', '', true);
     $D = new FotoFestival('斗降', $DJ, true);
     $S = new FotoFestival('月朔', $DJ, true);
     $W = new FotoFestival('月望', $DJ, true);
@@ -174,7 +174,7 @@ class FotoUtil
       '7-6' => array($L),
       '7-7' => array(new FotoFestival('道德腊', $XL), new FotoFestival('五帝校生人善恶', $XL), new FotoFestival('魁星诞', $XL)),
       '7-8' => array($T),
-      '7-10' => array(new FotoFestival('阴毒日', "", false, '大忌')),
+      '7-10' => array(new FotoFestival('阴毒日', '', false, '大忌')),
       '7-12' => array(new FotoFestival('长真谭真人诞')),
       '7-13' => array(new FotoFestival('大势至菩萨诞', $JS)),
       '7-14' => array(new FotoFestival('三元降', $JS), $T),
@@ -199,7 +199,7 @@ class FotoUtil
       '8-14' => array($T),
       '8-15' => array($W, new FotoFestival('太明朝元', '犯者暴亡', false, '宜焚香守夜'), $T),
       '8-16' => array(new FotoFestival('天曹掠刷真君降', '犯者贫夭')),
-      '8-18' => array(new FotoFestival('天人兴福之辰', "", false, '宜斋戒，存想吉事')),
+      '8-18' => array(new FotoFestival('天人兴福之辰', '', false, '宜斋戒，存想吉事')),
       '8-23' => array(new FotoFestival('汉恒候张显王诞'), $T),
       '8-24' => array(new FotoFestival('灶君夫人诞')),
       '8-25' => array($H),
@@ -229,7 +229,7 @@ class FotoUtil
       '10-3' => array($D, new FotoFestival('三茅诞')),
       '10-5' => array(new FotoFestival('下会日', $JS), new FotoFestival('达摩祖师诞', $JS)),
       '10-6' => array($L, new FotoFestival('天曹考察', $DJ)),
-      '10-8' => array(new FotoFestival('佛涅槃日', "", false, '大忌色欲'), $T),
+      '10-8' => array(new FotoFestival('佛涅槃日', '', false, '大忌色欲'), $T),
       '10-10' => array(new FotoFestival('四天王降', '犯者一年内死')),
       '10-11' => array(new FotoFestival('宜戒')),
       '10-14' => array(new FotoFestival('三元降', $JS), $T),

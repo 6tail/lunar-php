@@ -1237,39 +1237,79 @@ class Lunar
   }
 
   /**
-   * 获取日福神方位
+   * 获取日福神方位，默认流派2
    * @return string 福神方位，如艮
    */
   public function getDayPositionFu()
   {
-    return LunarUtil::$POSITION_FU[$this->dayGanIndex + 1];
+    return $this->getDayPositionFuBySect(2);
   }
 
   /**
-   * 获取日福神方位描述
+   * 获取日福神方位
+   * @param int $sect 流派，可选1或2
+   * @return string 福神方位，如艮
+   */
+  public function getDayPositionFuBySect($sect)
+  {
+    return (1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2)[$this->dayGanIndex + 1];
+  }
+
+  /**
+   * 获取日福神方位描述，默认流派2
    * @return string 福神方位描述，如东北
    */
   public function getDayPositionFuDesc()
   {
-    return LunarUtil::$POSITION_DESC[$this->getDayPositionFu()];
+    return $this->getDayPositionFuDescBySect(2);
   }
 
   /**
-   * 获取时辰福神方位
+   * 获取日福神方位描述
+   * @param int $sect 流派，可选1或2
+   * @return string 福神方位描述，如东北
+   */
+  public function getDayPositionFuDescBySect($sect)
+  {
+    return LunarUtil::$POSITION_DESC[$this->getDayPositionFuBySect($sect)];
+  }
+
+  /**
+   * 获取时辰福神方位，默认流派2
    * @return string 福神方位，如艮
    */
   public function getTimePositionFu()
   {
-    return LunarUtil::$POSITION_FU[$this->timeGanIndex + 1];
+    return $this->getTimePositionFuBySect(2);
   }
 
   /**
-   * 获取时辰福神方位描述
+   * 获取时辰福神方位
+   * @param int $sect 流派，可选1或2
+   * @return string 福神方位，如艮
+   */
+  public function getTimePositionFuBySect($sect)
+  {
+    return (1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2)[$this->timeGanIndex + 1];
+  }
+
+  /**
+   * 获取时辰福神方位描述，默认流派2
    * @return string 福神方位描述，如东北
    */
   public function getTimePositionFuDesc()
   {
-    return LunarUtil::$POSITION_DESC[$this->getTimePositionFu()];
+    return $this->getTimePositionFuDescBySect(2);
+  }
+
+  /**
+   * 获取时辰福神方位描述
+   * @param int $sect 流派，可选1或2
+   * @return string 福神方位描述，如东北
+   */
+  public function getTimePositionFuDescBySect($sect)
+  {
+    return LunarUtil::$POSITION_DESC[$this->getTimePositionFuBySect($sect)];
   }
 
   /**
@@ -1728,11 +1768,7 @@ class Lunar
    */
   public function getDayPositionTai()
   {
-    $offset = $this->dayGanIndex - $this->dayZhiIndex;
-    if ($offset < 0) {
-      $offset += 12;
-    }
-    return LunarUtil::$POSITION_TAI_DAY[$offset * 5 + $this->dayGanIndex];
+    return LunarUtil::$POSITION_TAI_DAY[LunarUtil::getJiaZiIndex($this->getDayInGanZhi())];
   }
 
   /**

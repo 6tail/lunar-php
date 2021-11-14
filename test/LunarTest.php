@@ -10,7 +10,7 @@ class LunarTest extends TestCase
   {
     $lunar = Lunar::fromYmdHms(2019, 3, 27, 0, 0, 0);
     $this->assertEquals('二〇一九年三月廿七', $lunar->toString());
-    $this->assertEquals('二〇一九年三月廿七 己亥(猪)年 戊辰(龙)月 戊戌(狗)日 子(鼠)时 纳音[平地木 大林木 平地木 桑柘木] 星期三 西方白虎 星宿[参水猿](吉) 彭祖百忌[戊不受田田主不祥 戌不吃犬作怪上床] 喜神方位[巽](东南) 阳贵神方位[艮](东北) 阴贵神方位[坤](西南) 福神方位[坎](正北) 财神方位[坎](正北) 冲[(壬辰)龙] 煞[北]', $lunar->toFullString());
+    $this->assertEquals('二〇一九年三月廿七 己亥(猪)年 戊辰(龙)月 戊戌(狗)日 子(鼠)时 纳音[平地木 大林木 平地木 桑柘木] 星期三 西方白虎 星宿[参水猿](吉) 彭祖百忌[戊不受田田主不祥 戌不吃犬作怪上床] 喜神方位[巽](东南) 阳贵神方位[艮](东北) 阴贵神方位[坤](西南) 福神方位[艮](东北) 财神方位[坎](正北) 冲[(壬辰)龙] 煞[北]', $lunar->toFullString());
     $this->assertEquals('2019-05-01', $lunar->getSolar()->toString());
     $this->assertEquals('2019-05-01 00:00:00 星期三 (劳动节) 金牛座', $lunar->getSolar()->toFullString());
   }
@@ -312,6 +312,36 @@ class LunarTest extends TestCase
   {
     $solar = Solar::fromYmd(2017, 2, 16);
     $this->assertEquals('寅命互禄', $solar->getLunar()->getDayLu());
+  }
+
+  public function test48()
+  {
+    $solar = Solar::fromYmd(2021, 11, 13);
+    $this->assertEquals('碓磨厕 外东南', $solar->getLunar()->getDayPositionTai());
+  }
+
+  public function test49()
+  {
+    $solar = Solar::fromYmd(2021, 11, 12);
+    $this->assertEquals('占门碓 外东南', $solar->getLunar()->getDayPositionTai());
+  }
+
+  public function test50()
+  {
+    $solar = Solar::fromYmd(2021, 11, 13);
+    $this->assertEquals('西南', $solar->getLunar()->getDayPositionFuDesc());
+  }
+
+  public function test51()
+  {
+    $solar = Solar::fromYmd(2021, 11, 12);
+    $this->assertEquals('正北', $solar->getLunar()->getDayPositionFuDesc());
+  }
+
+  public function test52()
+  {
+    $solar = Solar::fromYmd(2011, 11, 12);
+    $this->assertEquals('厕灶厨 外西南', $solar->getLunar()->getDayPositionTai());
   }
 
 }

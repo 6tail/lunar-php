@@ -142,21 +142,41 @@ class LunarTime
   }
 
   /**
-   * 获取时辰福神方位
+   * 获取时辰福神方位，默认流派2
    * @return string 福神方位，如艮
    */
   public function getPositionFu()
   {
-    return LunarUtil::$POSITION_FU[$this->ganIndex + 1];
+    return $this->getPositionFuBySect(2);
   }
 
   /**
-   * 获取时辰福神方位描述
+   * 获取时辰福神方位
+   * @param int $sect 流派，可选1或2
+   * @return string 福神方位，如艮
+   */
+  public function getPositionFuBySect($sect)
+  {
+    return (1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2)[$this->ganIndex + 1];
+  }
+
+  /**
+   * 获取时辰福神方位描述，默认流派2
    * @return string 福神方位描述，如东北
    */
   public function getPositionFuDesc()
   {
-    return LunarUtil::$POSITION_DESC[$this->getPositionFu()];
+    return $this->getPositionFuDescBySect(2);
+  }
+
+  /**
+   * 获取时辰福神方位描述
+   * @param int $sect 流派，可选1或2
+   * @return string 福神方位描述，如东北
+   */
+  public function getPositionFuDescBySect($sect)
+  {
+    return LunarUtil::$POSITION_DESC[$this->getPositionFuBySect($sect)];
   }
 
   /**
