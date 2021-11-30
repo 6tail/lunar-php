@@ -2630,4 +2630,13 @@ class Lunar
     return Foto::fromLunar($this);
   }
 
+  /**
+   * 获取道历
+   * @return Tao 道历
+   */
+  public function getTao()
+  {
+    return Tao::fromLunar($this);
+  }
+
 }

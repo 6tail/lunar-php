@@ -3,41 +3,25 @@
 namespace com\nlf\calendar;
 
 /**
- * 佛历因果犯忌
+ * 道历节日
  * @package com\nlf\calendar
  */
-class FotoFestival
+class TaoFestival
 {
 
   private $name;
 
-  private $result;
-
-  private $everyMonth;
-
   private $remark;
 
-  function __construct($name, $result = null, $everyMonth = false, $remark = null)
+  function __construct($name, $remark = null)
   {
     $this->name = $name;
-    $this->result = null == $result ? '' : $result;
-    $this->everyMonth = $everyMonth;
     $this->remark = null == $remark ? '' : $remark;
   }
 
   public function getName()
   {
     return $this->name;
-  }
-
-  public function getResult()
-  {
-    return $this->result;
-  }
-
-  public function isEveryMonth()
-  {
-    return $this->everyMonth;
   }
 
   public function getRemark()
@@ -53,11 +37,8 @@ class FotoFestival
   public function toFullString()
   {
     $s = $this->name;
-    if (null != $this->result && strlen($this->result) > 0) {
-      $s .= ' ' . $this->result;
-    }
     if (null != $this->remark && strlen($this->remark) > 0) {
-      $s .= ' ' . $this->remark;
+      $s .= '[' . $this->remark . ']';
     }
     return $s;
   }

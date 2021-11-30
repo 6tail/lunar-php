@@ -26,14 +26,14 @@ class Foto
     return new Foto($lunar);
   }
 
-  public static function fromYmdHms($lunarYear, $lunarMonth, $lunarDay, $hour, $minute, $second)
+  public static function fromYmdHms($year, $month, $day, $hour, $minute, $second)
   {
-    return Foto::fromLunar(Lunar::fromYmdHms($lunarYear + Foto::$DEAD_YEAR - 1, $lunarMonth, $lunarDay, $hour, $minute, $second));
+    return Foto::fromLunar(Lunar::fromYmdHms($year + Foto::$DEAD_YEAR - 1, $month, $day, $hour, $minute, $second));
   }
 
-  public static function fromYmd($lunarYear, $lunarMonth, $lunarDay)
+  public static function fromYmd($year, $month, $day)
   {
-    return Foto::fromYmdHms($lunarYear, $lunarMonth, $lunarDay, 0, 0, 0);
+    return Foto::fromYmdHms($year, $month, $day, 0, 0, 0);
   }
 
   public function getLunar()
@@ -141,7 +141,6 @@ class Foto
     }
     return false;
   }
-
 
   public function toString()
   {

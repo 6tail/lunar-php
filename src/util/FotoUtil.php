@@ -277,7 +277,7 @@ class FotoUtil
       '12-27' => array($D),
       '12-28' => array($R),
       '12-29' => array(new FotoFestival('华严菩萨诞'), $T),
-      '12-30' => array(new FotoFestival('诸神下降，察访善恶', '犯者男女俱亡')),
+      '12-30' => array(new FotoFestival('诸神下降，察访善恶', '犯者男女俱亡'))
     );
   }
 
