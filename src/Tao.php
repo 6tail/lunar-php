@@ -85,10 +85,10 @@ class Tao
   {
     $l = TaoUtil::getFestivals($this->getMonth() . '-' . $this->getDay());
     $jq = $this->lunar->getJieQi();
-    if (strcmp("冬至", $jq) == 0) {
-      $l[] = new TaoFestival("元始天尊圣诞");
-    } else if (strcmp("夏至", $jq) == 0) {
-      $l[] = new TaoFestival("灵宝天尊圣诞");
+    if (strcmp('冬至', $jq) == 0) {
+      $l[] = new TaoFestival('元始天尊圣诞');
+    } else if (strcmp('夏至', $jq) == 0) {
+      $l[] = new TaoFestival('灵宝天尊圣诞');
     }
     // 八节日
     if (!empty(TaoUtil::$BA_JIE[$jq])) {

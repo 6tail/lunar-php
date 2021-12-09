@@ -142,6 +142,76 @@ class Foto
     return false;
   }
 
+  /**
+   * 获取星宿
+   *
+   * @return string 星宿
+   */
+  public function getXiu()
+  {
+    return FotoUtil::getXiu($this->getMonth(), $this->getDay());
+  }
+
+  /**
+   * 获取宿吉凶
+   *
+   * @return string 吉/凶
+   */
+  public function getXiuLuck()
+  {
+    return LunarUtil::$XIU_LUCK[$this->getXiu()];
+  }
+
+  /**
+   * 获取宿歌诀
+   *
+   * @return string 宿歌诀
+   */
+  public function getXiuSong()
+  {
+    return LunarUtil::$XIU_SONG[$this->getXiu()];
+  }
+
+  /**
+   * 获取政
+   *
+   * @return string 政
+   */
+  public function getZheng()
+  {
+    return LunarUtil::$ZHENG[$this->getXiu()];
+  }
+
+  /**
+   * 获取动物
+   *
+   * @return string 动物
+   */
+  public function getAnimal()
+  {
+    return LunarUtil::$ANIMAL[$this->getXiu()];
+  }
+
+  /**
+   * 获取宫
+   *
+   * @return string 宫
+   */
+  public function getGong()
+  {
+    return LunarUtil::$GONG[$this->getXiu()];
+  }
+
+  /**
+   * 获取兽
+   *
+   * @return string 兽
+   */
+  public function getShou()
+  {
+    return LunarUtil::$SHOU[$this->getGong()];
+  }
+
   public function toString()
   {
     return sprintf('%s年%s月%s', $this->getYearInChinese(), $this->getMonthInChinese(), $this->getDayInChinese());

@@ -882,8 +882,8 @@ class Lunar
   public function getJie()
   {
     $jie = '';
-    for ($i = 1, $j = count(Lunar::$JIE_QI); $i < $j; $i += 2) {
-      $key = Lunar::$JIE_QI[$i];
+    for ($i = 0, $j = count(Lunar::$JIE_QI_IN_USE); $i < $j; $i += 2) {
+      $key = Lunar::$JIE_QI_IN_USE[$i];
       $d = $this->jieQi[$key];
       if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
         $jie = $key;
@@ -901,8 +901,8 @@ class Lunar
   public function getQi()
   {
     $qi = '';
-    for ($i = 0, $j = count(Lunar::$JIE_QI); $i < $j; $i += 2) {
-      $key = Lunar::$JIE_QI[$i];
+    for ($i = 1, $j = count(Lunar::$JIE_QI_IN_USE); $i < $j; $i += 2) {
+      $key = Lunar::$JIE_QI_IN_USE[$i];
       $d = $this->jieQi[$key];
       if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
         $qi = $key;
