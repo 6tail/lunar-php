@@ -12,21 +12,27 @@ class TaoUtil
 {
   /**
    * 三会日
-   * @var array
+   * @var string[]
    */
   public static $SAN_HUI = array('1-7', '7-7', '10-15');
 
   /**
    * 三元日
-   * @var array
+   * @var string[]
    */
   public static $SAN_YUAN = array('1-15', '7-15', '10-15');
 
   /**
    * 五腊日
-   * @var array
+   * @var string[]
    */
   public static $WU_LA = array('1-1', '5-5', '7-7', '10-1', '12-8');
+
+  /**
+   * 暗戊日
+   * @var string[]
+   */
+  public static $AN_WU = array('未', '戌', '辰', '寅', '午', '子', '酉', '申', '巳', '亥', '卯', '丑');
 
   /**
    * 八会日

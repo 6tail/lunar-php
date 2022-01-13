@@ -245,20 +245,20 @@ class Lunar
   public static function fromDate($date)
   {
     $c = ExactDate::fromDate($date);
+    $currentYear = intval($c->format('Y'));
+    $currentMonth = intval($c->format('n'));
+    $currentDay = intval($c->format('j'));
     $hour = intval($c->format('G'));
     $minute = intval($c->format('i'));
     $second = intval($c->format('s'));
-    $c->setTime(0, 0, 0, 0);
+    $ly = LunarYear::fromYear($currentYear);
     $lunarYear = 0;
     $lunarMonth = 0;
     $lunarDay = 0;
-    $y = intval($c->format('Y'));
-    $ly = LunarYear::fromYear($y);
     foreach ($ly->getMonths() as $m) {
       // 初一
-      $firstDay = Solar::fromJulianDay($m->getFirstJulianDay())->getCalendar();
-      $firstDay->setTime(0, 0, 0, 0);
-      $days = $c->diff($firstDay)->days;
+      $firstDay = Solar::fromJulianDay($m->getFirstJulianDay());
+      $days = ExactDate::getDaysBetween($firstDay->getYear(), $firstDay->getMonth(), $firstDay->getDay(), $currentYear, $currentMonth, $currentDay);
       if ($days < $m->getDayCount()) {
         $lunarYear = $m->getYear();
         $lunarMonth = $m->getMonth();
@@ -856,19 +856,19 @@ class Lunar
   private function convertJieQi($name)
   {
     $jq = $name;
-    if (strcmp('DONG_ZHI', $jq) == 0) {
+    if (strcmp('DONG_ZHI', $jq) === 0) {
       $jq = '冬至';
-    } else if (strcmp('DA_HAN', $jq) == 0) {
+    } else if (strcmp('DA_HAN', $jq) === 0) {
       $jq = '大寒';
-    } else if (strcmp('XIAO_HAN', $jq) == 0) {
+    } else if (strcmp('XIAO_HAN', $jq) === 0) {
       $jq = '小寒';
-    } else if (strcmp('LI_CHUN', $jq) == 0) {
+    } else if (strcmp('LI_CHUN', $jq) === 0) {
       $jq = '立春';
-    } else if (strcmp('DA_XUE', $jq) == 0) {
+    } else if (strcmp('DA_XUE', $jq) === 0) {
       $jq = '大雪';
-    } else if (strcmp('YU_SHUI', $jq) == 0) {
+    } else if (strcmp('YU_SHUI', $jq) === 0) {
       $jq = '雨水';
-    } else if (strcmp('JING_ZHE', $jq) == 0) {
+    } else if (strcmp('JING_ZHE', $jq) === 0) {
       $jq = '惊蛰';
     }
     return $jq;
@@ -881,16 +881,14 @@ class Lunar
    */
   public function getJie()
   {
-    $jie = '';
     for ($i = 0, $j = count(Lunar::$JIE_QI_IN_USE); $i < $j; $i += 2) {
       $key = Lunar::$JIE_QI_IN_USE[$i];
       $d = $this->jieQi[$key];
       if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
-        $jie = $key;
-        break;
+        return $this->convertJieQi($key);
       }
     }
-    return $this->convertJieQi($jie);
+    return '';
   }
 
   /**
@@ -900,16 +898,14 @@ class Lunar
    */
   public function getQi()
   {
-    $qi = '';
     for ($i = 1, $j = count(Lunar::$JIE_QI_IN_USE); $i < $j; $i += 2) {
       $key = Lunar::$JIE_QI_IN_USE[$i];
       $d = $this->jieQi[$key];
       if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
-        $qi = $key;
-        break;
+        return $this->convertJieQi($key);
       }
     }
-    return $this->convertJieQi($qi);
+    return '';
   }
 
   /**
@@ -1011,7 +1007,7 @@ class Lunar
     if (!empty(LunarUtil::$FESTIVAL[$key])) {
       $l[] = LunarUtil::$FESTIVAL[$key];
     }
-    if (abs($this->month) == 12 && $this->day >= 29 && $this->year != $this->next(1)->getYear()) {
+    if (abs($this->month) === 12 && $this->day >= 29 && $this->year != $this->next(1)->getYear()) {
       $l[] = '除夕';
     }
     return $l;
@@ -1032,7 +1028,7 @@ class Lunar
       }
     }
     $qm = $this->jieQi['清明'];
-    if (strcmp($this->solar->toYmd(), $qm->next(-1)->toYmd()) == 0) {
+    if (strcmp($this->solar->toYmd(), $qm->next(-1)->toYmd()) === 0) {
       $l[] = '寒食节';
     }
     return $l;
@@ -1364,6 +1360,144 @@ class Lunar
   public function getTimePositionCaiDesc()
   {
     return LunarUtil::$POSITION_DESC[$this->getTimePositionCai()];
+  }
+
+  public function getYearPositionTaiSui()
+  {
+    return $this->getYearPositionTaiSuiBySect(2);
+  }
+
+  public function getYearPositionTaiSuiBySect($sect)
+  {
+    switch ($sect) {
+      case 1:
+        $yearZhiIndex = $this->yearZhiIndex;
+        break;
+      case 3:
+        $yearZhiIndex = $this->yearZhiIndexExact;
+        break;
+      default:
+        $yearZhiIndex = $this->yearZhiIndexByLiChun;
+    }
+    return LunarUtil::$POSITION_TAI_SUI_YEAR[$yearZhiIndex];
+  }
+
+  public function getYearPositionTaiSuiDesc()
+  {
+    return $this->getYearPositionTaiSuiDescBySect(2);
+  }
+
+  public function getYearPositionTaiSuiDescBySect($sect)
+  {
+    return LunarUtil::$POSITION_DESC[$this->getYearPositionTaiSuiBySect($sect)];
+  }
+
+  protected function _getMonthPositionTaiSui($monthZhiIndex, $monthGanIndex)
+  {
+    $m = $monthZhiIndex - LunarUtil::$BASE_MONTH_ZHI_INDEX;
+    if ($m < 0) {
+      $m += 12;
+    }
+    switch ($m) {
+      case 0:
+      case 4:
+      case 8:
+        $p = '艮';
+        break;
+      case 2:
+      case 6:
+      case 10:
+        $p = '坤';
+        break;
+      case 3:
+      case 7:
+      case 11:
+        $p = '巽';
+        break;
+      default:
+        $p = LunarUtil::$POSITION_GAN[$monthGanIndex];
+    }
+    return $p;
+  }
+
+  public function getMonthPositionTaiSuiBySect($sect)
+  {
+    switch ($sect) {
+      case 3:
+        $monthZhiIndex = $this->monthZhiIndexExact;
+        $monthGanIndex = $this->monthGanIndexExact;
+        break;
+      default:
+        $monthZhiIndex = $this->monthZhiIndex;
+        $monthGanIndex = $this->monthGanIndex;
+    }
+    return $this->_getMonthPositionTaiSui($monthZhiIndex, $monthGanIndex);
+  }
+
+  public function getMonthPositionTaiSui()
+  {
+    return $this->getMonthPositionTaiSuiBySect(2);
+  }
+
+  public function getMonthPositionTaiSuiDesc()
+  {
+    return $this->getMonthPositionTaiSuiDescBySect(2);
+  }
+
+  public function getMonthPositionTaiSuiDescBySect($sect)
+  {
+    return LunarUtil::$POSITION_DESC[$this->getMonthPositionTaiSuiBySect($sect)];
+  }
+
+  protected function _getDayPositionTaiSui($dayInGanZhi, $yearZhiIndex)
+  {
+    if (strpos('甲子,乙丑,丙寅,丁卯,戊辰,已巳',$dayInGanZhi) !== false) {
+      $p = '震';
+    } else if (strpos('丙子,丁丑,戊寅,已卯,庚辰,辛巳',$dayInGanZhi) !== false) {
+      $p = '离';
+    } else if (strpos('戊子,已丑,庚寅,辛卯,壬辰,癸巳',$dayInGanZhi) !== false) {
+      $p = '中';
+    } else if (strpos('庚子,辛丑,壬寅,癸卯,甲辰,乙巳',$dayInGanZhi) !== false) {
+      $p = '兑';
+    } else if (strpos('壬子,癸丑,甲寅,乙卯,丙辰,丁巳',$dayInGanZhi) !== false) {
+      $p = '坎';
+    } else {
+      $p = LunarUtil::$POSITION_TAI_SUI_YEAR[$yearZhiIndex];
+    }
+    return $p;
+  }
+
+  public function getDayPositionTaiSuiBySect($sect)
+  {
+    switch ($sect) {
+      case 1:
+        $dayInGanZhi = $this->getDayInGanZhi();
+        $yearZhiIndex = $this->yearZhiIndex;
+        break;
+      case 3:
+        $dayInGanZhi = $this->getDayInGanZhi();
+        $yearZhiIndex = $this->yearZhiIndexExact;
+        break;
+      default:
+        $dayInGanZhi = $this->getDayInGanZhiExact2();
+        $yearZhiIndex = $this->yearZhiIndexByLiChun;
+    }
+    return $this->_getDayPositionTaiSui($dayInGanZhi, $yearZhiIndex);
+  }
+
+  public function getDayPositionTaiSui()
+  {
+    return $this->getDayPositionTaiSuiBySect(2);
+  }
+
+  public function getDayPositionTaiSuiDesc()
+  {
+    return $this->getDayPositionTaiSuiDescBySect(2);
+  }
+
+  public function getDayPositionTaiSuiDescBySect($sect)
+  {
+    return LunarUtil::$POSITION_DESC[$this->getDayPositionTaiSuiBySect($sect)];
   }
 
   /**
@@ -1846,17 +1980,72 @@ class Lunar
     return LunarUtil::$YUE_XIANG[$this->getDay()];
   }
 
+  protected function _getYearNineStar($yearInGanZhi)
+  {
+    $index = LunarUtil::getJiaZiIndex($yearInGanZhi) + 1;
+    $yearOffset = 0;
+    if ($index != LunarUtil::getJiaZiIndex($this->getYearInGanZhi()) + 1) {
+      $yearOffset = -1;
+    }
+    $yuan = (int)(($this->year + $yearOffset + 2696) / 60) % 3;
+    $offset = (62 + $yuan * 3 - $index) % 9;
+    if (0 === $offset) {
+      $offset = 9;
+    }
+    return NineStar::fromIndex($offset - 1);
+  }
+
+  public function getYearNineStarBySect($sect)
+  {
+    switch ($sect) {
+      case 1:
+        $yearInGanZhi = $this->getYearInGanZhi();
+        break;
+      case 3:
+        $yearInGanZhi = $this->getYearInGanZhiExact();
+        break;
+      default:
+        $yearInGanZhi = $this->getYearInGanZhiByLiChun();
+    }
+    return $this->_getYearNineStar($yearInGanZhi);
+  }
+
   /**
    * 获取值年九星（流年紫白星起例歌诀：年上吉星论甲子，逐年星逆中宫起；上中下作三元汇，一上四中七下兑。）
    * @return NineStar 值年九星
    */
   public function getYearNineStar()
   {
-    $index = -($this->year - 1900) % 9;
-    if ($index < 0) {
-      $index += 9;
+    return $this->getYearNineStarBySect(2);
+  }
+
+  public function _getMonthNineStar($yearZhiIndex, $monthZhiIndex)
+  {
+    $index = $yearZhiIndex % 3;
+    $n = 27 - ($index * 3);
+    if ($monthZhiIndex < LunarUtil::$BASE_MONTH_ZHI_INDEX) {
+      $n -= 3;
     }
-    return new NineStar($index);
+    $offset = ($n - $monthZhiIndex) % 9;
+    return NineStar::fromIndex($offset);
+  }
+
+  public function getMonthNineStarBySect($sect)
+  {
+    switch ($sect) {
+      case 1:
+        $yearZhiIndex = $this->yearZhiIndex;
+        $monthZhiIndex = $this->monthZhiIndex;
+        break;
+      case 3:
+        $yearZhiIndex = $this->yearZhiIndexExact;
+        $monthZhiIndex = $this->monthZhiIndexExact;
+        break;
+      default:
+        $yearZhiIndex = $this->yearZhiIndexByLiChun;
+        $monthZhiIndex = $this->monthZhiIndex;
+    }
+    return $this->_getMonthNineStar($yearZhiIndex, $monthZhiIndex);
   }
 
   /**
@@ -1865,23 +2054,7 @@ class Lunar
    */
   public function getMonthNineStar()
   {
-    $start = 2;
-    $yearZhi = $this->getYearZhi();
-    if (strpos('子午卯酉', $yearZhi) !== false) {
-      $start = 8;
-    } else if (strpos('辰戌丑未', $yearZhi) !== false) {
-      $start = 5;
-    }
-    // 寅月起，所以需要-2
-    $monthIndex = $this->monthZhiIndex - 2;
-    if ($monthIndex < 0) {
-      $monthIndex += 12;
-    }
-    $index = $start - $monthIndex - 1;
-    while ($index < 0) {
-      $index += 9;
-    }
-    return new NineStar($index);
+    return $this->getMonthNineStarBySect(2);
   }
 
   /**
@@ -1890,39 +2063,42 @@ class Lunar
    */
   public function getDayNineStar()
   {
-    //顺逆
     $solarYmd = $this->solar->toYmd();
-    $yuShui = $this->jieQi['雨水']->toYmd();
-    $guYu = $this->jieQi['谷雨']->toYmd();
-    $xiaZhi = $this->jieQi['夏至']->toYmd();
-    $chuShu = $this->jieQi['处暑']->toYmd();
-    $shuangJiang = $this->jieQi['霜降']->toYmd();
-
-    $start = 6;
-    $asc = false;
-    if (strcmp($solarYmd, $this->jieQi['冬至']->toYmd()) >= 0 && strcmp($solarYmd, $yuShui) < 0) {
-      $asc = true;
-      $start = 1;
-    } else if (strcmp($solarYmd, $yuShui) >= 0 && strcmp($solarYmd, $guYu) < 0) {
-      $asc = true;
-      $start = 7;
-    } else if (strcmp($solarYmd, $guYu) >= 0 && strcmp($solarYmd, $xiaZhi) < 0) {
-      $asc = true;
-      $start = 4;
-    } else if (strcmp($solarYmd, $xiaZhi) >= 0 && strcmp($solarYmd, $chuShu) < 0) {
-      $start = 9;
-    } else if (strcmp($solarYmd, $chuShu) >= 0 && strcmp($solarYmd, $shuangJiang) < 0) {
-      $start = 3;
+    $dongZhi = $this->jieQi['冬至'];
+    $dongZhi2 = $this->jieQi['DONG_ZHI'];
+    $xiaZhi = $this->jieQi['夏至'];
+    $dongZhiIndex = LunarUtil::getJiaZiIndex($dongZhi->getLunar()->getDayInGanZhi());
+    $dongZhiIndex2 = LunarUtil::getJiaZiIndex($dongZhi2->getLunar()->getDayInGanZhi());
+    $xiaZhiIndex = LunarUtil::getJiaZiIndex($xiaZhi->getLunar()->getDayInGanZhi());
+    if ($dongZhiIndex > 29) {
+      $solarShunBai = $dongZhi->next(60 - $dongZhiIndex);
+    } else {
+      $solarShunBai = $dongZhi->next(-$dongZhiIndex);
     }
-    $ganZhiIndex = LunarUtil::getJiaZiIndex($this->getDayInGanZhi()) % 9;
-    $index = $asc ? $start + $ganZhiIndex - 1 : $start - $ganZhiIndex - 1;
-    if ($index > 8) {
-      $index -= 9;
+    $solarShunBaiYmd = $solarShunBai->toYmd();
+    if ($dongZhiIndex2 > 29) {
+      $solarShunBai2 = $dongZhi2->next(60 - $dongZhiIndex2);
+    } else {
+      $solarShunBai2 = $dongZhi2->next(-$dongZhiIndex2);
     }
-    if ($index < 0) {
-      $index += 9;
+    $solarShunBaiYmd2 = $solarShunBai2->toYmd();
+    if ($xiaZhiIndex > 29) {
+      $solarNiZi = $xiaZhi->next(60 - $xiaZhiIndex);
+    } else {
+      $solarNiZi = $xiaZhi->next(-$xiaZhiIndex);
     }
-    return new NineStar($index);
+    $solarNiZiYmd = $solarNiZi->toYmd();
+    $offset = 0;
+    if (strcmp($solarYmd, $solarShunBaiYmd) >= 0 && strcmp($solarYmd, $solarNiZiYmd) < 0) {
+      $offset = ExactDate::getDaysBetweenDate($solarShunBai->getCalendar(), $this->getSolar()->getCalendar()) % 9;
+    } else if (strcmp($solarYmd, $solarNiZiYmd) >= 0 && strcmp($solarYmd, $solarShunBaiYmd2) < 0) {
+      $offset = 8 - (ExactDate::getDaysBetweenDate($solarNiZi->getCalendar(), $this->getSolar()->getCalendar()) % 9);
+    } else if (strcmp($solarYmd, $solarShunBaiYmd2) >= 0) {
+      $offset = ExactDate::getDaysBetweenDate($solarShunBai2->getCalendar(), $this->getSolar()->getCalendar()) % 9;
+    } else if (strcmp($solarYmd, $solarShunBaiYmd) < 0) {
+      $offset = (8 + ExactDate::getDaysBetweenDate($this->getSolar()->getCalendar(), $solarShunBai->getCalendar())) % 9;
+    }
+    return NineStar::fromIndex($offset);
   }
 
   /**
@@ -1936,22 +2112,18 @@ class Lunar
     $asc = false;
     if (strcmp($solarYmd, $this->jieQi['冬至']->toYmd()) >= 0 && strcmp($solarYmd, $this->jieQi['夏至']->toYmd()) < 0) {
       $asc = true;
+    } else if (strcmp($solarYmd, $this->jieQi['DONG_ZHI']->toYmd()) >= 0) {
+      $asc = true;
     }
-    $start = $asc ? 7 : 3;
+    $start = $asc ? 6 : 2;
     $dayZhi = $this->getDayZhi();
     if (strpos('子午卯酉', $dayZhi) !== false) {
-      $start = $asc ? 1 : 9;
+      $start = $asc ? 0 : 8;
     } else if (strpos('辰戌丑未', $dayZhi) !== false) {
-      $start = $asc ? 4 : 6;
+      $start = $asc ? 3 : 5;
     }
-    $index = $asc ? $start + $this->timeZhiIndex - 1 : $start - $this->timeZhiIndex - 1;
-    if ($index > 8) {
-      $index -= 9;
-    }
-    if ($index < 0) {
-      $index += 9;
-    }
-    return new NineStar($index);
+    $index = $asc ? $start + $this->timeZhiIndex : $start + 9 - $this->timeZhiIndex;
+    return NineStar::fromIndex($index % 9);
   }
 
   /**
@@ -1967,14 +2139,15 @@ class Lunar
    * 获取最近的节气，如果未找到匹配的，返回null
    * @param $forward bool 是否顺推，true为顺推，false为逆推
    * @param $conditions array|null 过滤条件，如果设置过滤条件，仅返回匹配该名称的
+   * @param $wholeDay bool 是否按天计
    * @return JieQi|null 节气
    */
-  protected function getNearJieQi($forward, $conditions)
+  protected function getNearJieQi($forward, $conditions, $wholeDay)
   {
     $name = null;
     $near = null;
     $filter = null != $conditions && count($conditions) > 0;
-    $today = $this->solar->toYmdHms();
+    $today = $wholeDay ? $this->solar->toYmd() : $this->solar->toYmdHms();
     foreach ($this->jieQi as $key => $solar) {
       $jq = $this->convertJieQi($key);
       if ($filter) {
@@ -1982,22 +2155,34 @@ class Lunar
           continue;
         }
       }
-      $day = $solar->toYmdHms();
+      $day = $wholeDay ? $solar->toYmd() : $solar->toYmdHms();
       if ($forward) {
         if (strcmp($day, $today) < 0) {
           continue;
         }
-        if (null == $near || strcmp($day, $near) < 0) {
+        if (null == $near) {
           $name = $jq;
           $near = $solar;
+        } else {
+          $nearDay = $wholeDay ? $near->toYmd() : $near->toYmdHms();
+          if (strcmp($day, $nearDay) < 0) {
+            $name = $jq;
+            $near = $solar;
+          }
         }
       } else {
         if (strcmp($day, $today) > 0) {
           continue;
         }
-        if (null == $near || strcmp($day, $near) > 0) {
+        if (null == $near) {
           $name = $jq;
           $near = $solar;
+        } else {
+          $nearDay = $wholeDay ? $near->toYmd() : $near->toYmdHms();
+          if (strcmp($day, $nearDay) > 0) {
+            $name = $jq;
+            $near = $solar;
+          }
         }
       }
     }
@@ -2007,17 +2192,31 @@ class Lunar
     return new JieQi($name, $near);
   }
 
+  public function getNextJieByWholeDay($wholeDay)
+  {
+    $conditions = array();
+    for ($i = 0, $j = count(Lunar::$JIE_QI_IN_USE) / 2; $i < $j; $i++) {
+      $conditions[] = Lunar::$JIE_QI_IN_USE[$i * 2];
+    }
+    return $this->getNearJieQi(true, $conditions, $wholeDay);
+  }
+
   /**
    * 获取下一节（顺推的第一个节）
    * @return JieQi|null 节气
    */
   public function getNextJie()
   {
+    return $this->getNextJieByWholeDay(false);
+  }
+
+  public function getPrevJieByWholeDay($wholeDay)
+  {
     $conditions = array();
     for ($i = 0, $j = count(Lunar::$JIE_QI_IN_USE) / 2; $i < $j; $i++) {
       $conditions[] = Lunar::$JIE_QI_IN_USE[$i * 2];
     }
-    return $this->getNearJieQi(true, $conditions);
+    return $this->getNearJieQi(false, $conditions, $wholeDay);
   }
 
   /**
@@ -2026,11 +2225,16 @@ class Lunar
    */
   public function getPrevJie()
   {
+    return $this->getPrevJieByWholeDay(false);
+  }
+
+  public function getNextQiByWholeDay($wholeDay)
+  {
     $conditions = array();
     for ($i = 0, $j = count(Lunar::$JIE_QI_IN_USE) / 2; $i < $j; $i++) {
-      $conditions[] = Lunar::$JIE_QI_IN_USE[$i * 2];
+      $conditions[] = Lunar::$JIE_QI_IN_USE[$i * 2 + 1];
     }
-    return $this->getNearJieQi(false, $conditions);
+    return $this->getNearJieQi(true, $conditions, $wholeDay);
   }
 
   /**
@@ -2039,11 +2243,16 @@ class Lunar
    */
   public function getNextQi()
   {
+    return $this->getNextQiByWholeDay(false);
+  }
+
+  public function getPrevQiByWholeDay($wholeDay)
+  {
     $conditions = array();
     for ($i = 0, $j = count(Lunar::$JIE_QI_IN_USE) / 2; $i < $j; $i++) {
       $conditions[] = Lunar::$JIE_QI_IN_USE[$i * 2 + 1];
     }
-    return $this->getNearJieQi(true, $conditions);
+    return $this->getNearJieQi(false, $conditions, $wholeDay);
   }
 
   /**
@@ -2052,11 +2261,12 @@ class Lunar
    */
   public function getPrevQi()
   {
-    $conditions = array();
-    for ($i = 0, $j = count(Lunar::$JIE_QI_IN_USE) / 2; $i < $j; $i++) {
-      $conditions[] = Lunar::$JIE_QI_IN_USE[$i * 2 + 1];
-    }
-    return $this->getNearJieQi(false, $conditions);
+    return $this->getPrevQiByWholeDay(false);
+  }
+
+  public function getNextJieQiByWholeDay($wholeDay)
+  {
+    return $this->getNearJieQi(true, null, $wholeDay);
   }
 
   /**
@@ -2065,7 +2275,12 @@ class Lunar
    */
   public function getNextJieQi()
   {
-    return $this->getNearJieQi(true, null);
+    return $this->getNextJieQiByWholeDay(false);
+  }
+
+  public function getPrevJieQiByWholeDay($wholeDay)
+  {
+    return $this->getNearJieQi(false, null, $wholeDay);
   }
 
   /**
@@ -2074,7 +2289,7 @@ class Lunar
    */
   public function getPrevJieQi()
   {
-    return $this->getNearJieQi(false, null);
+    return $this->getPrevJieQiByWholeDay(false);
   }
 
   /**
@@ -2083,14 +2298,12 @@ class Lunar
    */
   public function getJieQi()
   {
-    $name = '';
-    foreach ($this->jieQi as $jq => $d) {
-      if ($d->getYear() == $this->solar->getYear() && $d->getMonth() == $this->solar->getMonth() && $d->getDay() == $this->solar->getDay()) {
-        $name = $jq;
-        break;
+    foreach ($this->jieQi as $key => $d) {
+      if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
+        return $this->convertJieQi($key);
       }
     }
-    return $this->convertJieQi($name);
+    return '';
   }
 
   /**
@@ -2099,8 +2312,12 @@ class Lunar
    */
   public function getCurrentJieQi()
   {
-    $name = $this->getJieQi();
-    return strlen($name) > 0 ? new JieQi($name, $this->solar) : null;
+    foreach ($this->jieQi as $key => $d) {
+      if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
+        return new JieQi($key, $d);
+      }
+    }
+    return null;
   }
 
   /**
@@ -2109,8 +2326,14 @@ class Lunar
    */
   public function getCurrentJie()
   {
-    $name = $this->getJie();
-    return strlen($name) > 0 ? new JieQi($name, $this->solar) : null;
+    for ($i = 0, $j = count(Lunar::$JIE_QI_IN_USE); $i < $j; $i += 2) {
+      $key = Lunar::$JIE_QI_IN_USE[$i];
+      $d = $this->jieQi[$key];
+      if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
+        return new JieQi($key, $d);
+      }
+    }
+    return null;
   }
 
   /**
@@ -2119,8 +2342,14 @@ class Lunar
    */
   public function getCurrentQi()
   {
-    $name = $this->getQi();
-    return strlen($name) > 0 ? new JieQi($name, $this->solar) : null;
+    for ($i = 1, $j = count(Lunar::$JIE_QI_IN_USE); $i < $j; $i += 2) {
+      $key = Lunar::$JIE_QI_IN_USE[$i];
+      $d = $this->jieQi[$key];
+      if ($d->getYear() === $this->solar->getYear() && $d->getMonth() === $this->solar->getMonth() && $d->getDay() === $this->solar->getDay()) {
+        return new JieQi($key, $d);
+      }
+    }
+    return null;
   }
 
   public function getTimeGanIndex()
@@ -2505,7 +2734,7 @@ class Lunar
     if ($currentCalendar < $startCalendar || $currentCalendar >= $endCalendar) {
       return null;
     }
-    $days = $currentCalendar->diff($startCalendar)->days;
+    $days = ExactDate::getDaysBetweenDate($startCalendar, $currentCalendar);
     return new ShuJiu(LunarUtil::$NUMBER[$days / 9 + 1] . '九', $days % 9 + 1);
   }
 
@@ -2524,17 +2753,17 @@ class Lunar
     if ($currentCalendar < $startCalendar) {
       return null;
     }
-    $days = $currentCalendar->diff($startCalendar)->days;
+    $days = ExactDate::getDaysBetweenDate($startCalendar, $currentCalendar);
     if ($days < 10) {
       return new Fu('初伏', $days + 1);
     }
     $startCalendar->modify('+10 day');
-    $days = $currentCalendar->diff($startCalendar)->days;
+    $days = ExactDate::getDaysBetweenDate($startCalendar, $currentCalendar);
     if ($days < 10) {
       return new Fu('中伏', $days + 1);
     }
     $startCalendar->modify('+10 day');
-    $days = $currentCalendar->diff($startCalendar)->days;
+    $days = ExactDate::getDaysBetweenDate($startCalendar, $currentCalendar);
     $liQiuCalendar = ExactDate::fromYmd($liQiu->getYear(), $liQiu->getMonth(), $liQiu->getDay());
     if ($liQiuCalendar <= $startCalendar) {
       if ($days < 10) {
@@ -2545,7 +2774,7 @@ class Lunar
         return new Fu('中伏', $days + 11);
       }
       $startCalendar->modify('+10 day');
-      $days = $currentCalendar->diff($startCalendar)->days;
+      $days = ExactDate::getDaysBetweenDate($startCalendar, $currentCalendar);
       if ($days < 10) {
         return new Fu('末伏', $days + 1);
       }
@@ -2568,7 +2797,7 @@ class Lunar
    */
   public function getWuHou()
   {
-    $jieQi = $this->getPrevJieQi();
+    $jieQi = $this->getPrevJieQiByWholeDay(true);
     $name = $jieQi->getName();
     $offset = 0;
     for ($i = 0, $j = count(Lunar::$JIE_QI); $i < $j; $i++) {
@@ -2580,8 +2809,18 @@ class Lunar
     $currentCalendar = ExactDate::fromYmd($this->solar->getYear(), $this->solar->getMonth(), $this->solar->getDay());
     $startSolar = $jieQi->getSolar();
     $startCalendar = ExactDate::fromYmd($startSolar->getYear(), $startSolar->getMonth(), $startSolar->getDay());
-    $days = $currentCalendar->diff($startCalendar)->days;
+    $days = ExactDate::getDaysBetweenDate($startCalendar, $currentCalendar);
     return LunarUtil::$WU_HOU[($offset * 3 + floor($days / 5)) % count(LunarUtil::$WU_HOU)];
+  }
+
+  public function getHou()
+  {
+    $jieQi = $this->getPrevJieQiByWholeDay(true);
+    $name = $jieQi->getName();
+    $startSolar = $jieQi->getSolar();
+    $days = ExactDate::getDaysBetween($startSolar->getYear(), $startSolar->getMonth(), $startSolar->getDay(), $this->solar->getYear(), $this->solar->getMonth(), $this->solar->getDay());
+    $hou = LunarUtil::$HOU[(int)($days / 5) % count(LunarUtil::$HOU)];
+    return $name . ' ' . $hou;
   }
 
   public function getDayLu()

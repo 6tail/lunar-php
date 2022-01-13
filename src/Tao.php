@@ -85,9 +85,9 @@ class Tao
   {
     $l = TaoUtil::getFestivals($this->getMonth() . '-' . $this->getDay());
     $jq = $this->lunar->getJieQi();
-    if (strcmp('冬至', $jq) == 0) {
+    if (strcmp('冬至', $jq) === 0) {
       $l[] = new TaoFestival('元始天尊圣诞');
-    } else if (strcmp('夏至', $jq) == 0) {
+    } else if (strcmp('夏至', $jq) === 0) {
       $l[] = new TaoFestival('灵宝天尊圣诞');
     }
     // 八节日
@@ -106,7 +106,7 @@ class Tao
   {
     $md = $this->getMonth() . '-' . $this->getDay();
     foreach ($days as $d) {
-      if (strcmp($md, $d) == 0) {
+      if (strcmp($md, $d) === 0) {
         return true;
       }
     }
@@ -136,6 +136,46 @@ class Tao
   public function isDayBaHui()
   {
     return !empty(TaoUtil::$BA_HUI[$this->lunar->getDayInGanZhi()]);
+  }
+
+  public function isDayMingWu()
+  {
+    return strcmp('戊', $this->lunar->getDayGan()) == 0;
+  }
+
+  public function isDayAnWu()
+  {
+    return strcmp($this->lunar->getDayZhi(), TaoUtil::$AN_WU[abs($this->getMonth()) - 1]) === 0;
+  }
+
+  public function isDayWu()
+  {
+    return $this->isDayMingWu() || $this->isDayAnWu();
+  }
+
+  public function isDayTianShe()
+  {
+    $ret = false;
+    $mz = $this->lunar->getMonthZhi();
+    $dgz = $this->lunar->getDayInGanZhi();
+    if (strpos('寅卯辰', $mz) !== false) {
+      if ('戊寅' === $dgz) {
+        $ret = true;
+      }
+    } else if (strpos('巳午未', $mz) !== false) {
+      if ('甲午' === $dgz) {
+        $ret = true;
+      }
+    } else if (strpos('申酉戌', $mz) !== false) {
+      if ('戊申' === $dgz) {
+        $ret = true;
+      }
+    } else if (strpos('亥子丑', $mz) !== false) {
+      if ('甲子' === $dgz) {
+        $ret = true;
+      }
+    }
+    return $ret;
   }
 
   public function toString()

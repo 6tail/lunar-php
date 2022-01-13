@@ -116,10 +116,11 @@ class SolarWeek
   public function getIndex()
   {
     $firstDayWeek = intval(ExactDate::fromYmd($this->year, $this->month, 1)->format('w'));
-    if ($firstDayWeek === 0) {
-      $firstDayWeek = 7;
+    $offset = $firstDayWeek - $this->start;
+    if ($offset < 0) {
+      $offset += 7;
     }
-    return ceil(($this->day + $firstDayWeek - $this->start) / 7);
+    return ceil(($this->day + $offset) / 7);
   }
 
   /**

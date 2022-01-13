@@ -3,7 +3,6 @@
 namespace com\nlf\calendar;
 
 use com\nlf\calendar\util\LunarUtil;
-use DateTime;
 
 bcscale(12);
 
@@ -84,11 +83,8 @@ class Yun
     // 时辰差
     $hourDiff = $endTimeZhiIndex - $startTimeZhiIndex;
 
-    $endCalendar = ExactDate::fromYmd($end->getYear(), $end->getMonth(), $end->getDay());
-    $startCalendar = ExactDate::fromYmd($start->getYear(), $start->getMonth(), $start->getDay());
-
     // 天数差
-    $dayDiff = $endCalendar->diff($startCalendar)->days;
+    $dayDiff = ExactDate::getDaysBetween($start->getYear(), $start->getMonth(), $start->getDay(), $end->getYear(), $end->getMonth(), $end->getDay());
     if ($hourDiff < 0) {
       $hourDiff += 12;
       $dayDiff--;

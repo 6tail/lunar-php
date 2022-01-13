@@ -16,6 +16,7 @@ class LunarUtil
   public static $XUN = array('甲子', '甲戌', '甲申', '甲午', '甲辰', '甲寅');
   public static $XUN_KONG = array('戌亥', '申酉', '午未', '辰巳', '寅卯', '子丑');
   public static $LIU_YAO = array('先胜', '友引', '先负', '佛灭', '大安', '赤口');
+  public static $HOU = array('初候', '二候', '三候');
   public static $WU_HOU = array('蚯蚓结', '麋角解', '水泉动', '雁北乡', '鹊始巢', '雉始雊', '鸡始乳', '征鸟厉疾', '水泽腹坚', '东风解冻', '蛰虫始振', '鱼陟负冰', '獭祭鱼', '候雁北', '草木萌动', '桃始华', '仓庚鸣', '鹰化为鸠', '玄鸟至', '雷乃发声', '始电', '桐始华', '田鼠化为鴽', '虹始见', '萍始生', '鸣鸠拂奇羽', '戴胜降于桑', '蝼蝈鸣', '蚯蚓出', '王瓜生', '苦菜秀', '靡草死', '麦秋至', '螳螂生', '鵙始鸣', '反舌无声', '鹿角解', '蜩始鸣', '半夏生', '温风至', '蟋蟀居壁', '鹰始挚', '腐草为萤', '土润溽暑', '大雨行时', '凉风至', '白露降', '寒蝉鸣', '鹰乃祭鸟', '天地始肃', '禾乃登', '鸿雁来', '玄鸟归', '群鸟养羞', '雷始收声', '蛰虫坯户', '水始涸', '鸿雁来宾', '雀入大水为蛤', '菊有黄花', '豺乃祭兽', '草木黄落', '蛰虫咸俯', '水始冰', '地始冻', '雉入大水为蜃', '虹藏不见', '天气上升地气下降', '闭塞而成冬', '鹖鴠不鸣', '虎始交', '荔挺出');
   public static $GAN = array('', '甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸');
   public static $POSITION_XI = array('', '艮', '乾', '坤', '离', '巽', '艮', '乾', '坤', '离', '巽');
@@ -24,6 +25,9 @@ class LunarUtil
   public static $POSITION_FU = array('', '巽', '巽', '震', '震', '坎', '离', '坤', '坤', '乾', '兑');
   public static $POSITION_FU_2 = array('', '坎', '坤', '乾', '巽', '艮', '坎', '坤', '乾', '巽', '艮');
   public static $POSITION_CAI = array('', '艮', '艮', '坤', '坤', '坎', '坎', '震', '震', '离', '离');
+  public static $POSITION_TAI_SUI_YEAR = array('坎', '艮', '艮', '震', '巽', '巽', '离', '坤', '坤', '兑', '坎', '坎');
+  public static $POSITION_GAN = array('震', '震', '离', '离', '中', '中', '兑', '兑', '坎', '坎');
+  public static $POSITION_ZHI = array('坎', '中', '震', '震', '中', '离', '离', '中', '兑', '兑', '中', '坎');
   public static $POSITION_TAI_DAY = array('占门碓 外东南', '碓磨厕 外东南', '厨灶炉 外正南', '仓库门 外正南', '房床栖 外正南', '占门床 外正南', '占碓磨 外正南', '厕灶厨 外西南', '仓库炉 外西南', '房床门 外西南', '门碓栖 外西南', '碓磨床 外西南', '厨灶碓 外西南', '仓库厕 外正西', '房床炉 外正西', '占大门 外正西', '碓磨栖 外正西', '厨房床 外正西', '仓库碓 外西北', '房床厕 外西北', '占门炉 外西北', '门碓磨 外西北', '厨灶栖 外西北', '仓库床 外西北', '房床碓 外正北', '占门厕 外正北', '碓磨炉 外正北', '厨灶门 外正北', '仓库栖 外正北', '占房床 房内北', '占门碓 房内北', '碓磨厕 房内北', '厨灶炉 房内北', '门仓库 房内北', '床房栖 房内中', '占门床 房内中', '占碓磨 房内南', '厨磨厕 房内南', '仓库炉 房内南', '房床门 房内西', '门碓栖 房内东', '碓磨床 房内东', '厨灶碓 房内东', '仓库厕 房内东', '房床炉 房内中', '占大门 外东北', '碓磨栖 外东北', '厨灶床 外东北', '仓库碓 外东北', '房床厕 外东北', '占门炉 外东北', '门碓磨 外正东', '厨灶栖 外正东', '仓库床 外正东', '房床碓 外正东', '占门厕 外正东', '碓磨炉 外东南', '厨灶门 外东南', '仓库栖 外东南', '占房床 外东南');
   public static $POSITION_TAI_MONTH = array('占房床', '占户窗', '占门堂', '占厨灶', '占房床', '占床仓', '占碓磨', '占厕户', '占门房', '占房床', '占灶炉', '占房床');
   public static $ZHI = array('', '子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥');
@@ -1036,7 +1040,7 @@ class LunarUtil
     while ($index > -1) {
       $right = substr($right, $index + 3);
       $left = $right;
-      if (strpos($left, '=')) {
+      if (strpos($left, '=') !== false) {
         $left = substr($left, 0, strpos($left, '=') - 2);
       }
       $matched = false;
@@ -1081,7 +1085,7 @@ class LunarUtil
     while ($index > -1) {
       $right = substr($right, $index + 3);
       $left = $right;
-      if (strpos($left, '=')) {
+      if (strpos($left, '=') !== false) {
         $left = substr($left, 0, strpos($left, '=') - 2);
       }
       $matched = false;
@@ -1123,7 +1127,7 @@ class LunarUtil
     $index = strpos(LunarUtil::$DAY_SHEN_SHA, $month . $day . '=');
     if ($index > -1) {
       $left = substr(LunarUtil::$DAY_SHEN_SHA, $index + 4);
-      if (strpos($left, '=')) {
+      if (strpos($left, '=') !== false) {
         $left = substr($left, 0, strpos($left, '=') - 3);
       }
       $js = substr($left, 0, strpos($left, ','));
@@ -1152,7 +1156,7 @@ class LunarUtil
     $index = strpos(LunarUtil::$DAY_SHEN_SHA, $month . $day . '=');
     if ($index > -1) {
       $left = substr(LunarUtil::$DAY_SHEN_SHA, $index + 4);
-      if (strpos($left, '=')) {
+      if (strpos($left, '=') !== false) {
         $left = substr($left, 0, strpos($left, '=') - 3);
       }
       $xs = substr($left, strpos($left, ',') + 1, strlen($left));
@@ -1181,7 +1185,7 @@ class LunarUtil
     $index = strpos(LunarUtil::$TIME_YI_JI, $day . $time . '=');
     if ($index > -1) {
       $left = substr(LunarUtil::$TIME_YI_JI, $index + 5);
-      if (strpos($left, '=')) {
+      if (strpos($left, '=') !== false) {
         $left = substr($left, 0, strpos($left, '=') - 4);
       }
       $ys = substr($left, 0, strpos($left, ','));
@@ -1210,7 +1214,7 @@ class LunarUtil
     $index = strpos(LunarUtil::$TIME_YI_JI, $day . $time . '=');
     if ($index > -1) {
       $left = substr(LunarUtil::$TIME_YI_JI, $index + 5);
-      if (strpos($left, '=')) {
+      if (strpos($left, '=') !== false) {
         $left = substr($left, 0, strpos($left, '=') - 4);
       }
       $js = substr($left, strpos($left, ',') + 1, strlen($left));

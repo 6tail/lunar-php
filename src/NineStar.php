@@ -105,6 +105,11 @@ class NineStar
     $this->index = $index;
   }
 
+  public static function fromIndex($index)
+  {
+    return new NineStar($index);
+  }
+
   /**
    * 获取九数
    * @return string 九数

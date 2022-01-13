@@ -35,14 +35,14 @@ class Holiday
 
   function __construct($day, $name, $work, $target)
   {
-    if (strpos($day, '-')) {
+    if (strpos($day, '-') !== false) {
       $this->day = $day;
     } else {
       $this->day = substr($day, 0, 4) . '-' . substr($day, 4, 2) . '-' . substr($day, 6);
     }
     $this->name = $name;
     $this->work = $work;
-    if (strpos($day, '-')) {
+    if (strpos($day, '-') !== false) {
       $this->target = $target;
     } else {
       $this->target = substr($target, 0, 4) . '-' . substr($target, 4, 2) . '-' . substr($target, 6);

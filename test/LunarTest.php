@@ -161,13 +161,13 @@ class LunarTest extends TestCase
   public function test22()
   {
     $lunar = Lunar::fromYmd(2022, 1, 1);
-    $this->assertEquals('五黄土玉衡', $lunar->getYearNineStar()->toString());
+    $this->assertEquals('六白金开阳', $lunar->getYearNineStar()->toString());
   }
 
   public function test23()
   {
     $lunar = Lunar::fromYmd(2033, 1, 1);
-    $this->assertEquals('三碧木天玑', $lunar->getYearNineStar()->toString());
+    $this->assertEquals('四绿木天权', $lunar->getYearNineStar()->toString());
   }
 
   public function test24()
@@ -342,6 +342,12 @@ class LunarTest extends TestCase
   {
     $solar = Solar::fromYmd(2011, 11, 12);
     $this->assertEquals('厕灶厨 外西南', $solar->getLunar()->getDayPositionTai());
+  }
+
+  public function test53()
+  {
+    $solar = Solar::fromYmd(2021, 12, 25);
+    $this->assertEquals('二〇二一年冬月廿二', $solar->getLunar()->toString());
   }
 
 }

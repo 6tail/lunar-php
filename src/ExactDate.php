@@ -2,6 +2,7 @@
 
 namespace com\nlf\calendar;
 
+use com\nlf\calendar\util\SolarUtil;
 use DateTime;
 use DateTimeZone;
 use RuntimeException;
@@ -41,4 +42,46 @@ class ExactDate
     return $calendar;
   }
 
+  /**
+   * 获取两个日期之间相差的天数（如果日期a比日期b小，天数为正，如果日期a比日期b大，天数为负）
+   * @param $ay int 年a
+   * @param $am int 月a
+   * @param $ad int 日a
+   * @param $by int 年b
+   * @param $bm int 月b
+   * @param $bd int 日b
+   * @return int
+   */
+  public static function getDaysBetween($ay, $am, $ad, $by, $bm, $bd)
+  {
+    if ($ay == $by) {
+      $n = SolarUtil::getDaysInYear($by, $bm, $bd) - SolarUtil::getDaysInYear($ay, $am, $ad);
+    } else if ($ay > $by) {
+      $days = SolarUtil::getDaysOfYear($by) - SolarUtil::getDaysInYear($by, $bm, $bd);
+      for ($i = $by + 1; $i < $ay; $i++) {
+        $days += SolarUtil::getDaysOfYear($i);
+      }
+      $days += SolarUtil::getDaysInYear($ay, $am, $ad);
+      $n = -$days;
+    } else {
+      $days = SolarUtil::getDaysOfYear($ay) - SolarUtil::getDaysInYear($ay, $am, $ad);
+      for ($i = $ay + 1; $i < $by; $i++) {
+        $days += SolarUtil::getDaysOfYear($i);
+      }
+      $days += SolarUtil::getDaysInYear($by, $bm, $bd);
+      $n = $days;
+    }
+    return $n;
+  }
+
+  /**
+   * 获取两个日期之间相差的天数（如果日期a比日期b小，天数为正，如果日期a比日期b大，天数为负）
+   * @param DateTime $date0 日期a
+   * @param DateTime $date1 日期b
+   * @return int 天数
+   */
+  public static function getDaysBetweenDate(DateTime $date0, DateTime $date1)
+  {
+    return ExactDate::getDaysBetween(intval($date0 -> format('Y')), intval($date0 -> format('n')), intval($date0 -> format('j')), intval($date1 -> format('Y')), intval($date1 -> format('n')), intval($date1 -> format('j')));
+  }
 }

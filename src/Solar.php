@@ -67,7 +67,7 @@ class Solar
 
   function __construct($year, $month, $day, $hour, $minute, $second)
   {
-    if ($year == 1582 && $month == 10) {
+    if ($year === 1582 && $month === 10) {
       if ($day >= 15) {
         $day -= 10;
       }
@@ -188,11 +188,11 @@ class Solar
     if ($offsetYear < 0) {
       $offsetYear = $offsetYear + 60;
     }
-    $startYear = $today->getYear() - $offsetYear;
+    $startYear = $lunar->getYear() - $offsetYear;
     $hour = 0;
     $timeZhi = substr($timeGanZhi, strlen($timeGanZhi) / 2);
     for ($i = 0, $j = count(LunarUtil::$ZHI); $i < $j; $i++) {
-      if (strcmp(LunarUtil::$ZHI[$i], $timeZhi) == 0) {
+      if (strcmp(LunarUtil::$ZHI[$i], $timeZhi) === 0) {
         $hour = ($i - 1) * 2;
       }
     }
@@ -259,7 +259,7 @@ class Solar
   public function toYmd()
   {
     $d = $this->day;
-    if ($this->year == 1582 && $this->month == 10) {
+    if ($this->year === 1582 && $this->month === 10) {
       if ($d >= 5) {
         $d += 10;
       }
@@ -467,7 +467,7 @@ class Solar
       $holiday = HolidayUtil::getHolidayByYmd($year, $month, $day);
       if (null == $holiday) {
         $week = intval($calendar->format('w'));
-        if (0 == $week || 6 == $week) {
+        if (0 === $week || 6 === $week) {
           $work = false;
         }
       } else {

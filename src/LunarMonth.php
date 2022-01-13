@@ -2,6 +2,8 @@
 
 namespace com\nlf\calendar;
 
+use com\nlf\calendar\util\LunarUtil;
+
 /**
  * 农历月
  * @package com\nlf\calendar
@@ -110,5 +112,48 @@ class LunarMonth
   public function isLeap()
   {
     return $this->month < 0;
+  }
+
+  public function getPositionTaiSui()
+  {
+    $m = abs($this->month);
+    switch ($m) {
+      case 1:
+      case 5:
+      case 9:
+        $p = '艮';
+        break;
+      case 3:
+      case 7:
+      case 11:
+        $p = '坤';
+        break;
+      case 4:
+      case 8:
+      case 12:
+        $p = '巽';
+        break;
+      default:
+        $p = LunarUtil::$POSITION_GAN[Solar::fromJulianDay($this->getFirstJulianDay())->getLunar()->getMonthGanIndex()];
+    }
+    return $p;
+  }
+
+  public function getPositionTaiSuiDesc()
+  {
+    return LunarUtil::$POSITION_DESC[$this->getPositionTaiSui()];
+  }
+
+  public function getNineStar()
+  {
+    $index = LunarYear::fromYear($this->year)->getZhiIndex() % 3;
+    $m = abs($this->month);
+    $monthZhiIndex = (13 + $m) % 12;
+    $n = 27 - ($index * 3);
+    if ($monthZhiIndex < LunarUtil::$BASE_MONTH_ZHI_INDEX) {
+      $n -= 3;
+    }
+    $offset = ($n - $monthZhiIndex) % 9;
+    return NineStar::fromIndex($offset);
   }
 }

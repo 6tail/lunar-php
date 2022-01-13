@@ -128,7 +128,7 @@ class SolarUtil
     '11-28' => array('恩格斯诞辰纪念日'),
     '12-1' => array('世界艾滋病日'),
     '12-12' => array('西安事变纪念日'),
-    '12-13' => array('南京大屠杀纪念日'),
+    '12-13' => array('国家公祭日'),
     '12-26' => array('毛泽东诞辰纪念日')
   );
 
@@ -139,7 +139,7 @@ class SolarUtil
    */
   public static function isLeapYear($year)
   {
-    return ($year%4 == 0 && $year%100 != 0) || ($year%400 == 0);
+    return ($year%4 === 0 && $year%100 != 0) || ($year%400 === 0);
   }
 
   /**
@@ -150,12 +150,45 @@ class SolarUtil
    */
   public static function getDaysOfMonth($year, $month)
   {
+    if (1582 === $year && 10 === $month) {
+      return 21;
+    }
     $d = SolarUtil::$DAYS_OF_MONTH[$month - 1];
     //公历闰年2月多一天
-    if ($month == 2 && SolarUtil::isLeapYear($year)) {
+    if ($month === 2 && SolarUtil::isLeapYear($year)) {
       $d++;
     }
     return $d;
+  }
+
+  /**
+   * 获取某年有多少天（平年365天，闰年366天）
+   * @param $year int 年
+   * @return int 天数
+   */
+  public static function getDaysOfYear($year)
+  {
+    return SolarUtil::isLeapYear($year) ? 366 : 365;
+  }
+
+  /**
+   * 获取某天为当年的第几天
+   * @param $year int 年
+   * @param $month int 月
+   * @param $day int 日
+   * @return int 第几天
+   */
+  public static function getDaysInYear($year, $month, $day)
+  {
+    $days = 0;
+    for ($i = 1; $i < $month; $i++) {
+      $days += SolarUtil::getDaysOfMonth($year, $i);
+    }
+    $days += $day;
+    if (1582 === $year && 10 === $month && $day >= 15) {
+      $days -= 10;
+    }
+    return $days;
   }
 
   /**

@@ -44,4 +44,18 @@ class WeekTest extends TestCase
     $this->assertEquals('2019-05-01', $week->getFirstDayInMonth()->toString());
   }
 
+  public function test3()
+  {
+    $start = 0;
+    $week = SolarWeek::fromYmd(2022, 5, 1, $start);
+    $this->assertEquals(1, $week->getIndex());
+  }
+
+  public function test4()
+  {
+    $start = 2;
+    $week = SolarWeek::fromYmd(2022, 5, 4, $start);
+    $this->assertEquals(2, $week->getIndex());
+  }
+
 }
