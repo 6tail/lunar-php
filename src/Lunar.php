@@ -2816,11 +2816,14 @@ class Lunar
   public function getHou()
   {
     $jieQi = $this->getPrevJieQiByWholeDay(true);
-    $name = $jieQi->getName();
     $startSolar = $jieQi->getSolar();
     $days = ExactDate::getDaysBetween($startSolar->getYear(), $startSolar->getMonth(), $startSolar->getDay(), $this->solar->getYear(), $this->solar->getMonth(), $this->solar->getDay());
-    $hou = LunarUtil::$HOU[(int)($days / 5) % count(LunarUtil::$HOU)];
-    return $name . ' ' . $hou;
+    $max = count(LunarUtil::$HOU) - 1;
+    $offset = floor($days / 5);
+    if ($offset > $max) {
+      $offset = $max;
+    }
+    return $jieQi->getName() . ' ' . LunarUtil::$HOU[$offset];
   }
 
   public function getDayLu()

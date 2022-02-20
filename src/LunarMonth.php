@@ -156,4 +156,62 @@ class LunarMonth
     $offset = ($n - $monthZhiIndex) % 9;
     return NineStar::fromIndex($offset);
   }
+
+  public function next($n)
+  {
+    if (0 == $n) {
+      return LunarMonth::fromYm($this->year, $this->month);
+    } else {
+      $rest = abs($n);
+      $ny = $this->year;
+      $iy = $ny;
+      $im = $this->month;
+      $index = 0;
+      $months = LunarYear::fromYear($ny)->getMonths();
+      if ($n > 0) {
+        while (true) {
+          $size = count($months);
+          for ($i = 0; $i < $size; $i++) {
+            $m = $months[$i];
+            if ($m->getYear() == $iy && $m->getMonth() == $im) {
+              $index = $i;
+              break;
+            }
+          }
+          $more = $size - $index - 1;
+          if ($rest < $more) {
+            break;
+          }
+          $rest -= $more;
+          $lastMonth = $months[$size - 1];
+          $iy = $lastMonth->getYear();
+          $im = $lastMonth->getMonth();
+          $ny++;
+          $months = LunarYear::fromYear($ny)->getMonths();
+        }
+        return $months[$index + $rest];
+      } else {
+        while (true) {
+          $size = count($months);
+          for ($i = 0; $i < $size; $i++) {
+            $m = $months[$i];
+            if ($m->getYear() == $iy && $m->getMonth() == $im) {
+              $index = $i;
+              break;
+            }
+          }
+          if ($rest <= $index) {
+            break;
+          }
+          $rest -= $index;
+          $firstMonth = $months[0];
+          $iy = $firstMonth->getYear();
+          $im = $firstMonth->getMonth();
+          $ny--;
+          $months = LunarYear::fromYear($ny)->getMonths();
+        }
+        return $months[$index - $rest];
+      }
+    }
+  }
 }

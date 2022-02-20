@@ -484,4 +484,9 @@ class LunarYear
   {
     return LunarUtil::$POSITION_DESC[$this->getPositionTaiSui()];
   }
+
+  public function next($n)
+  {
+    return LunarYear::fromYear($this->year + $n);
+  }
 }
