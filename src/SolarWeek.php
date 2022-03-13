@@ -124,6 +124,20 @@ class SolarWeek
   }
 
   /**
+   * 获取当前日期是在当年第几周
+   * @return int
+   */
+  public function getIndexInYear()
+  {
+    $firstDayWeek = intval(ExactDate::fromYmd($this->year, 1, 1)->format('w'));
+    $offset = $firstDayWeek - $this->start;
+    if ($offset < 0) {
+      $offset += 7;
+    }
+    return ceil((SolarUtil::getDaysInYear($this->year, $this->month, $this->day) + $offset) / 7);
+  }
+
+  /**
    * 周推移
    * @param int $weeks 推移的周数，负数为倒推
    * @param bool $separateMonth 是否按月单独计算

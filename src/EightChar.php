@@ -577,7 +577,18 @@ class EightChar
    */
   public function getYun($gender)
   {
-    return new Yun($this, $gender);
+    return $this->getYunBySect($gender, 1);
+  }
+
+  /**
+   * 获取运
+   * @param int $gender 性别，1男，0女
+   * @param int $sect 流派，1按天数和时辰数计算，3天1年，1天4个月，1时辰10天；2按分钟数计算
+   * @return Yun 运
+   */
+  public function getYunBySect($gender, $sect)
+  {
+    return new Yun($this, $gender, $sect);
   }
 
   /**

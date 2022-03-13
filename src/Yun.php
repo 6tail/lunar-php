@@ -38,6 +38,12 @@ class Yun
   private $startDay;
 
   /**
+   * 起运小时数
+   * @var int
+   */
+  private $startHour;
+
+  /**
    * 是否顺推
    * @var bool
    */
@@ -53,8 +59,9 @@ class Yun
    * 初始化
    * @param $eightChar EightChar 八字
    * @param $gender int 性别，1男，0女
+   * @param int $sect 流派，1按天数和时辰数计算，3天1年，1天4个月，1时辰10天；2按分钟数计算
    */
-  public function __construct($eightChar, $gender)
+  public function __construct($eightChar, $gender, $sect)
   {
     $this->lunar = $eightChar->getLunar();
     $this->gender = $gender;
@@ -63,10 +70,10 @@ class Yun
     // 男
     $man = 1 == $gender;
     $this->forward = ($yang && $man) || (!$yang && !$man);
-    $this->computeStart();
+    $this->computeStart($sect);
   }
 
-  private function computeStart()
+  private function computeStart($sect)
   {
     // 上节
     $prev = $this->lunar->getPrevJie();
@@ -78,25 +85,40 @@ class Yun
     $start = $this->forward ? $current : $prev->getSolar();
     $end = $this->forward ? $next->getSolar() : $current;
 
-    $endTimeZhiIndex = ($end->getHour() == 23) ? 11 : LunarUtil::getTimeZhiIndex(substr($end->toYmdHms(), 11, 5));
-    $startTimeZhiIndex = ($start->getHour() == 23) ? 11 : LunarUtil::getTimeZhiIndex(substr($start->toYmdHms(), 11, 5));
-    // 时辰差
-    $hourDiff = $endTimeZhiIndex - $startTimeZhiIndex;
+    $hour = 0;
 
-    // 天数差
-    $dayDiff = ExactDate::getDaysBetween($start->getYear(), $start->getMonth(), $start->getDay(), $end->getYear(), $end->getMonth(), $end->getDay());
-    if ($hourDiff < 0) {
-      $hourDiff += 12;
-      $dayDiff--;
+    if (2 == $sect) {
+      $minutes = (int)(($end->getCalendar()->getTimestamp() - $start->getCalendar()->getTimestamp()) / 60);
+      $year = (int)($minutes / 4320);
+      $minutes -= $year * 4320;
+      $month = (int)($minutes / 360);
+      $minutes -= $month * 360;
+      $day = (int)($minutes / 12);
+      $minutes -= $day * 12;
+      $hour = $minutes * 2;
+    } else {
+      $endTimeZhiIndex = ($end->getHour() == 23) ? 11 : LunarUtil::getTimeZhiIndex(substr($end->toYmdHms(), 11, 5));
+      $startTimeZhiIndex = ($start->getHour() == 23) ? 11 : LunarUtil::getTimeZhiIndex(substr($start->toYmdHms(), 11, 5));
+      // 时辰差
+      $hourDiff = $endTimeZhiIndex - $startTimeZhiIndex;
+
+      // 天数差
+      $dayDiff = ExactDate::getDaysBetween($start->getYear(), $start->getMonth(), $start->getDay(), $end->getYear(), $end->getMonth(), $end->getDay());
+      if ($hourDiff < 0) {
+        $hourDiff += 12;
+        $dayDiff--;
+      }
+      $monthDiff = (int)($hourDiff * 10 / 30);
+      $month = $dayDiff * 4 + $monthDiff;
+      $day = $hourDiff * 10 - $monthDiff * 30;
+      $year = (int)($month / 12);
+      $month = $month - $year * 12;
     }
-    $monthDiff = (int)($hourDiff * 10 / 30);
-    $month = $dayDiff * 4 + $monthDiff;
-    $day = $hourDiff * 10 - $monthDiff * 30;
-    $year = (int)($month / 12);
-    $month = $month - $year * 12;
+
     $this->startYear = $year;
     $this->startMonth = $month;
     $this->startDay = $day;
+    $this->startHour = $hour;
   }
 
   /**
@@ -136,6 +158,15 @@ class Yun
   }
 
   /**
+   * 获取起运小时数
+   * @return int
+   */
+  public function getStartHour()
+  {
+    return $this->startHour;
+  }
+
+  /**
    * 是否顺推
    * @return bool
    */
@@ -160,10 +191,11 @@ class Yun
   public function getStartSolar()
   {
     $birth = $this->lunar->getSolar();
-    $date = ExactDate::fromYmd($birth->getYear(), $birth->getMonth(), $birth->getDay());
+    $date = ExactDate::fromYmdHms($birth->getYear(), $birth->getMonth(), $birth->getDay(), $birth->getHour(), $birth->getMinute(), $birth->getSecond());
     $date->modify($this->startYear . ' year');
     $date->modify($this->startMonth . ' month');
     $date->modify($this->startDay . ' day');
+    $date->modify($this->startHour . ' hour');
     return Solar::fromDate($date);
   }
 

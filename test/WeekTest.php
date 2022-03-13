@@ -58,4 +58,11 @@ class WeekTest extends TestCase
     $this->assertEquals(2, $week->getIndex());
   }
 
+  public function test5()
+  {
+    $start = 0;
+    $week = SolarWeek::fromYmd(2022, 3, 6, $start);
+    $this->assertEquals(11, $week->getIndexInYear());
+  }
+
 }
