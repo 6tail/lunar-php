@@ -1027,9 +1027,26 @@ class Lunar
         $l[] = $f;
       }
     }
-    $qm = $this->jieQi['清明'];
-    if (strcmp($this->solar->toYmd(), $qm->next(-1)->toYmd()) === 0) {
+    $jq = $this->jieQi['清明'];
+    $solarYmd = $this->solar->toYmd();
+    if (strcmp($solarYmd, $jq->next(-1)->toYmd()) === 0) {
       $l[] = '寒食节';
+    }
+    $jq = $this->jieQi['立春'];
+    $offset = 4 - $jq->getLunar()->getDayGanIndex();
+    if ($offset < 0) {
+      $offset += 10;
+    }
+    if (strcmp($solarYmd, $jq->next($offset + 40)->toYmd()) === 0) {
+      $l[] = '春社';
+    }
+    $jq = $this->jieQi['立秋'];
+    $offset = 4 - $jq->getLunar()->getDayGanIndex();
+    if ($offset < 0) {
+      $offset += 10;
+    }
+    if (strcmp($solarYmd, $jq->next($offset + 40)->toYmd()) === 0) {
+      $l[] = '秋社';
     }
     return $l;
   }

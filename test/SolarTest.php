@@ -48,4 +48,18 @@ class SolarTest extends TestCase
     $this->assertEquals(false, SolarUtil::isLeapYear(1500));
   }
 
+  public function test11()
+  {
+    $solar = Solar::fromYmd(2022, 3, 31);
+    $this->assertEquals('四', $solar->getWeekInChinese());
+  }
+
+  public function test12()
+  {
+    $solar = Solar::fromYmd(2021, 3, 29);
+    $fs = array();
+    $fs[] = '全国中小学生安全教育日';
+    $this->assertEquals($fs, $solar->getFestivals());
+  }
+  
 }

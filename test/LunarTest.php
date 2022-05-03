@@ -350,4 +350,20 @@ class LunarTest extends TestCase
     $this->assertEquals('二〇二一年冬月廿二', $solar->getLunar()->toString());
   }
 
+  public function test54()
+  {
+    $solar = Solar::fromYmd(1722, 9, 25);
+    $fs = array();
+    $fs[] = '秋社';
+    $this->assertEquals($fs, $solar->getLunar()->getOtherFestivals());
+  }
+
+  public function test55()
+  {
+    $solar = Solar::fromYmd(2022, 3, 16);
+    $fs = array();
+    $fs[] = '春社';
+    $this->assertEquals($fs, $solar->getLunar()->getOtherFestivals());
+  }
+
 }
