@@ -494,6 +494,26 @@ class EightChar
   }
 
   /**
+   * 获取胎息
+   * @return string 胎息
+   */
+  public function getTaiXi()
+  {
+    $ganIndex = (2 == $this->sect) ? $this->lunar->getDayGanIndexExact2() : $this->lunar->getDayGanIndexExact();
+    $zhiIndex = (2 == $this->sect) ? $this->lunar->getDayZhiIndexExact2() : $this->lunar->getDayZhiIndexExact();
+    return LunarUtil::$HE_GAN_5[$ganIndex] . LunarUtil::$HE_ZHI_6[$zhiIndex];
+  }
+
+  /**
+   * 获取胎息纳音
+   * @return string 纳音
+   */
+  public function getTaiXiNaYin()
+  {
+    return LunarUtil::$NAYIN[$this->getTaiXi()];
+  }
+
+  /**
    * 获取命宫
    * @return string 命宫
    */
@@ -550,7 +570,10 @@ class EightChar
         $timeZhiIndex = $i;
       }
     }
-    $zhiIndex = (2 + ($monthZhiIndex + $timeZhiIndex)) % 12;
+    $zhiIndex = 2 + $monthZhiIndex + $timeZhiIndex;
+    if ($zhiIndex > 12) {
+      $zhiIndex -= 12;
+    }
     $jiaZiIndex = LunarUtil::getJiaZiIndex($this->lunar->getMonthInGanZhiExact()) - ($monthZhiIndex - $zhiIndex);
     if ($jiaZiIndex >= 60) {
       $jiaZiIndex -= 60;

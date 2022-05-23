@@ -1532,7 +1532,7 @@ class Lunar
    */
   public function getDayChong()
   {
-    return LunarUtil::$CHONG[$this->dayZhiIndex + 1];
+    return LunarUtil::$CHONG[$this->dayZhiIndex];
   }
 
   /**
@@ -1541,7 +1541,7 @@ class Lunar
    */
   public function getTimeChong()
   {
-    return LunarUtil::$CHONG[$this->timeZhiIndex + 1];
+    return LunarUtil::$CHONG[$this->timeZhiIndex];
   }
 
   /**
@@ -1559,7 +1559,7 @@ class Lunar
    */
   public function getDayChongGan()
   {
-    return LunarUtil::$CHONG_GAN[$this->dayGanIndex + 1];
+    return LunarUtil::$CHONG_GAN[$this->dayGanIndex];
   }
 
   /**
@@ -1568,7 +1568,7 @@ class Lunar
    */
   public function getTimeChongGan()
   {
-    return LunarUtil::$CHONG_GAN[$this->timeGanIndex + 1];
+    return LunarUtil::$CHONG_GAN[$this->timeGanIndex];
   }
 
   /**
@@ -1586,7 +1586,7 @@ class Lunar
    */
   public function getDayChongGanTie()
   {
-    return LunarUtil::$CHONG_GAN_TIE[$this->dayGanIndex + 1];
+    return LunarUtil::$CHONG_GAN_TIE[$this->dayGanIndex];
   }
 
   /**
@@ -1595,7 +1595,7 @@ class Lunar
    */
   public function getTimeChongGanTie()
   {
-    return LunarUtil::$CHONG_GAN_TIE[$this->timeGanIndex + 1];
+    return LunarUtil::$CHONG_GAN_TIE[$this->timeGanIndex];
   }
 
   /**

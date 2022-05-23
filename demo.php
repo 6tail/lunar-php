@@ -297,3 +297,9 @@ echo $lunar->getLiuYao() . "\n";
 
 // 物候
 echo $lunar->getWuHou() . "\n";
+
+// 时辰福神方位
+$times = $lunar->getTimes();
+foreach ($times as $time) {
+  echo $time->getPositionFuBySect(2) . "\n";
+}

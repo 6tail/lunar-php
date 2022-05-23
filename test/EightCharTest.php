@@ -213,6 +213,30 @@ class EightCharTest extends TestCase
     $this->assertEquals('壬午', $eightChar->getShenGong());
   }
 
+  public function testShenGong1()
+  {
+    $solar = Solar::fromYmdHms(1994, 12, 6, 2, 0, 0);
+    $lunar = $solar->getLunar();
+    $eightChar = $lunar->getEightChar();
+    $this->assertEquals('丁丑', $eightChar->getShenGong());
+  }
+
+  public function testShenGong2()
+  {
+    $solar = Solar::fromYmdHms(1990, 12, 11, 6, 0, 0);
+    $lunar = $solar->getLunar();
+    $eightChar = $lunar->getEightChar();
+    $this->assertEquals('庚辰', $eightChar->getShenGong());
+  }
+
+  public function testShenGong3()
+  {
+    $solar = Solar::fromYmdHms(1993, 5, 23, 4, 0, 0);
+    $lunar = $solar->getLunar();
+    $eightChar = $lunar->getEightChar();
+    $this->assertEquals('庚申', $eightChar->getShenGong());
+  }
+
   public function test4()
   {
     $lunar = Lunar::fromYmd(1985, 12, 27);

@@ -30,4 +30,14 @@ class HolidayTest extends TestCase
     $this->assertEquals('2020-01-01 春节 2020-01-01', $holiday->toString());
   }
 
+  public function testRemove()
+  {
+    $holiday = HolidayUtil::getHolidayByYmd(2010,1,1);
+    $this->assertEquals('元旦节', $holiday->getName());
+
+    HolidayUtil::fix(null, '20100101~000000000000000000000000000');
+    $holiday = HolidayUtil::getHolidayByYmd(2010,1,1);
+    $this->assertNull($holiday);
+  }
+
 }

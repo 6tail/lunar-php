@@ -203,7 +203,7 @@ class LunarTime
    */
   public function getChong()
   {
-    return LunarUtil::$CHONG[$this->zhiIndex + 1];
+    return LunarUtil::$CHONG[$this->zhiIndex];
   }
 
   /**
@@ -212,7 +212,7 @@ class LunarTime
    */
   public function getChongGan()
   {
-    return LunarUtil::$CHONG_GAN[$this->ganIndex + 1];
+    return LunarUtil::$CHONG_GAN[$this->ganIndex];
   }
 
   /**
@@ -221,7 +221,7 @@ class LunarTime
    */
   public function getChongGanTie()
   {
-    return LunarUtil::$CHONG_GAN_TIE[$this->ganIndex + 1];
+    return LunarUtil::$CHONG_GAN_TIE[$this->ganIndex];
   }
 
   /**

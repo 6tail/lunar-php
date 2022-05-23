@@ -329,26 +329,17 @@ class LunarUtil
     '北' => '玄武'
   );
 
-  public static $CHONG = array('', '午', '未', '申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳');
+  public static $CHONG = array('午', '未', '申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳');
 
-  public static $CHONG_GAN = array('', '戊', '己', '庚', '辛', '壬', '癸', '甲', '乙', '丙', '丁');
+  public static $CHONG_GAN = array('戊', '己', '庚', '辛', '壬', '癸', '甲', '乙', '丙', '丁');
 
-  public static $CHONG_GAN_BAD = array(
-    '庚' => '甲',
-    '辛' => '乙',
-    '壬' => '丙',
-    '癸' => '丁'
-  );
+  public static $CHONG_GAN_TIE = array('己', '戊', '辛', '庚', '癸', '壬', '乙', '甲', '丁', '丙');
 
-  public static $CHONG_GAN_TIE = array('', '己', '戊', '辛', '庚', '癸', '壬', '乙', '甲', '丁', '丙');
+  public static $CHONG_GAN_4 = array('庚', '辛', '壬', '癸', '', '', '甲', '乙', '丙', '丁');
 
-  public static $CHONG_GAN_TIE_GOOD = array(
-    '甲' => '己',
-    '丙' => '辛',
-    '戊' => '癸',
-    '庚' => '乙',
-    '壬' => '丁'
-  );
+  public static $HE_GAN_5 = array('己', '庚', '辛', '壬', '癸', '甲', '乙', '丙', '丁', '戊');
+
+  public static $HE_ZHI_6 = array('丑', '子', '亥', '戌', '酉', '申', '未', '午', '巳', '辰', '卯', '寅');
 
   public static $SHA = array(
     '子' => '南',

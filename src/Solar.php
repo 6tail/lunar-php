@@ -415,7 +415,7 @@ class Solar
     if (!empty(SolarUtil::$WEEK_FESTIVAL[$key])) {
       $l[] = SolarUtil::$WEEK_FESTIVAL[$key];
     }
-    if ($this->day + 7 >= SolarUtil::getDaysOfMonth($this->year, $this->month)) {
+    if ($this->day + 7 > SolarUtil::getDaysOfMonth($this->year, $this->month)) {
       $key = $this->month . '-0-' . $week;
       if (!empty(SolarUtil::$WEEK_FESTIVAL[$key])) {
         $l[] = SolarUtil::$WEEK_FESTIVAL[$key];

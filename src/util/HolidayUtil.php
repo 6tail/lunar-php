@@ -24,6 +24,12 @@ class HolidayUtil
   private static $ZERO = 48;
 
   /**
+   * 删除标识
+   * @var string
+   */
+  private static $TAG_REMOVE = '~';
+
+  /**
    * 节假日名称（元旦0，春节1，清明2，劳动3，端午4，中秋5，国庆6，国庆中秋7，抗战胜利日8）
    * @var array
    */
@@ -218,9 +224,12 @@ class HolidayUtil
     while (strlen($data) >= self::$SIZE) {
       $segment = substr($data, 0, self::$SIZE);
       $day = substr($segment, 0, 8);
+      $remove = strcmp(self::$TAG_REMOVE, substr($segment, 8, 1)) == 0;
       $holiday = self::getHoliday($day);
       if (null == $holiday) {
-        $append .= $segment;
+        if (!$remove) {
+          $append .= $segment;
+        }
       } else {
         $nameIndex = -1;
         for ($i = 0, $j = count(self::$NAMES); $i < $j; $i++) {
@@ -231,7 +240,7 @@ class HolidayUtil
         }
         if ($nameIndex > -1) {
           $old = $day . chr($nameIndex + self::$ZERO) . ($holiday->isWork() ? '0' : '1') . str_replace('-', '', $holiday->getTarget());
-          self::$DATA = str_replace($old, $segment, self::$DATA);
+          self::$DATA = str_replace($old, $remove ? '' : $segment, self::$DATA);
         }
       }
       $data = substr($data, self::$SIZE);
