@@ -157,7 +157,8 @@ class LunarTime
    */
   public function getPositionFuBySect($sect)
   {
-    return (1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2)[$this->ganIndex + 1];
+    $fu = 1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2;
+    return $fu[$this->ganIndex + 1];
   }
 
   /**

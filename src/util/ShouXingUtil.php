@@ -239,7 +239,7 @@ class ShouXingUtil
   {
     $t = ShouXingUtil::msaLonT2($w) * 36525;
     $t = $t - ShouXingUtil::dtT($t) + ShouXingUtil::$ONE_THIRD;
-    $v = (($t + 0.5) % 1) * ShouXingUtil::$SECOND_PER_DAY;
+    $v = (intval($t + 0.5) % 1) * ShouXingUtil::$SECOND_PER_DAY;
     if ($v < 1800 || $v > ShouXingUtil::$SECOND_PER_DAY - 1800) {
       $t = ShouXingUtil::msaLont($w) * 36525 - ShouXingUtil::dtT($t) + ShouXingUtil::$ONE_THIRD;
     }

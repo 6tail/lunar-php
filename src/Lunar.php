@@ -1265,7 +1265,8 @@ class Lunar
    */
   public function getDayPositionFuBySect($sect)
   {
-    return (1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2)[$this->dayGanIndex + 1];
+    $fu = 1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2;
+    return $fu[$this->dayGanIndex + 1];
   }
 
   /**
@@ -1303,7 +1304,8 @@ class Lunar
    */
   public function getTimePositionFuBySect($sect)
   {
-    return (1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2)[$this->timeGanIndex + 1];
+    $fu = 1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2;
+    return $fu[$this->timeGanIndex + 1];
   }
 
   /**
@@ -2752,7 +2754,7 @@ class Lunar
       return null;
     }
     $days = ExactDate::getDaysBetweenDate($startCalendar, $currentCalendar);
-    return new ShuJiu(LunarUtil::$NUMBER[$days / 9 + 1] . '九', $days % 9 + 1);
+    return new ShuJiu(LunarUtil::$NUMBER[intval($days / 9) + 1] . '九', $days % 9 + 1);
   }
 
   public function getFu()
