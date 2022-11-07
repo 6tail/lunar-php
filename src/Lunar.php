@@ -234,6 +234,9 @@ class Lunar
     $m = $y->getMonth($lunarMonth);
     $noon = Solar::fromJulianDay($m->getFirstJulianDay() + $lunarDay - 1);
     $solar = Solar::fromYmdHms($noon->getYear(), $noon->getMonth(), $noon->getDay(), $hour, $minute, $second);
+    if ($noon->getYear() != $lunarYear) {
+      $y = LunarYear::fromYear($noon->getYear());
+    }
     return new Lunar($lunarYear, $lunarMonth, $lunarDay, $hour, $minute, $second, $solar, $y);
   }
 
@@ -2829,7 +2832,11 @@ class Lunar
     $startSolar = $jieQi->getSolar();
     $startCalendar = ExactDate::fromYmd($startSolar->getYear(), $startSolar->getMonth(), $startSolar->getDay());
     $days = ExactDate::getDaysBetweenDate($startCalendar, $currentCalendar);
-    return LunarUtil::$WU_HOU[($offset * 3 + floor($days / 5)) % count(LunarUtil::$WU_HOU)];
+    $index = floor($days / 5);
+    if ($index > 2) {
+      $index = 2;
+    }
+    return LunarUtil::$WU_HOU[($offset * 3 + $index) % count(LunarUtil::$WU_HOU)];
   }
 
   public function getHou()

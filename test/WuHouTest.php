@@ -73,4 +73,18 @@ class WuHouTest extends TestCase
     $this->assertEquals('蚯蚓结', $lunar->getWuHou());
   }
 
+  public function test15()
+  {
+    $solar = Solar::fromYmd(2022,8,22);
+    $lunar = $solar->getLunar();
+    $this->assertEquals('寒蝉鸣', $lunar->getWuHou());
+  }
+
+  public function test16()
+  {
+    $solar = Solar::fromYmd(2022,8,23);
+    $lunar = $solar->getLunar();
+    $this->assertEquals('鹰乃祭鸟', $lunar->getWuHou());
+  }
+
 }

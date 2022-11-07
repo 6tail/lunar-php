@@ -274,4 +274,14 @@ class EightCharTest extends TestCase
     $this->assertEquals('辛卯 庚子 己丑 辛未', $eightChar->toString());
   }
 
+  public function test11()
+  {
+    $lunar = Lunar::fromYmdHms(1987, 12, 28, 23, 30, 0);
+    $eightChar = $lunar->getEightChar();
+    $this->assertEquals('戊辰', $eightChar->getYear());
+    $this->assertEquals('甲寅', $eightChar->getMonth());
+    $this->assertEquals('庚子', $eightChar->getDay());
+    $this->assertEquals('戊子', $eightChar->getTime());
+  }
+
 }
