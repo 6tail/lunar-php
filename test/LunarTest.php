@@ -158,18 +158,6 @@ class LunarTest extends TestCase
     $this->assertEquals('除夕', $fs[0]);
   }
 
-  public function test22()
-  {
-    $lunar = Lunar::fromYmd(2022, 1, 1);
-    $this->assertEquals('六白金开阳', $lunar->getYearNineStar()->toString());
-  }
-
-  public function test23()
-  {
-    $lunar = Lunar::fromYmd(2033, 1, 1);
-    $this->assertEquals('四绿木天权', $lunar->getYearNineStar()->toString());
-  }
-
   public function test24()
   {
     $lunar = Lunar::fromYmd(2033, -11, 1);

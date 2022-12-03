@@ -100,6 +100,27 @@ class SolarMonth
   }
 
   /**
+   * 获取本月的阳历周列表
+   * @param int $start 星期几作为一周的开始，1234560分别代表星期一至星期天
+   * @return SolarWeek[] 周列表
+   */
+  public function getWeeks($start)
+  {
+    $l = array();
+    $week = SolarWeek::fromYmd($this->year, $this->month, 1, $start);
+    $firstDay = $week->getFirstDay();
+    while (true) {
+      $l[] = $week;
+      $week = $week->next(1, false);
+      $firstDay = $week->getFirstDay();
+      if ($firstDay->getYear() > $this->year || $firstDay->getMonth() > $this->month) {
+        break;
+      }
+    }
+    return $l;
+  }
+
+  /**
    * 获取往后推几个月的阳历月，如果要往前推，则月数用负数
    * @param int $months 月数
    * @return SolarMonth|null
