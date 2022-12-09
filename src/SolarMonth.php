@@ -108,7 +108,6 @@ class SolarMonth
   {
     $l = array();
     $week = SolarWeek::fromYmd($this->year, $this->month, 1, $start);
-    $firstDay = $week->getFirstDay();
     while (true) {
       $l[] = $week;
       $week = $week->next(1, false);
