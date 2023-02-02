@@ -267,8 +267,7 @@ class NineStar
 
   public function toFullString()
   {
-    $s = '';
-    $s .= $this->getNumber();
+    $s = $this->getNumber();
     $s .= $this->getColor();
     $s .= $this->getWuXing();
     $s .= ' ';

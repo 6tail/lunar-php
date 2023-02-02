@@ -354,4 +354,23 @@ class LunarTest extends TestCase
     $this->assertEquals($fs, $solar->getLunar()->getOtherFestivals());
   }
 
+  public function test56()
+  {
+    $solar = Solar::fromYmd(2022, 12, 1);
+    $lunar = $solar->getLunar();
+    $this->assertEquals('初八', $lunar->getDayInChinese());
+  }
+
+  public function test57()
+  {
+    $lunar = Lunar::fromYmd(1582, 9, 18);
+    $this->assertEquals('1582-10-04', $lunar->getSolar()->toYmd());
+  }
+
+  public function test58()
+  {
+    $lunar = Lunar::fromYmd(1582, 9, 19);
+    $this->assertEquals('1582-10-15', $lunar->getSolar()->toYmd());
+  }
+
 }

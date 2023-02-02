@@ -54,15 +54,13 @@ class SolarYear
   }
 
   /**
-   * 通过指定日期获取阳历年
-   * @param DateTime $date 日期DateTime
+   * 通过指定DateTime获取阳历年
+   * @param DateTime $date DateTime
    * @return SolarYear
    */
   public static function fromDate($date)
   {
-    $calendar = ExactDate::fromDate($date);
-    $year = intval(date_format($calendar, 'Y'));
-    return new SolarYear($year);
+    return new SolarYear(Solar::fromDate($date)->getYear());
   }
 
   public function getYear()
@@ -88,16 +86,11 @@ class SolarYear
   /**
    * 年推移
    * @param int $years 推移的年数，负数为倒推
-   * @return SolarYear|null
+   * @return SolarYear
    */
   public function next($years)
   {
-    if (0 === $years) {
-      return new SolarYear($this->year);
-    }
-    $date = ExactDate::fromYmd($this->year, 1, 1);
-    $date->modify($years . ' year');
-    return SolarYear::fromDate($date);
+    return new SolarYear($this->year + $years);
   }
 
 }

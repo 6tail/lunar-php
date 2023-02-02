@@ -1,5 +1,6 @@
 <?php
 
+use com\nlf\calendar\Solar;
 use com\nlf\calendar\SolarWeek;
 use com\nlf\calendar\util\SolarUtil;
 use PHPUnit\Framework\TestCase;
@@ -63,6 +64,24 @@ class WeekTest extends TestCase
     $start = 0;
     $week = SolarWeek::fromYmd(2022, 3, 6, $start);
     $this->assertEquals(11, $week->getIndexInYear());
+  }
+
+  public function test6()
+  {
+    $solar = Solar::fromYmd(1582, 10, 1);
+    $this->assertEquals(1, $solar->getWeek());
+  }
+
+  public function test7()
+  {
+    $solar = Solar::fromYmd(1582, 10, 15);
+    $this->assertEquals(5, $solar->getWeek());
+  }
+
+  public function test8()
+  {
+    $solar = Solar::fromYmd(2023, 1, 31);
+    $this->assertEquals(2, $solar->getWeek());
   }
 
 }

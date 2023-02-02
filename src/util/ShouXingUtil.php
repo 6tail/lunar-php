@@ -49,11 +49,11 @@ class ShouXingUtil
     $a = -1.742 * $t;
     $t2 = $t * $t;
     $dl = 0;
-    for ($i = 0, $j = count(ShouXingUtil::$NUT_B); $i < $j; $i += 5) {
-      $dl += (ShouXingUtil::$NUT_B[$i + 3] + $a) * sin(ShouXingUtil::$NUT_B[$i] + ShouXingUtil::$NUT_B[$i + 1] * $t + ShouXingUtil::$NUT_B[$i + 2] * $t2);
+    for ($i = 0, $j = count(self::$NUT_B); $i < $j; $i += 5) {
+      $dl += (self::$NUT_B[$i + 3] + $a) * sin(self::$NUT_B[$i] + self::$NUT_B[$i + 1] * $t + self::$NUT_B[$i + 2] * $t2);
       $a = 0;
     }
-    return $dl / 100 / ShouXingUtil::$SECOND_PER_RAD;
+    return $dl / 100 / self::$SECOND_PER_RAD;
   }
 
   public static function eLon($t, $n)
@@ -62,10 +62,10 @@ class ShouXingUtil
     $v = 0;
     $tn = 1;
     $pn = 1;
-    $m0 = ShouXingUtil::$XL0[$pn + 1] - ShouXingUtil::$XL0[$pn];
+    $m0 = self::$XL0[$pn + 1] - self::$XL0[$pn];
     for ($i = 0; $i < 6; $i++, $tn *= $t) {
-      $n1 = (int)(ShouXingUtil::$XL0[$pn + $i]);
-      $n2 = (int)(ShouXingUtil::$XL0[$pn + 1 + $i]);
+      $n1 = (int)(self::$XL0[$pn + $i]);
+      $n2 = (int)(self::$XL0[$pn + 1 + $i]);
       $n0 = $n2 - $n1;
       if ($n0 == 0) {
         continue;
@@ -83,19 +83,19 @@ class ShouXingUtil
       }
       $c = 0;
       for ($j = $n1; $j < $m; $j += 3) {
-        $c += ShouXingUtil::$XL0[$j] * cos(ShouXingUtil::$XL0[$j + 1] + $t * ShouXingUtil::$XL0[$j + 2]);
+        $c += self::$XL0[$j] * cos(self::$XL0[$j + 1] + $t * self::$XL0[$j + 2]);
       }
       $v += $c * $tn;
     }
-    $v /= ShouXingUtil::$XL0[0];
+    $v /= self::$XL0[0];
     $t2 = $t * $t;
-    $v += (-0.0728 - 2.7702 * $t - 1.1019 * $t2 - 0.0996 * $t2 * $t) / ShouXingUtil::$SECOND_PER_RAD;
+    $v += (-0.0728 - 2.7702 * $t - 1.1019 * $t2 - 0.0996 * $t2 * $t) / self::$SECOND_PER_RAD;
     return $v;
   }
 
   public static function mLon($t, $n)
   {
-    $ob = ShouXingUtil::$XL1;
+    $ob = self::$XL1;
     $obl = count($ob[0]);
     $tn = 1;
     $v = 0;
@@ -104,7 +104,7 @@ class ShouXingUtil
     $t4 = $t3 * $t;
     $t5 = $t4 * $t;
     $tx = $t - 10;
-    $v += (3.81034409 + 8399.684730072 * $t - 3.319e-05 * $t2 + 3.11e-08 * $t3 - 2.033e-10 * $t4) * ShouXingUtil::$SECOND_PER_RAD;
+    $v += (3.81034409 + 8399.684730072 * $t - 3.319e-05 * $t2 + 3.11e-08 * $t3 - 2.033e-10 * $t4) * self::$SECOND_PER_RAD;
     $v += 5028.792262 * $t + 1.1124406 * $t2 + 0.00007699 * $t3 - 0.000023479 * $t4 - 0.0000000178 * $t5;
     if ($tx > 0) {
       $v += -0.866 + 1.43 * $tx + 0.054 * $tx * $tx;
@@ -132,7 +132,7 @@ class ShouXingUtil
       }
       $v += $c * $tn;
     }
-    $v /= ShouXingUtil::$SECOND_PER_RAD;
+    $v /= self::$SECOND_PER_RAD;
     return $v;
   }
 
@@ -141,7 +141,7 @@ class ShouXingUtil
     $t2 = $t * $t;
     $v = -0.043126 + 628.301955 * $t - 0.000002732 * $t2;
     $e = 0.016708634 - 0.000042037 * $t - 0.0000001267 * $t2;
-    return -20.49552 * (1 + $e * cos($v)) / ShouXingUtil::$SECOND_PER_RAD;
+    return -20.49552 * (1 + $e * cos($v)) / self::$SECOND_PER_RAD;
   }
 
   public static function ev($t)
@@ -152,7 +152,7 @@ class ShouXingUtil
 
   public static function saLon($t, $n)
   {
-    return ShouXingUtil::eLon($t, $n) + ShouXingUtil::nutationLon2($t) + ShouXingUtil::gxcSunLon($t) + M_PI;
+    return self::eLon($t, $n) + self::nutationLon2($t) + self::gxcSunLon($t) + M_PI;
   }
 
   public static function dtExt($y, $jsd)
@@ -163,30 +163,30 @@ class ShouXingUtil
 
   public static function dtCalc($y)
   {
-    $size = count(ShouXingUtil::$DT_AT);
-    $y0 = ShouXingUtil::$DT_AT[$size - 2];
-    $t0 = ShouXingUtil::$DT_AT[$size - 1];
+    $size = count(self::$DT_AT);
+    $y0 = self::$DT_AT[$size - 2];
+    $t0 = self::$DT_AT[$size - 1];
     if ($y >= $y0) {
       $jsd = 31;
       if ($y > $y0 + 100) {
-        return ShouXingUtil::dtExt($y, $jsd);
+        return self::dtExt($y, $jsd);
       }
-      return ShouXingUtil::dtExt($y, $jsd) - (ShouXingUtil::dtExt($y0, $jsd) - $t0) * ($y0 + 100 - $y) / 100;
+      return self::dtExt($y, $jsd) - (self::dtExt($y0, $jsd) - $t0) * ($y0 + 100 - $y) / 100;
     }
     for ($i = 0; $i < $size; $i += 5) {
-      if ($y < ShouXingUtil::$DT_AT[$i + 5]) {
+      if ($y < self::$DT_AT[$i + 5]) {
         break;
       }
     }
-    $t1 = ($y - ShouXingUtil::$DT_AT[$i]) / (ShouXingUtil::$DT_AT[$i + 5] - ShouXingUtil::$DT_AT[$i]) * 10;
+    $t1 = ($y - self::$DT_AT[$i]) / (self::$DT_AT[$i + 5] - self::$DT_AT[$i]) * 10;
     $t2 = $t1 * $t1;
     $t3 = $t2 * $t1;
-    return ShouXingUtil::$DT_AT[$i + 1] + ShouXingUtil::$DT_AT[$i + 2] * $t1 + ShouXingUtil::$DT_AT[$i + 3] * $t2 + ShouXingUtil::$DT_AT[$i + 4] * $t3;
+    return self::$DT_AT[$i + 1] + self::$DT_AT[$i + 2] * $t1 + self::$DT_AT[$i + 3] * $t2 + self::$DT_AT[$i + 4] * $t3;
   }
 
   public static function dtT($t)
   {
-    return ShouXingUtil::dtCalc($t / 365.2425 + 2000) / ShouXingUtil::$SECOND_PER_DAY;
+    return self::dtCalc($t / 365.2425 + 2000) / self::$SECOND_PER_DAY;
   }
 
   public static function mv($t)
@@ -200,26 +200,26 @@ class ShouXingUtil
   {
     $v = 628.3319653318;
     $t = ($w - 1.75347 - M_PI) / $v;
-    $v = ShouXingUtil::ev($t);
-    $t += ($w - ShouXingUtil::saLon($t, 10)) / $v;
-    $v = ShouXingUtil::ev($t);
-    $t += ($w - ShouXingUtil::saLon($t, -1)) / $v;
+    $v = self::ev($t);
+    $t += ($w - self::saLon($t, 10)) / $v;
+    $v = self::ev($t);
+    $t += ($w - self::saLon($t, -1)) / $v;
     return $t;
   }
 
   public static function msaLon($t, $mn, $sn)
   {
-    return ShouXingUtil::mLon($t, $mn) + (-3.4E-6) - (ShouXingUtil::eLon($t, $sn) + ShouXingUtil::gxcSunLon($t) + M_PI);
+    return self::mLon($t, $mn) + (-3.4E-6) - (self::eLon($t, $sn) + self::gxcSunLon($t) + M_PI);
   }
 
   public static function msaLonT($w)
   {
     $v = 7771.37714500204;
     $t = ($w + 1.08472) / $v;
-    $t += ($w - ShouXingUtil::msaLon($t, 3, 3)) / $v;
-    $v = ShouXingUtil::mv($t) - ShouXingUtil::ev($t);
-    $t += ($w - ShouXingUtil::msaLon($t, 20, 10)) / $v;
-    $t += ($w - ShouXingUtil::msaLon($t, -1, 60)) / $v;
+    $t += ($w - self::msaLon($t, 3, 3)) / $v;
+    $v = self::mv($t) - self::ev($t);
+    $t += ($w - self::msaLon($t, 20, 10)) / $v;
+    $t += ($w - self::msaLon($t, -1, 60)) / $v;
     return $t;
   }
 
@@ -229,7 +229,7 @@ class ShouXingUtil
     $t = ($w + 1.08472) / $v;
     $t2 = $t * $t;
     $t -= (-0.00003309 * $t2 + 0.10976 * cos(0.784758 + 8328.6914246 * $t + 0.000152292 * $t2) + 0.02224 * cos(0.18740 + 7214.0628654 * $t - 0.00021848 * $t2) - 0.03342 * cos(4.669257 + 628.307585 * $t)) / $v;
-    $l = ShouXingUtil::mLon($t, 20) - (4.8950632 + 628.3319653318 * $t + 0.000005297 * $t * $t + 0.0334166 * cos(4.669257 + 628.307585 * $t) + 0.0002061 * cos(2.67823 + 628.307585 * $t) * $t + 0.000349 * cos(4.6261 + 1256.61517 * $t) - 20.5 / ShouXingUtil::$SECOND_PER_RAD);
+    $l = self::mLon($t, 20) - (4.8950632 + 628.3319653318 * $t + 0.000005297 * $t * $t + 0.0334166 * cos(4.669257 + 628.307585 * $t) + 0.0002061 * cos(2.67823 + 628.307585 * $t) * $t + 0.000349 * cos(4.6261 + 1256.61517 * $t) - 20.5 / self::$SECOND_PER_RAD);
     $v = 7771.38 - 914 * sin(0.7848 + 8328.691425 * $t + 0.0001523 * $t * $t) - 179 * sin(2.543 + 15542.7543 * $t) - 160 * sin(0.1874 + 7214.0629 * $t);
     $t += ($w - $l) / $v;
     return $t;
@@ -237,11 +237,11 @@ class ShouXingUtil
 
   public static function shuoHigh($w)
   {
-    $t = ShouXingUtil::msaLonT2($w) * 36525;
-    $t = $t - ShouXingUtil::dtT($t) + ShouXingUtil::$ONE_THIRD;
-    $v = (intval($t + 0.5) % 1) * ShouXingUtil::$SECOND_PER_DAY;
-    if ($v < 1800 || $v > ShouXingUtil::$SECOND_PER_DAY - 1800) {
-      $t = ShouXingUtil::msaLont($w) * 36525 - ShouXingUtil::dtT($t) + ShouXingUtil::$ONE_THIRD;
+    $t = self::msaLonT2($w) * 36525;
+    $t = $t - self::dtT($t) + self::$ONE_THIRD;
+    $v = (intval($t + 0.5) % 1) * self::$SECOND_PER_DAY;
+    if ($v < 1800 || $v > self::$SECOND_PER_DAY - 1800) {
+      $t = self::msaLont($w) * 36525 - self::dtT($t) + self::$ONE_THIRD;
     }
     return $t;
   }
@@ -250,37 +250,37 @@ class ShouXingUtil
   {
     $v = 7771.37714500204;
     $t = ($w + 1.08472) / $v;
-    $t -= (-0.0000331 * $t * $t + 0.10976 * cos(0.785 + 8328.6914 * $t) + 0.02224 * cos(0.187 + 7214.0629 * $t) - 0.03342 * cos(4.669 + 628.3076 * $t)) / $v + (32 * ($t + 1.8) * ($t + 1.8) - 20) / ShouXingUtil::$SECOND_PER_DAY / 36525;
-    return $t * 36525 + ShouXingUtil::$ONE_THIRD;
+    $t -= (-0.0000331 * $t * $t + 0.10976 * cos(0.785 + 8328.6914 * $t) + 0.02224 * cos(0.187 + 7214.0629 * $t) - 0.03342 * cos(4.669 + 628.3076 * $t)) / $v + (32 * ($t + 1.8) * ($t + 1.8) - 20) / self::$SECOND_PER_DAY / 36525;
+    return $t * 36525 + self::$ONE_THIRD;
   }
 
   public static function calcShuo($jd)
   {
-    $size = count(ShouXingUtil::$SHUO_KB);
+    $size = count(self::$SHUO_KB);
     $d = 0;
     $pc = 14;
     $jd += Solar::$J2000;
-    $f1 = ShouXingUtil::$SHUO_KB[0] - $pc;
-    $f2 = ShouXingUtil::$SHUO_KB[$size - 1] - $pc;
+    $f1 = self::$SHUO_KB[0] - $pc;
+    $f2 = self::$SHUO_KB[$size - 1] - $pc;
     $f3 = 2436935;
     if ($jd < $f1 || $jd >= $f3) {
-      $d = floor(ShouXingUtil::shuoHigh(floor(($jd + $pc - 2451551) / 29.5306) * M_PI * 2) + 0.5);
+      $d = floor(self::shuoHigh(floor(($jd + $pc - 2451551) / 29.5306) * M_PI * 2) + 0.5);
     } else if ($jd >= $f1 && $jd < $f2) {
       for ($i = 0; $i < $size; $i += 2) {
-        if ($jd + $pc < ShouXingUtil::$SHUO_KB[$i + 2]) {
+        if ($jd + $pc < self::$SHUO_KB[$i + 2]) {
           break;
         }
       }
-      $d = ShouXingUtil::$SHUO_KB[$i] + ShouXingUtil::$SHUO_KB[$i + 1] * floor(($jd + $pc - ShouXingUtil::$SHUO_KB[$i]) / ShouXingUtil::$SHUO_KB[$i + 1]);
+      $d = self::$SHUO_KB[$i] + self::$SHUO_KB[$i + 1] * floor(($jd + $pc - self::$SHUO_KB[$i]) / self::$SHUO_KB[$i + 1]);
       $d = floor($d + 0.5);
       if ($d == 1683460) {
         $d++;
       }
       $d -= Solar::$J2000;
     } else if ($jd >= $f2 && $jd < $f3) {
-      $d = floor(ShouXingUtil::shuoLow(floor(($jd + $pc - 2451551) / 29.5306) * M_PI * 2) + 0.5);
+      $d = floor(self::shuoLow(floor(($jd + $pc - 2451551) / 29.5306) * M_PI * 2) + 0.5);
       $from = (int)(($jd - $f2) / 29.5306);
-      $n = substr(ShouXingUtil::$SB, $from, 1);
+      $n = substr(self::$SB, $from, 1);
       if (strcmp('1', $n) == 0) {
         $d += 1;
       } elseif (strcmp('2', $n) == 0) {

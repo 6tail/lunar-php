@@ -88,7 +88,7 @@ class Yun
     $hour = 0;
 
     if (2 == $sect) {
-      $minutes = (int)(($end->getCalendar()->getTimestamp() - $start->getCalendar()->getTimestamp()) / 60);
+      $minutes = $end->subtractMinute($start);
       $year = (int)($minutes / 4320);
       $minutes -= $year * 4320;
       $month = (int)($minutes / 360);
@@ -103,7 +103,7 @@ class Yun
       $hourDiff = $endTimeZhiIndex - $startTimeZhiIndex;
 
       // 天数差
-      $dayDiff = ExactDate::getDaysBetween($start->getYear(), $start->getMonth(), $start->getDay(), $end->getYear(), $end->getMonth(), $end->getDay());
+      $dayDiff = $end->subtract($start);
       if ($hourDiff < 0) {
         $hourDiff += 12;
         $dayDiff--;
@@ -186,17 +186,15 @@ class Yun
 
   /**
    * 获取起运的阳历日期
-   * @return Solar|null
+   * @return Solar
    */
   public function getStartSolar()
   {
-    $birth = $this->lunar->getSolar();
-    $date = ExactDate::fromYmdHms($birth->getYear(), $birth->getMonth(), $birth->getDay(), $birth->getHour(), $birth->getMinute(), $birth->getSecond());
-    $date->modify($this->startYear . ' year');
-    $date->modify($this->startMonth . ' month');
-    $date->modify($this->startDay . ' day');
-    $date->modify($this->startHour . ' hour');
-    return Solar::fromDate($date);
+    $solar = $this->lunar->getSolar();
+    $solar = $solar->nextYear($this->startYear);
+    $solar = $solar->nextMonth($this->startMonth);
+    $solar = $solar->next($this->startDay);
+    return $solar->nextHour($this->startHour);
   }
 
   /**

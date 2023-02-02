@@ -284,4 +284,64 @@ class EightCharTest extends TestCase
     $this->assertEquals('戊子', $eightChar->getTime());
   }
 
+  public function test12()
+  {
+    $solarList = Solar::fromBaZi('丙辰', '丁酉', '丙子', '甲午');
+    $actual = array();
+    foreach ($solarList as $solar) {
+      $actual[] = $solar->toYmdHms();
+    }
+
+    $expected = array('1976-09-21 12:00:00', '1916-10-06 12:00:00');
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function test13()
+  {
+    $solarList = Solar::fromBaZi('壬寅', '庚戌', '己未', '乙亥');
+    $actual = array();
+    foreach ($solarList as $solar) {
+      $actual[] = $solar->toYmdHms();
+    }
+
+    $expected = array('2022-11-02 22:00:00');
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function test14()
+  {
+    $solarList = Solar::fromBaZi('己卯', '辛未', '甲戌', '壬申');
+    $actual = array();
+    foreach ($solarList as $solar) {
+      $actual[] = $solar->toYmdHms();
+    }
+
+    $expected = array('1999-07-21 16:00:00', '1939-08-05 16:00:00');
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function test15()
+  {
+    $solarList = Solar::fromBaZi('庚子', '戊子', '己卯', '庚午');
+    $actual = array();
+    foreach ($solarList as $solar) {
+      $actual[] = $solar->toYmdHms();
+    }
+
+    $expected = array('1960-12-17 12:00:00', '1901-01-01 12:00:00');
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function test16()
+  {
+    $solarList = Solar::fromBaZi('庚子', '癸未', '乙丑', '丁亥');
+    $actual = array();
+    foreach ($solarList as $solar) {
+      $actual[] = $solar->toYmdHms();
+    }
+
+    $expected = array('2020-07-21 22:00:00', '1960-08-05 22:00:00');
+    $this->assertEquals($expected, $actual);
+  }
+
 }

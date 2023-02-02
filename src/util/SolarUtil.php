@@ -2,7 +2,8 @@
 
 namespace com\nlf\calendar\util;
 
-use com\nlf\calendar\ExactDate;
+use com\nlf\calendar\Solar;
+use RuntimeException;
 
 /**
  * 阳历工具
@@ -157,9 +158,9 @@ class SolarUtil
     if (1582 === $year && 10 === $month) {
       return 21;
     }
-    $d = SolarUtil::$DAYS_OF_MONTH[$month - 1];
+    $d = self::$DAYS_OF_MONTH[$month - 1];
     //公历闰年2月多一天
-    if ($month === 2 && SolarUtil::isLeapYear($year)) {
+    if ($month === 2 && self::isLeapYear($year)) {
       $d++;
     }
     return $d;
@@ -172,7 +173,10 @@ class SolarUtil
    */
   public static function getDaysOfYear($year)
   {
-    return SolarUtil::isLeapYear($year) ? 366 : 365;
+    if (1582 == $year) {
+      return 355;
+    }
+    return self::isLeapYear($year) ? 366 : 365;
   }
 
   /**
@@ -186,12 +190,17 @@ class SolarUtil
   {
     $days = 0;
     for ($i = 1; $i < $month; $i++) {
-      $days += SolarUtil::getDaysOfMonth($year, $i);
+      $days += self::getDaysOfMonth($year, $i);
     }
-    $days += $day;
-    if (1582 === $year && 10 === $month && $day >= 15) {
-      $days -= 10;
+    $d = $day;
+    if (1582 === $year && 10 === $month) {
+      if ($day >= 15) {
+        $d -= 10;
+      } else if ($day > 4){
+        throw new RuntimeException(sprintf('wrong solar year %d month %d day %d', $year, $month, $day));
+      }
     }
+    $days += $d;
     return $days;
   }
 
@@ -204,8 +213,41 @@ class SolarUtil
    */
   public static function getWeeksOfMonth($year, $month, $start)
   {
-    $days = SolarUtil::getDaysOfMonth($year, $month);
-    $week = intval(ExactDate::fromYmd($year, $month, 1)->format('w'));
-    return ceil(($days + $week - $start) / count(SolarUtil::$WEEK));
+    $days = self::getDaysOfMonth($year, $month);
+    $week = Solar::fromYmd($year, $month, 1)->getWeek();
+    return ceil(($days + $week - $start) / count(self::$WEEK));
   }
+
+  /**
+   * 获取两个日期之间相差的天数（如果日期a比日期b小，天数为正，如果日期a比日期b大，天数为负）
+   * @param $ay int 年a
+   * @param $am int 月a
+   * @param $ad int 日a
+   * @param $by int 年b
+   * @param $bm int 月b
+   * @param $bd int 日b
+   * @return int
+   */
+  public static function getDaysBetween($ay, $am, $ad, $by, $bm, $bd)
+  {
+    if ($ay == $by) {
+      $n = self::getDaysInYear($by, $bm, $bd) - self::getDaysInYear($ay, $am, $ad);
+    } else if ($ay > $by) {
+      $days = self::getDaysOfYear($by) - self::getDaysInYear($by, $bm, $bd);
+      for ($i = $by + 1; $i < $ay; $i++) {
+        $days += self::getDaysOfYear($i);
+      }
+      $days += self::getDaysInYear($ay, $am, $ad);
+      $n = -$days;
+    } else {
+      $days = self::getDaysOfYear($ay) - self::getDaysInYear($ay, $am, $ad);
+      for ($i = $ay + 1; $i < $by; $i++) {
+        $days += self::getDaysOfYear($i);
+      }
+      $days += self::getDaysInYear($by, $bm, $bd);
+      $n = $days;
+    }
+    return $n;
+  }
+
 }

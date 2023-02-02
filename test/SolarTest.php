@@ -61,5 +61,71 @@ class SolarTest extends TestCase
     $fs[] = '全国中小学生安全教育日';
     $this->assertEquals($fs, $solar->getFestivals());
   }
+
+  public function test13()
+  {
+    $solar = Solar::fromYmd(2022, 1, 1);
+    $this->assertEquals('2022-01-02', $solar->next(1)->toYmd());
+  }
+
+  public function test14()
+  {
+    $solar = Solar::fromYmd(2022, 1, 31);
+    $this->assertEquals('2022-02-01', $solar->next(1)->toYmd());
+  }
+
+  public function test15()
+  {
+    $solar = Solar::fromYmd(2022, 1, 1);
+    $this->assertEquals('2023-01-01', $solar->next(365)->toYmd());
+  }
+
+  public function test16()
+  {
+    $solar = Solar::fromYmd(2023, 1, 1);
+    $this->assertEquals('2022-01-01', $solar->next(-365)->toYmd());
+  }
+
+  public function test17()
+  {
+    $solar = Solar::fromYmd(1582, 10, 4);
+    $this->assertEquals('1582-10-15', $solar->next(1)->toYmd());
+  }
+
+  public function test18()
+  {
+    $solar = Solar::fromYmd(1582, 10, 4);
+    $this->assertEquals('1582-11-01', $solar->next(18)->toYmd());
+  }
+
+  public function test19()
+  {
+    $solar = Solar::fromYmd(1582, 11, 1);
+    $this->assertEquals('1582-10-04', $solar->next(-18)->toYmd());
+  }
+
+  public function test20()
+  {
+    $solar = Solar::fromYmd(1582, 11, 1);
+    $this->assertEquals('1582-10-15', $solar->next(-17)->toYmd());
+  }
+
+  public function test21()
+  {
+    $days = SolarUtil::getDaysBetween(1582, 10, 4, 1582, 10, 15);
+    $this->assertEquals(1, $days);
+  }
+
+  public function test22()
+  {
+    $days = SolarUtil::getDaysBetween(1582, 10, 4, 1582, 11, 1);
+    $this->assertEquals(18, $days);
+  }
+
+  public function test23()
+  {
+    $days = SolarUtil::getDaysBetween(1582, 1, 1, 1583, 1, 1);
+    $this->assertEquals(355, $days);
+  }
   
 }

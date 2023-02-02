@@ -32,12 +32,12 @@ class FotoUtil
    */
   public static function getFestivals($md)
   {
-    if (null == FotoUtil::$FESTIVAL) {
-      FotoUtil::init();
+    if (null == self::$FESTIVAL) {
+      self::init();
     }
     $l = array();
-    if (!empty(FotoUtil::$FESTIVAL[$md])) {
-      $l = FotoUtil::$FESTIVAL[$md];
+    if (!empty(self::$FESTIVAL[$md])) {
+      $l = self::$FESTIVAL[$md];
     }
     return $l;
   }
@@ -50,7 +50,7 @@ class FotoUtil
    */
   public static function getXiu($month, $day)
   {
-    return FotoUtil::$XIU_27[(FotoUtil::$XIU_OFFSET[abs($month)-1] + $day - 1) % count(FotoUtil::$XIU_27)];
+    return self::$XIU_27[(self::$XIU_OFFSET[abs($month)-1] + $day - 1) % count(self::$XIU_27)];
   }
 
   private static function init()
@@ -73,7 +73,7 @@ class FotoUtil
     $M = new FotoFestival('司命奏事', $JS, true, '如月小，即戒廿九');
     $HH = new FotoFestival('月晦', $JS, true, '如月小，即戒廿九');
 
-    FotoUtil::$FESTIVAL = array(
+    self::$FESTIVAL = array(
       '1-1' => array(new FotoFestival('天腊，玉帝校世人神气禄命', $XL), $S),
       '1-3' => array(new FotoFestival('万神都会', $DJ), $D),
       '1-5' => array(new FotoFestival('五虚忌')),

@@ -76,19 +76,19 @@ class TaoUtil
    */
   public static function getFestivals($md)
   {
-    if (null == TaoUtil::$FESTIVAL) {
-      TaoUtil::init();
+    if (null == self::$FESTIVAL) {
+      self::init();
     }
     $l = array();
-    if (!empty(TaoUtil::$FESTIVAL[$md])) {
-      $l = TaoUtil::$FESTIVAL[$md];
+    if (!empty(self::$FESTIVAL[$md])) {
+      $l = self::$FESTIVAL[$md];
     }
     return $l;
   }
 
   private static function init()
   {
-    TaoUtil::$FESTIVAL = array(
+    self::$FESTIVAL = array(
       '1-1' => array(new TaoFestival('天腊之辰', '天腊，此日五帝会于东方九炁青天')),
       '1-3' => array(new TaoFestival('郝真人圣诞'), new TaoFestival('孙真人圣诞')),
       '1-5' => array(new TaoFestival('孙祖清静元君诞')),

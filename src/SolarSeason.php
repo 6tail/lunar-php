@@ -64,16 +64,14 @@ class SolarSeason
   }
 
   /**
-   * 通过指定日期获取阳历季度
-   * @param DateTime $date 日期DateTime
+   * 通过指定DateTime获取阳历季度
+   * @param DateTime $date DateTime
    * @return SolarSeason
    */
   public static function fromDate($date)
   {
-    $calendar = ExactDate::fromDate($date);
-    $year = intval(date_format($calendar, 'Y'));
-    $month = intval(date_format($calendar, 'n'));
-    return new SolarSeason($year, $month);
+    $solar = Solar::fromDate($date);
+    return new SolarSeason($solar->getYear(), $solar->getMonth());
   }
 
   public function getYear()
@@ -103,8 +101,8 @@ class SolarSeason
   {
     $l = array();
     $index = $this->getIndex() - 1;
-    for ($i = 0; $i < SolarSeason::$MONTH_COUNT; $i++) {
-      $l[] = new SolarMonth($this->year, SolarSeason::$MONTH_COUNT * $index + $i + 1);
+    for ($i = 0; $i < self::$MONTH_COUNT; $i++) {
+      $l[] = new SolarMonth($this->year, self::$MONTH_COUNT * $index + $i + 1);
     }
     return $l;
   }
@@ -112,16 +110,13 @@ class SolarSeason
   /**
    * 季度推移
    * @param int $seasons 推移的季度数，负数为倒推
-   * @return SolarSeason|null
+   * @return SolarSeason
    */
   public function next($seasons)
   {
-    if (0 === $seasons) {
-      return new SolarSeason($this->year, $this->month);
-    }
-    $date = ExactDate::fromYmd($this->year, $this->month, 1);
-    $date->modify((SolarSeason::$MONTH_COUNT * $seasons) . ' month');
-    return SolarSeason::fromDate($date);
+    $month = SolarMonth::fromYm($this->year, $this->month);
+    $month = $month->next(self::$MONTH_COUNT * $seasons);
+    return new SolarSeason($month->getYear(), $month->getMonth());
   }
 
 }

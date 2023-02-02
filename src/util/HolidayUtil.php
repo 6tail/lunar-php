@@ -49,8 +49,8 @@ class HolidayUtil
   private static function buildHolidayForward($s)
   {
     $day = substr($s, 0, 8);
-    $name = HolidayUtil::$NAMES[ord(substr($s, 8, 1)) - HolidayUtil::$ZERO];
-    $work = ord(substr($s, 9, 1)) === HolidayUtil::$ZERO;
+    $name = self::$NAMES[ord(substr($s, 8, 1)) - self::$ZERO];
+    $work = ord(substr($s, 9, 1)) === self::$ZERO;
     $target = substr($s, 10, 8);
     return new Holiday($day, $name, $work, $target);
   }
@@ -59,44 +59,44 @@ class HolidayUtil
   {
     $size = strlen($s);
     $day = substr($s, $size - 18, 8);
-    $name = HolidayUtil::$NAMES[ord(substr($s, $size - 10, 1)) - HolidayUtil::$ZERO];
-    $work = ord(substr($s, $size - 9, 1)) === HolidayUtil::$ZERO;
+    $name = self::$NAMES[ord(substr($s, $size - 10, 1)) - self::$ZERO];
+    $work = ord(substr($s, $size - 9, 1)) === self::$ZERO;
     $target = substr($s, $size - 8);
     return new Holiday($day, $name, $work, $target);
   }
 
   private static function findForward($key)
   {
-    $start = strpos(HolidayUtil::$DATA, $key);
+    $start = strpos(self::$DATA, $key);
     if (!$start) {
       return null;
     }
-    $right = substr(HolidayUtil::$DATA, $start);
-    $n = strlen($right) % HolidayUtil::$SIZE;
+    $right = substr(self::$DATA, $start);
+    $n = strlen($right) % self::$SIZE;
     if ($n > 0) {
       $right = substr($right, $n);
     }
-    while ((strpos($right, $key) !== 0) && strlen($right) >= HolidayUtil::$SIZE) {
-      $right = substr($right, HolidayUtil::$SIZE);
+    while ((strpos($right, $key) !== 0) && strlen($right) >= self::$SIZE) {
+      $right = substr($right, self::$SIZE);
     }
     return $right;
   }
 
   private static function findBackward($key)
   {
-    $start = strrpos(HolidayUtil::$DATA, $key);
+    $start = strrpos(self::$DATA, $key);
     if (!$start) {
       return null;
     }
-    $left = substr(HolidayUtil::$DATA, 0, $start + strlen($key));
+    $left = substr(self::$DATA, 0, $start + strlen($key));
     $size = strlen($left);
-    $n = $size % HolidayUtil::$SIZE;
+    $n = $size % self::$SIZE;
     if ($n > 0) {
       $left = substr($left, 0, $size - $n);
     }
     $size = strlen($left);
-    while ((substr_compare($left, $key, -strlen($key)) !== 0) && $size >= HolidayUtil::$SIZE) {
-      $left = substr($left, 0, $size - HolidayUtil::$SIZE);
+    while ((substr_compare($left, $key, -strlen($key)) !== 0) && $size >= self::$SIZE) {
+      $left = substr($left, 0, $size - self::$SIZE);
       $size = strlen($left);
     }
     return $left;
@@ -105,13 +105,13 @@ class HolidayUtil
   private static function findHolidaysForward($key)
   {
     $l = array();
-    $s = HolidayUtil::findForward($key);
+    $s = self::findForward($key);
     if (null == $s) {
       return $l;
     }
     while (strpos($s, $key) === 0) {
-      $l[] = HolidayUtil::buildHolidayForward($s);
-      $s = substr($s, HolidayUtil::$SIZE);
+      $l[] = self::buildHolidayForward($s);
+      $s = substr($s, self::$SIZE);
     }
     return $l;
   }
@@ -119,13 +119,13 @@ class HolidayUtil
   private static function findHolidaysBackward($key)
   {
     $l = array();
-    $s = HolidayUtil::findBackward($key);
+    $s = self::findBackward($key);
     if (null == $s) {
       return $l;
     }
     while (substr_compare($s, $key, -strlen($key)) === 0) {
-      $l[] = HolidayUtil::buildHolidayBackward($s);
-      $s = substr($s, 0, strlen($s) - HolidayUtil::$SIZE);
+      $l[] = self::buildHolidayBackward($s);
+      $s = substr($s, 0, strlen($s) - self::$SIZE);
     }
     return array_reverse($l);
   }
@@ -139,7 +139,7 @@ class HolidayUtil
    */
   public static function getHolidayByYmd($year, $month, $day)
   {
-    $l = HolidayUtil::findHolidaysForward($year . HolidayUtil::padding($month) . HolidayUtil::padding($day));
+    $l = self::findHolidaysForward($year . self::padding($month) . self::padding($day));
     return empty($l) ? null : $l[0];
   }
 
@@ -150,7 +150,7 @@ class HolidayUtil
    */
   public static function getHoliday($ymd)
   {
-    $l = HolidayUtil::findHolidaysForward(str_replace('-', '', $ymd));
+    $l = self::findHolidaysForward(str_replace('-', '', $ymd));
     return empty($l) ? null : $l[0];
   }
 
@@ -162,7 +162,7 @@ class HolidayUtil
    */
   public static function getHolidaysByYm($year, $month)
   {
-    return HolidayUtil::findHolidaysForward($year . HolidayUtil::padding($month));
+    return self::findHolidaysForward($year . self::padding($month));
   }
 
   /**
@@ -172,7 +172,7 @@ class HolidayUtil
    */
   public static function getHolidaysByYear($year)
   {
-    return HolidayUtil::findHolidaysForward($year . '');
+    return self::findHolidaysForward($year . '');
   }
 
   /**
@@ -182,7 +182,7 @@ class HolidayUtil
    */
   public static function getHolidays($ymd)
   {
-    return HolidayUtil::findHolidaysForward(str_replace('-', '', $ymd));
+    return self::findHolidaysForward(str_replace('-', '', $ymd));
   }
 
   /**
@@ -194,7 +194,7 @@ class HolidayUtil
    */
   public static function getHolidaysByTargetYmd($year, $month, $day)
   {
-    return HolidayUtil::findHolidaysBackward($year . HolidayUtil::padding($month) . HolidayUtil::padding($day));
+    return self::findHolidaysBackward($year . self::padding($month) . self::padding($day));
   }
 
   /**
@@ -204,7 +204,7 @@ class HolidayUtil
    */
   public static function getHolidaysByTarget($ymd)
   {
-    return HolidayUtil::findHolidaysBackward(str_replace('-', '', $ymd));
+    return self::findHolidaysBackward(str_replace('-', '', $ymd));
   }
 
   /**

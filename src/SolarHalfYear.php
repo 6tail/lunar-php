@@ -63,16 +63,14 @@ class SolarHalfYear
   }
 
   /**
-   * 通过指定日期获取阳历半年
-   * @param DateTime $date 日期DateTime
+   * 通过指定DateTime获取阳历半年
+   * @param DateTime $date DateTime
    * @return SolarHalfYear
    */
   public static function fromDate($date)
   {
-    $calendar = ExactDate::fromDate($date);
-    $year = intval(date_format($calendar, 'Y'));
-    $month = intval(date_format($calendar, 'n'));
-    return new SolarHalfYear($year, $month);
+    $solar = Solar::fromDate($date);
+    return new SolarHalfYear($solar->getYear(), $solar->getMonth());
   }
 
   public function getYear()
@@ -111,16 +109,13 @@ class SolarHalfYear
   /**
    * 半年推移
    * @param int $halfYears 推移的半年数，负数为倒推
-   * @return SolarHalfYear|null
+   * @return SolarHalfYear
    */
   public function next($halfYears)
   {
-    if (0 === $halfYears) {
-      return new SolarHalfYear($this->year, $this->month);
-    }
-    $date = ExactDate::fromYmd($this->year, $this->month, 1);
-    $date->modify((SolarHalfYear::$MONTH_COUNT * $halfYears) . ' month');
-    return SolarHalfYear::fromDate($date);
+    $month = SolarMonth::fromYm($this->year, $this->month);
+    $month = $month->next(self::$MONTH_COUNT * $halfYears);
+    return new SolarHalfYear($month->getYear(), $month->getMonth());
   }
 
 }

@@ -75,18 +75,15 @@ class SolarWeek
   }
 
   /**
-   * 通过指定日期获取阳历周
-   * @param DateTime $date 日期DateTime
+   * 通过指定DateTime获取阳历周
+   * @param DateTime $date DateTime
    * @param int $start 星期几作为一周的开始，1234560分别代表星期一至星期天
    * @return SolarWeek
    */
   public static function fromDate($date, $start)
   {
-    $calendar = ExactDate::fromDate($date);
-    $year = intval(date_format($calendar, 'Y'));
-    $month = intval(date_format($calendar, 'n'));
-    $day = intval(date_format($calendar, 'j'));
-    return new SolarWeek($year, $month, $day, $start);
+    $solar = Solar::fromDate($date);
+    return new SolarWeek($solar->getYear(), $solar->getMonth(), $solar->getDay(), $start);
   }
 
   public function getYear()
@@ -115,12 +112,12 @@ class SolarWeek
    */
   public function getIndex()
   {
-    $firstDayWeek = intval(ExactDate::fromYmd($this->year, $this->month, 1)->format('w'));
+    $firstDayWeek = Solar::fromYmd($this->year, $this->month, 1)->getWeek();
     $offset = $firstDayWeek - $this->start;
     if ($offset < 0) {
       $offset += 7;
     }
-    return ceil(($this->day + $offset) / 7);
+    return (int)ceil(($this->day + $offset) / 7);
   }
 
   /**
@@ -129,19 +126,19 @@ class SolarWeek
    */
   public function getIndexInYear()
   {
-    $firstDayWeek = intval(ExactDate::fromYmd($this->year, 1, 1)->format('w'));
+    $firstDayWeek = Solar::fromYmd($this->year, 1, 1)->getWeek();
     $offset = $firstDayWeek - $this->start;
     if ($offset < 0) {
       $offset += 7;
     }
-    return ceil((SolarUtil::getDaysInYear($this->year, $this->month, $this->day) + $offset) / 7);
+    return (int)ceil((SolarUtil::getDaysInYear($this->year, $this->month, $this->day) + $offset) / 7);
   }
 
   /**
    * 周推移
    * @param int $weeks 推移的周数，负数为倒推
    * @param bool $separateMonth 是否按月单独计算
-   * @return SolarWeek|null
+   * @return SolarWeek
    */
   public function next($weeks, $separateMonth)
   {
@@ -150,13 +147,13 @@ class SolarWeek
     }
     if ($separateMonth) {
       $n = $weeks;
-      $date = ExactDate::fromYmd($this->year, $this->month, $this->day);
-      $week = SolarWeek::fromDate($date, $this->start);
+      $solar = Solar::fromYmd($this->year, $this->month, $this->day);
+      $week = SolarWeek::fromYmd($this->year, $this->month, $this->day, $this->start);
       $month = $this->month;
       $plus = $n > 0;
       while (0 !== $n) {
-        $date->modify(($plus ? 7 : -7) . ' day');
-        $week = SolarWeek::fromDate($date, $this->start);
+        $solar = $solar->next($plus ? 7 : -7);
+        $week = SolarWeek::fromYmd($solar->getYear(), $solar->getMonth(), $solar->getDay(), $this->start);
         $weekMonth = $week->getMonth();
         if ($month !== $weekMonth) {
           $index = $week->getIndex();
@@ -166,8 +163,8 @@ class SolarWeek
               $week = SolarWeek::fromYmd($firstDay->getYear(), $firstDay->getMonth(), $firstDay->getDay(), $this->start);
               $weekMonth = $week->getMonth();
             } else {
-              $date = ExactDate::fromYmd($week->year, $week->month, 1);
-              $week = SolarWeek::fromDate($date, $this->start);
+              $solar = Solar::fromYmd($week->getYear(), $week->getMonth(), 1);
+              $week = SolarWeek::fromYmd($solar->getYear(), $solar->getMonth(), $solar->getDay(), $this->start);
             }
           } else {
             $size = SolarUtil::getWeeksOfMonth($week->getYear(), $week->getMonth(), $week->getStart());
@@ -176,8 +173,8 @@ class SolarWeek
               $week = SolarWeek::fromYmd($lastDay->getYear(), $lastDay->getMonth(), $lastDay->getDay(), $this->start);
               $weekMonth = $week->getMonth();
             } else {
-              $date = ExactDate::fromYmd($this->year, $this->month, SolarUtil::getDaysOfMonth($week->getYear(), $week->getMonth()));
-              $week = SolarWeek::fromDate($date, $this->start);
+              $solar = Solar::fromYmd($this->year, $this->month, SolarUtil::getDaysOfMonth($week->getYear(), $week->getMonth()));
+              $week = SolarWeek::fromYmd($solar->getYear(), $solar->getMonth(), $solar->getDay(), $this->start);
             }
           }
           $month = $weekMonth;
@@ -186,31 +183,29 @@ class SolarWeek
       }
       return $week;
     } else {
-      $date = ExactDate::fromYmd($this->year, $this->month, $this->day);
-      $date->modify(($weeks * 7) . ' day');
-      return SolarWeek::fromDate($date, $this->start);
+      $solar = Solar::fromYmd($this->year, $this->month, $this->day);
+      $solar = $solar->next($weeks * 7);
+      return SolarWeek::fromYmd($solar->getYear(), $solar->getMonth(), $solar->getDay(), $this->start);
     }
   }
 
   /**
    * 获取本周第一天的阳历日期（可能跨月）
-   * @return Solar|null
+   * @return Solar
    */
   public function getFirstDay()
   {
-    $date = ExactDate::fromYmd($this->year, $this->month, $this->day);
-    $week = intval($date->format('w'));
-    $prev = $week - $this->start;
+    $solar = Solar::fromYmd($this->year, $this->month, $this->day);
+    $prev = $solar->getWeek() - $this->start;
     if ($prev < 0) {
       $prev += 7;
     }
-    $date->modify(-$prev . ' day');
-    return Solar::fromDate($date);
+    return $solar->next(-$prev);
   }
 
   /**
    * 获取本周第一天的阳历日期（仅限当月）
-   * @return Solar|null
+   * @return Solar
    */
   public function getFirstDayInMonth()
   {

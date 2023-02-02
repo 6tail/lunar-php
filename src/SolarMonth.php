@@ -61,16 +61,14 @@ class SolarMonth
   }
 
   /**
-   * 通过指定日期获取阳历月
-   * @param DateTime $date 日期DateTime
+   * 通过DateTime获取阳历月
+   * @param DateTime $date DateTime
    * @return SolarMonth
    */
   public static function fromDate($date)
   {
-    $calendar = ExactDate::fromDate($date);
-    $year = intval(date_format($calendar, 'Y'));
-    $month = intval(date_format($calendar, 'n'));
-    return new SolarMonth($year, $month);
+    $solar = Solar::fromDate($date);
+    return new SolarMonth($solar->getYear(), $solar->getMonth());
   }
 
   public function getYear()
@@ -122,13 +120,22 @@ class SolarMonth
   /**
    * 获取往后推几个月的阳历月，如果要往前推，则月数用负数
    * @param int $months 月数
-   * @return SolarMonth|null
+   * @return SolarMonth
    */
   public function next($months)
   {
-    $date = ExactDate::fromYmd($this->year, $this->month, 1);
-    $date->modify($months . ' month');
-    return SolarMonth::fromDate($date);
+    $n = $months < 0 ? -1 : 1;
+    $m = abs($months);
+    $y = $this->year + (int)($m / 12) * $n;
+    $m = $this->month + $m % 12 * $n;
+    if ($m > 12) {
+      $m -= 12;
+      $y++;
+    } else if ($m < 1) {
+      $m += 12;
+      $y--;
+    }
+    return new SolarMonth($y, $m);
   }
 
 }

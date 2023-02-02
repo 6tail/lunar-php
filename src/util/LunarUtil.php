@@ -983,7 +983,7 @@ class LunarUtil
    */
   public static function convertTime($hm)
   {
-    return LunarUtil::$ZHI[LunarUtil::getTimeZhiIndex($hm) + 1];
+    return self::$ZHI[self::getTimeZhiIndex($hm) + 1];
   }
 
   /**
@@ -1007,8 +1007,8 @@ class LunarUtil
    */
   public static function getJiaZiIndex($ganZhi)
   {
-    for ($i = 0, $j = count(LunarUtil::$JIA_ZI); $i < $j; $i++) {
-      if (strcmp(LunarUtil::$JIA_ZI[$i], $ganZhi) === 0) {
+    for ($i = 0, $j = count(self::$JIA_ZI); $i < $j; $i++) {
+      if (strcmp(self::$JIA_ZI[$i], $ganZhi) === 0) {
         return $i;
       }
     }
@@ -1024,9 +1024,9 @@ class LunarUtil
   public static function getDayYi($monthGanZhi, $dayGanZhi)
   {
     $l = array();
-    $day = LunarUtil::hex(LunarUtil::getJiaZiIndex($dayGanZhi));
-    $month = LunarUtil::hex(LunarUtil::getJiaZiIndex($monthGanZhi));
-    $right = LunarUtil::$DAY_YI_JI;
+    $day = self::hex(self::getJiaZiIndex($dayGanZhi));
+    $month = self::hex(self::getJiaZiIndex($monthGanZhi));
+    $right = self::$DAY_YI_JI;
     $index = strpos($right, $day . '=');
     while ($index > -1) {
       $right = substr($right, $index + 3);
@@ -1048,7 +1048,7 @@ class LunarUtil
         $ys = substr($ys, 0, strpos($ys, ','));
         for ($i = 0, $j = strlen($ys); $i < $j; $i += 2) {
           $m = substr($ys, $i, 2);
-          $l[] = LunarUtil::$YI_JI[hexdec($m)];
+          $l[] = self::$YI_JI[hexdec($m)];
         }
         break;
       }
@@ -1069,9 +1069,9 @@ class LunarUtil
   public static function getDayJi($monthGanZhi, $dayGanZhi)
   {
     $l = array();
-    $day = LunarUtil::hex(LunarUtil::getJiaZiIndex($dayGanZhi));
-    $month = LunarUtil::hex(LunarUtil::getJiaZiIndex($monthGanZhi));
-    $right = LunarUtil::$DAY_YI_JI;
+    $day = self::hex(self::getJiaZiIndex($dayGanZhi));
+    $month = self::hex(self::getJiaZiIndex($monthGanZhi));
+    $right = self::$DAY_YI_JI;
     $index = strpos($right, $day . '=');
     while ($index > -1) {
       $right = substr($right, $index + 3);
@@ -1092,7 +1092,7 @@ class LunarUtil
         $ys = substr($left, strpos($left, ',') + 1, strlen($left));
         for ($i = 0, $j = strlen($ys); $i < $j; $i += 2) {
           $m = substr($ys, $i, 2);
-          $l[] = LunarUtil::$YI_JI[hexdec($m)];
+          $l[] = self::$YI_JI[hexdec($m)];
         }
         break;
       }
@@ -1113,18 +1113,18 @@ class LunarUtil
   public static function getDayJiShen($lunarMonth, $dayGanZhi)
   {
     $l = array();
-    $day = LunarUtil::hex(LunarUtil::getJiaZiIndex($dayGanZhi));
+    $day = self::hex(self::getJiaZiIndex($dayGanZhi));
     $month = strtoupper(dechex(abs($lunarMonth)));
-    $index = strpos(LunarUtil::$DAY_SHEN_SHA, $month . $day . '=');
+    $index = strpos(self::$DAY_SHEN_SHA, $month . $day . '=');
     if ($index > -1) {
-      $left = substr(LunarUtil::$DAY_SHEN_SHA, $index + 4);
+      $left = substr(self::$DAY_SHEN_SHA, $index + 4);
       if (strpos($left, '=') !== false) {
         $left = substr($left, 0, strpos($left, '=') - 3);
       }
       $js = substr($left, 0, strpos($left, ','));
       for ($i = 0, $j = strlen($js); $i < $j; $i += 2) {
         $m = substr($js, $i, 2);
-        $l[] = LunarUtil::$SHEN_SHA[hexdec($m)];
+        $l[] = self::$SHEN_SHA[hexdec($m)];
       }
     }
     if (count($l) < 1) {
@@ -1142,18 +1142,18 @@ class LunarUtil
   public static function getDayXiongSha($lunarMonth, $dayGanZhi)
   {
     $l = array();
-    $day = LunarUtil::hex(LunarUtil::getJiaZiIndex($dayGanZhi));
+    $day = self::hex(self::getJiaZiIndex($dayGanZhi));
     $month = strtoupper(dechex(abs($lunarMonth)));
-    $index = strpos(LunarUtil::$DAY_SHEN_SHA, $month . $day . '=');
+    $index = strpos(self::$DAY_SHEN_SHA, $month . $day . '=');
     if ($index > -1) {
-      $left = substr(LunarUtil::$DAY_SHEN_SHA, $index + 4);
+      $left = substr(self::$DAY_SHEN_SHA, $index + 4);
       if (strpos($left, '=') !== false) {
         $left = substr($left, 0, strpos($left, '=') - 3);
       }
       $xs = substr($left, strpos($left, ',') + 1, strlen($left));
       for ($i = 0, $j = strlen($xs); $i < $j; $i += 2) {
         $m = substr($xs, $i, 2);
-        $l[] = LunarUtil::$SHEN_SHA[hexdec($m)];
+        $l[] = self::$SHEN_SHA[hexdec($m)];
       }
     }
     if (count($l) < 1) {
@@ -1171,18 +1171,18 @@ class LunarUtil
   public static function getTimeYi($dayGanZhi, $timeGanZhi)
   {
     $l = array();
-    $day = LunarUtil::hex(LunarUtil::getJiaZiIndex($dayGanZhi));
-    $time = LunarUtil::hex(LunarUtil::getJiaZiIndex($timeGanZhi));
-    $index = strpos(LunarUtil::$TIME_YI_JI, $day . $time . '=');
+    $day = self::hex(self::getJiaZiIndex($dayGanZhi));
+    $time = self::hex(self::getJiaZiIndex($timeGanZhi));
+    $index = strpos(self::$TIME_YI_JI, $day . $time . '=');
     if ($index > -1) {
-      $left = substr(LunarUtil::$TIME_YI_JI, $index + 5);
+      $left = substr(self::$TIME_YI_JI, $index + 5);
       if (strpos($left, '=') !== false) {
         $left = substr($left, 0, strpos($left, '=') - 4);
       }
       $ys = substr($left, 0, strpos($left, ','));
       for ($i = 0, $j = strlen($ys); $i < $j; $i += 2) {
         $m = substr($ys, $i, 2);
-        $l[] = LunarUtil::$YI_JI[hexdec($m)];
+        $l[] = self::$YI_JI[hexdec($m)];
       }
     }
     if (count($l) < 1) {
@@ -1200,18 +1200,18 @@ class LunarUtil
   public static function getTimeJi($dayGanZhi, $timeGanZhi)
   {
     $l = array();
-    $day = LunarUtil::hex(LunarUtil::getJiaZiIndex($dayGanZhi));
-    $time = LunarUtil::hex(LunarUtil::getJiaZiIndex($timeGanZhi));
-    $index = strpos(LunarUtil::$TIME_YI_JI, $day . $time . '=');
+    $day = self::hex(self::getJiaZiIndex($dayGanZhi));
+    $time = self::hex(self::getJiaZiIndex($timeGanZhi));
+    $index = strpos(self::$TIME_YI_JI, $day . $time . '=');
     if ($index > -1) {
-      $left = substr(LunarUtil::$TIME_YI_JI, $index + 5);
+      $left = substr(self::$TIME_YI_JI, $index + 5);
       if (strpos($left, '=') !== false) {
         $left = substr($left, 0, strpos($left, '=') - 4);
       }
       $js = substr($left, strpos($left, ',') + 1, strlen($left));
       for ($i = 0, $j = strlen($js); $i < $j; $i += 2) {
         $m = substr($js, $i, 2);
-        $l[] = LunarUtil::$YI_JI[hexdec($m)];
+        $l[] = self::$YI_JI[hexdec($m)];
       }
     }
     if (count($l) < 1) {
@@ -1232,14 +1232,14 @@ class LunarUtil
     $zhi = substr($ganZhi, $half);
     $ganIndex = 0;
     $zhiIndex = 0;
-    for ($i = 0, $j = count(LunarUtil::$GAN); $i < $j; $i++) {
-      if (strcmp(LunarUtil::$GAN[$i], $gan) === 0) {
+    for ($i = 0, $j = count(self::$GAN); $i < $j; $i++) {
+      if (strcmp(self::$GAN[$i], $gan) === 0) {
         $ganIndex = $i;
         break;
       }
     }
-    for ($i = 0, $j = count(LunarUtil::$ZHI); $i < $j; $i++) {
-      if (strcmp(LunarUtil::$ZHI[$i], $zhi) === 0) {
+    for ($i = 0, $j = count(self::$ZHI); $i < $j; $i++) {
+      if (strcmp(self::$ZHI[$i], $zhi) === 0) {
         $zhiIndex = $i;
         break;
       }
@@ -1258,7 +1258,7 @@ class LunarUtil
    */
   public static function getXun($ganZhi)
   {
-    return LunarUtil::$XUN[LunarUtil::getXunIndex($ganZhi)];
+    return self::$XUN[self::getXunIndex($ganZhi)];
   }
 
   /**
@@ -1268,6 +1268,6 @@ class LunarUtil
    */
   public static function getXunKong($ganZhi)
   {
-    return LunarUtil::$XUN_KONG[LunarUtil::getXunIndex($ganZhi)];
+    return self::$XUN_KONG[self::getXunIndex($ganZhi)];
   }
 }

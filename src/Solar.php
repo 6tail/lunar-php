@@ -6,7 +6,8 @@ use com\nlf\calendar\util\HolidayUtil;
 use com\nlf\calendar\util\LunarUtil;
 use com\nlf\calendar\util\SolarUtil;
 use DateTime;
-use Exception;
+use DateTimeZone;
+use RuntimeException;
 
 bcscale(12);
 
@@ -59,18 +60,21 @@ class Solar
    */
   private $second;
 
-  /**
-   * 日期
-   * @var
-   */
-  private $calendar;
-
   function __construct($year, $month, $day, $hour, $minute, $second)
   {
-    if ($year === 1582 && $month === 10) {
-      if ($day >= 15) {
-        $day -= 10;
+    if (1582 == $year && 10 == $month) {
+      if ($day > 4 && $day < 15) {
+        throw new RuntimeException(sprintf('wrong solar year %d month %d day %d', $year, $month, $day));
       }
+    }
+    if ($hour < 0 || $hour > 23) {
+      throw new RuntimeException(sprintf('wrong hour %d', $hour));
+    }
+    if ($minute < 0 || $minute > 59) {
+      throw new RuntimeException(sprintf('wrong minute %d', $minute));
+    }
+    if ($second < 0 || $second > 59) {
+      throw new RuntimeException(sprintf('wrong second %d', $second));
     }
     $this->year = $year;
     $this->month = $month;
@@ -78,12 +82,12 @@ class Solar
     $this->hour = $hour;
     $this->minute = $minute;
     $this->second = $second;
-    $this->calendar = ExactDate::fromYmdHms($year, $month, $day, $hour, $minute, $second);
   }
 
   public static function fromDate($date)
   {
-    $calendar = ExactDate::fromDate($date);
+    $calendar = DateTime::createFromFormat('Y-n-j G:i:s', $date->format('Y-n-j G:i:s'), $date->getTimezone());
+    $calendar->setTimezone(new DateTimezone('Asia/Shanghai'));
     $year = intval($calendar -> format('Y'));
     $month = intval($calendar -> format('n'));
     $day = intval($calendar -> format('j'));
@@ -135,7 +139,7 @@ class Solar
       $hour++;
     }
 
-    return Solar::fromYmdHms($year, $month, $day, $hour, $minute, $second);
+    return self::fromYmdHms($year, $month, $day, $hour, $minute, $second);
   }
 
   /**
@@ -145,7 +149,6 @@ class Solar
    * @param string $dayGanZhi 日柱
    * @param string $timeGanZhi 时柱
    * @return Solar[] 符合的阳历列表
-   * @throws Exception
    */
   public static function fromBaZi($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi)
   {
@@ -160,7 +163,6 @@ class Solar
    * @param string $timeGanZhi 时柱
    * @param int sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
    * @return Solar[] 符合的阳历列表
-   * @throws Exception
    */
   public static function fromBaZiBySect($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect)
   {
@@ -176,19 +178,22 @@ class Solar
    * @param int sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
    * @param int $baseYear 起始年
    * @return Solar[]
-   * @throws Exception
    */
   public static function fromBaZiBySectAndBaseYear($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect, $baseYear)
   {
     $sect = (1 == $sect) ? 1 : 2;
     $l = array();
-    $today = Solar::fromDate(new DateTime());
-    $lunar = $today->getLunar();
-    $offsetYear = LunarUtil::getJiaZiIndex($lunar->getYearInGanZhiExact()) - LunarUtil::getJiaZiIndex($yearGanZhi);
+    $years = array();
+    $today = self::fromDate(new DateTime());
+    $offsetYear = LunarUtil::getJiaZiIndex($today->getLunar()->getYearInGanZhiExact()) - LunarUtil::getJiaZiIndex($yearGanZhi);
     if ($offsetYear < 0) {
-      $offsetYear = $offsetYear + 60;
+      $offsetYear += 60;
     }
-    $startYear = $lunar->getYear() - $offsetYear;
+    $startYear = $today->getYear() - $offsetYear - 1;
+    while ($startYear >= $baseYear) {
+      $years[] = $startYear;
+      $startYear -= 60;
+    }
     $hour = 0;
     $timeZhi = substr($timeGanZhi, strlen($timeGanZhi) / 2);
     for ($i = 0, $j = count(LunarUtil::$ZHI); $i < $j; $i++) {
@@ -196,38 +201,11 @@ class Solar
         $hour = ($i - 1) * 2;
       }
     }
-    while ($startYear >= $baseYear) {
-      $year = $startYear - 1;
-      $counter = 0;
-      $month = 12;
-      $found = false;
-      while ($counter < 15) {
-        if ($year >= $baseYear) {
-          $day = 1;
-          $solar = Solar::fromYmdHms($year, $month, $day, $hour, 0, 0);
-          $lunar = $solar->getLunar();
-          if (strcmp($lunar->getYearInGanZhiExact(), $yearGanZhi) == 0 && strcmp($lunar->getMonthInGanZhiExact(), $monthGanZhi) == 0) {
-            $found = true;
-            break;
-          }
-        }
-        $month++;
-        if ($month > 12) {
-          $month = 1;
-          $year++;
-        }
-        $counter++;
-      }
-      if ($found) {
-        $counter = 0;
-        $month--;
-        if ($month < 1) {
-          $month = 12;
-          $year--;
-        }
-        $day = 1;
-        $solar = Solar::fromYmdHms($year, $month, $day, $hour, 0, 0);
-        while ($counter < 61) {
+    foreach ($years as $y) {
+      inner: for ($x = 0; $x < 3; $x++) {
+        $year = $y + $x;
+        $solar = self::fromYmdHms($year, 1, 1, $hour, 0, 0);
+        while ($solar->getYear() == $year) {
           $lunar = $solar->getLunar();
           $dgz = (2 == $sect) ? $lunar->getDayInGanZhiExact2() : $lunar->getDayInGanZhiExact();
           if (strcmp($lunar->getYearInGanZhiExact(), $yearGanZhi) == 0 && strcmp($lunar->getMonthInGanZhiExact(), $monthGanZhi) == 0 && strcmp($dgz, $dayGanZhi) == 0 && strcmp($lunar->getTimeInGanZhi(), $timeGanZhi) == 0) {
@@ -235,10 +213,8 @@ class Solar
             break;
           }
           $solar = $solar->next(1);
-          $counter++;
         }
       }
-      $startYear -= 60;
     }
     return $l;
   }
@@ -258,13 +234,7 @@ class Solar
    */
   public function toYmd()
   {
-    $d = $this->day;
-    if ($this->year === 1582 && $this->month === 10) {
-      if ($d >= 5) {
-        $d += 10;
-      }
-    }
-    return sprintf('%04d-%02d-%02d', $this->year, $this->month, $d);
+    return sprintf('%04d-%02d-%02d', $this->year, $this->month, $this->day);
   }
 
   public function toYmdHms()
@@ -339,12 +309,7 @@ class Solar
 
   public function getLunar()
   {
-    return Lunar::fromDate($this->calendar);
-  }
-
-  public function getCalendar()
-  {
-    return $this->calendar;
+    return Lunar::fromSolar($this);
   }
 
   public function toString()
@@ -360,11 +325,6 @@ class Solar
   public function isLeapYear()
   {
     return SolarUtil::isLeapYear($this->year);
-  }
-
-  public function getWeek()
-  {
-    return intval($this->calendar->format('w'));
   }
 
   public function getWeekInChinese()
@@ -437,53 +397,287 @@ class Solar
   }
 
   /**
-   * 获取往后推几天的阳历日期，如果要往前推，则天数用负数
-   * @param int $days 天数
-   * @return Solar|null
+   * 阳历日期相减，获得相差天数
+   * @param $solar Solar 阳历
+   * @return int 天数
+   */
+  public function subtract($solar)
+  {
+    return SolarUtil::getDaysBetween($solar->getYear(), $solar->getMonth(), $solar->getDay(), $this->getYear(), $this->getMonth(), $this->getDay());
+  }
+
+  /**
+   * 阳历日期相减，获得相差分钟数
+   * @param $solar Solar 阳历
+   * @return int 分钟数
+   */
+  public function subtractMinute($solar)
+  {
+    $days = $this->subtract($solar);
+    $cm = $this->getHour() * 60 + $this->getMinute();
+    $sm = $solar->getHour() * 60 + $solar->getMinute();
+    $m = $cm - $sm;
+    if ($m < 0) {
+      $m += 1440;
+      $days--;
+    }
+    $m += $days * 1440;
+    return $m;
+  }
+
+  /**
+   * 是否在指定日期之后
+   * @param $solar Solar 阳历
+   * @return bool
+   */
+  public function isAfter($solar)
+  {
+    if ($this->year > $solar->getYear()) {
+      return true;
+    } else if ($this->year < $solar->getYear()) {
+      return false;
+    }
+    if ($this->month > $solar->getMonth()) {
+      return true;
+    } else if ($this->month < $solar->getMonth()) {
+      return false;
+    }
+    if ($this->day > $solar->getDay()) {
+      return true;
+    } else if ($this->day < $solar->getDay()) {
+      return false;
+    }
+    if ($this->hour > $solar->getHour()) {
+      return true;
+    } else if ($this->hour < $solar->getHour()) {
+      return false;
+    }
+    if ($this->minute > $solar->getMinute()) {
+      return true;
+    } else if ($this->minute < $solar->getMinute()) {
+      return false;
+    }
+    return $this->second > $solar->second;
+  }
+
+  /**
+   * 是否在指定日期之前
+   * @param $solar Solar 阳历
+   * @return bool
+   */
+  public function isBefore($solar)
+  {
+    if ($this->year > $solar->getYear()) {
+      return false;
+    } else if ($this->year < $solar->getYear()) {
+      return true;
+    }
+    if ($this->month > $solar->getMonth()) {
+      return false;
+    } else if ($this->month < $solar->getMonth()) {
+      return true;
+    }
+    if ($this->day > $solar->getDay()) {
+      return false;
+    } else if ($this->day < $solar->getDay()) {
+      return true;
+    }
+    if ($this->hour > $solar->getHour()) {
+      return false;
+    } else if ($this->hour < $solar->getHour()) {
+      return true;
+    }
+    if ($this->minute > $solar->getMinute()) {
+      return false;
+    } else if ($this->minute < $solar->getMinute()) {
+      return true;
+    }
+    return $this->second < $solar->second;
+  }
+
+  /**
+   * 年推移
+   * @param $years int 年数
+   * @return Solar 阳历
+   */
+  public function nextYear($years) {
+    $y = $this->year + $years;
+    $m = $this->month;
+    $d = $this->day;
+    // 2月处理
+    if (2 == $m) {
+      if ($d > 28) {
+        if (!SolarUtil::isLeapYear($y)) {
+          $d -= 28;
+          $m ++;
+          if ($m > 12) {
+            $m = 1;
+            $y++;
+          }
+        }
+      }
+    }
+    if (1582 == $y && 10 == $m) {
+      if ($d > 4 && $d < 15) {
+        $d += 10;
+      }
+    }
+    return self::fromYmdHms($y, $m, $d, $this->hour, $this->minute, $this->second);
+  }
+
+  /**
+   * 月推移
+   * @param $months int 月数
+   * @return Solar 阳历
+   */
+  public function nextMonth($months) {
+    $month = SolarMonth::fromYm($this->year, $this->month);
+    $month = $month->next($months);
+    $y = $month->getYear();
+    $m = $month->getMonth();
+    $d = $this->day;
+    // 2月处理
+    if (2 == $m) {
+      if ($d > 28) {
+        if (!SolarUtil::isLeapYear($y)) {
+          $d -= 28;
+          $m ++;
+          if ($m > 12) {
+            $m = 1;
+            $y++;
+          }
+        }
+      }
+    }
+    if (1582 == $y && 10 == $m) {
+      if ($d > 4 && $d < 15) {
+        $d += 10;
+      }
+    }
+    return self::fromYmdHms($y, $m, $d, $this->hour, $this->minute, $this->second);
+  }
+
+  /**
+   * 天推移
+   * @param $days int 天数
+   * @return Solar 阳历
    */
   public function next($days)
   {
-    if ($days == 0) {
-      return Solar::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
+    $y = $this->year;
+    $m = $this->month;
+    $d = $this->day;
+    if ($days > 0) {
+      $d = $this->day + $days;
+      $daysInMonth = SolarUtil::getDaysOfMonth($y, $m);
+      while ($d > $daysInMonth) {
+        $d -= $daysInMonth;
+        $m++;
+        if ($m > 12) {
+          $m -= 12;
+          $y++;
+        }
+        $daysInMonth = SolarUtil::getDaysOfMonth($y, $m);
+      }
+    } else if ($days < 0) {
+      $rest = -$days;
+      while ($d <= $rest) {
+        $rest -= $d;
+        $m--;
+        if ($m < 1) {
+          $m = 12;
+          $y--;
+        }
+        $d = SolarUtil::getDaysOfMonth($y, $m);
+      }
+      $d -= $rest;
     }
-    $calendar = ExactDate::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
-    $calendar->modify(($days > 0 ? '+' : '') . $days . ' day');
-    return Solar::fromDate($calendar);
+    if (1582 == $y && 10 == $m) {
+      if ($d > 4 && $d < 15) {
+        $d += 10;
+      }
+    }
+    return self::fromYmdHms($y, $m, $d, $this->hour, $this->minute, $this->second);
+  }
+
+  /**
+   * 小时推移
+   * @param $hours int 小时数
+   * @return Solar 阳历
+   */
+  public function nextHour($hours) {
+    $h = $this->hour + $hours;
+    $n = $h < 0 ? -1 : 1;
+    $hour = (int)abs($h);
+    $days = (int)($hour / 24) * $n;
+    $hour = ($hour % 24) * $n;
+    if ($hour < 0) {
+      $hour += 24;
+      $days--;
+    }
+    $solar = $this->next($days);
+    return self::fromYmdHms($solar->getYear(), $solar->getMonth(), $solar->getDay(), $hour, $solar->getMinute(), $solar->getSecond());
+  }
+
+  /**
+   * 获取星期
+   * @return int 星期，0星期天，1星期一，2星期二，3星期三，4星期四，5星期五，6星期六
+   */
+  public function getWeek()
+  {
+    $start = self::fromYmd(1582, 10, 15);
+    $y = $this->year;
+    $m = $this->month;
+    $d = $this->day;
+    $current = self::fromYmd($y, $m, $d);
+    // 蔡勒公式
+    if ($m < 3) {
+      $m += 12;
+      $y--;
+    }
+    $c = (int)($y / 100);
+    $y = $y - $c * 100;
+    $x = $y + (int)($y / 4) + (int)($c / 4) - 2 * $c;
+    if ($current->isBefore($start)) {
+      $w = ($x + (int)((13 * ($m + 1)) / 5) + $d + 2) % 7;
+    } else {
+      $w = ($x + (int)((26 * ($m + 1)) / 10) + $d - 1) % 7;
+    }
+    return ($w + 7) % 7;
   }
 
   /**
    * 获取往后推几个工作日的阳历日期，如果要往前推，则天数用负数
    * @param int $days 天数
-   * @return Solar|null
+   * @return Solar
    */
   public function nextWorkday($days)
   {
-    if ($days == 0) {
-      return Solar::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
-    }
-    $calendar = ExactDate::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
-    $rest = abs($days);
-    $add = $days < 1 ? -1 : 1;
-    while ($rest > 0) {
-      $calendar->modify(($add > 0 ? '+' : '') . $add . ' day');
-      $work = true;
-      $year = intval($calendar -> format('Y'));
-      $month = intval($calendar -> format('n'));
-      $day = intval($calendar -> format('j'));
-      $holiday = HolidayUtil::getHolidayByYmd($year, $month, $day);
-      if (null == $holiday) {
-        $week = intval($calendar->format('w'));
-        if (0 === $week || 6 === $week) {
-          $work = false;
+    $solar = self::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
+    if ($days != 0) {
+      $rest = abs($days);
+      $add = $days < 1 ? -1 : 1;
+      while ($rest > 0) {
+        $solar = $solar->next($add);
+        $work = true;
+        $year = $solar->getYear();
+        $month = $solar->getMonth();
+        $day = $solar->getDay();
+        $holiday = HolidayUtil::getHolidayByYmd($year, $month, $day);
+        if (null == $holiday) {
+          $week = $solar->getWeek();
+          if (0 === $week || 6 === $week) {
+            $work = false;
+          }
+        } else {
+          $work = $holiday->isWork();
         }
-      } else {
-        $work = $holiday->isWork();
-      }
-      if ($work) {
-        $rest -= 1;
+        if ($work) {
+          $rest -= 1;
+        }
       }
     }
-    return Solar::fromDate($calendar);
+    return $solar;
   }
 
 }

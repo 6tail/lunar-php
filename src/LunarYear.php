@@ -186,7 +186,7 @@ class LunarYear
 
   /**
    * 获取闰月
-   * @return int 闰月数字，1代表闰1月，0代表无闰月
+   * @return int 闰月数字，1=闰1月，0=无闰月
    */
   public function getLeapMonth()
   {
