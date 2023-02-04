@@ -213,9 +213,7 @@ class SolarUtil
    */
   public static function getWeeksOfMonth($year, $month, $start)
   {
-    $days = self::getDaysOfMonth($year, $month);
-    $week = Solar::fromYmd($year, $month, 1)->getWeek();
-    return ceil(($days + $week - $start) / count(self::$WEEK));
+    return (int)ceil((self::getDaysOfMonth($year, $month) + Solar::fromYmd($year, $month, 1)->getWeek() - $start) / count(self::$WEEK));
   }
 
   /**

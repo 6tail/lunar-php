@@ -509,11 +509,7 @@ class Solar
       if ($d > 28) {
         if (!SolarUtil::isLeapYear($y)) {
           $d -= 28;
-          $m ++;
-          if ($m > 12) {
-            $m = 1;
-            $y++;
-          }
+          $m++;
         }
       }
     }
@@ -541,11 +537,7 @@ class Solar
       if ($d > 28) {
         if (!SolarUtil::isLeapYear($y)) {
           $d -= 28;
-          $m ++;
-          if ($m > 12) {
-            $m = 1;
-            $y++;
-          }
+          $m++;
         }
       }
     }
@@ -660,10 +652,7 @@ class Solar
       while ($rest > 0) {
         $solar = $solar->next($add);
         $work = true;
-        $year = $solar->getYear();
-        $month = $solar->getMonth();
-        $day = $solar->getDay();
-        $holiday = HolidayUtil::getHolidayByYmd($year, $month, $day);
+        $holiday = HolidayUtil::getHolidayByYmd($solar->getYear(), $solar->getMonth(), $solar->getDay());
         if (null == $holiday) {
           $week = $solar->getWeek();
           if (0 === $week || 6 === $week) {

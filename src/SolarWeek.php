@@ -112,8 +112,7 @@ class SolarWeek
    */
   public function getIndex()
   {
-    $firstDayWeek = Solar::fromYmd($this->year, $this->month, 1)->getWeek();
-    $offset = $firstDayWeek - $this->start;
+    $offset = Solar::fromYmd($this->year, $this->month, 1)->getWeek() - $this->start;
     if ($offset < 0) {
       $offset += 7;
     }
@@ -126,8 +125,7 @@ class SolarWeek
    */
   public function getIndexInYear()
   {
-    $firstDayWeek = Solar::fromYmd($this->year, 1, 1)->getWeek();
-    $offset = $firstDayWeek - $this->start;
+    $offset = Solar::fromYmd($this->year, 1, 1)->getWeek() - $this->start;
     if ($offset < 0) {
       $offset += 7;
     }
@@ -145,10 +143,10 @@ class SolarWeek
     if (0 === $weeks) {
       return SolarWeek::fromYmd($this->year, $this->month, $this->day, $this->start);
     }
+    $solar = Solar::fromYmd($this->year, $this->month, $this->day);
     if ($separateMonth) {
       $n = $weeks;
-      $solar = Solar::fromYmd($this->year, $this->month, $this->day);
-      $week = SolarWeek::fromYmd($this->year, $this->month, $this->day, $this->start);
+      $week = SolarWeek::fromYmd($solar->getYear(), $solar->getMonth(), $solar->getDay(), $this->start);
       $month = $this->month;
       $plus = $n > 0;
       while (0 !== $n) {
@@ -173,7 +171,7 @@ class SolarWeek
               $week = SolarWeek::fromYmd($lastDay->getYear(), $lastDay->getMonth(), $lastDay->getDay(), $this->start);
               $weekMonth = $week->getMonth();
             } else {
-              $solar = Solar::fromYmd($this->year, $this->month, SolarUtil::getDaysOfMonth($week->getYear(), $week->getMonth()));
+              $solar = Solar::fromYmd($week->year, $week->month, SolarUtil::getDaysOfMonth($week->getYear(), $week->getMonth()));
               $week = SolarWeek::fromYmd($solar->getYear(), $solar->getMonth(), $solar->getDay(), $this->start);
             }
           }
@@ -183,7 +181,6 @@ class SolarWeek
       }
       return $week;
     } else {
-      $solar = Solar::fromYmd($this->year, $this->month, $this->day);
       $solar = $solar->next($weeks * 7);
       return SolarWeek::fromYmd($solar->getYear(), $solar->getMonth(), $solar->getDay(), $this->start);
     }

@@ -2826,19 +2826,14 @@ class Lunar
   public function getWuHou()
   {
     $jieQi = $this->getPrevJieQiByWholeDay(true);
-    $name = $jieQi->getName();
     $offset = 0;
     for ($i = 0, $j = count(self::$JIE_QI); $i < $j; $i++) {
-      if (strcmp($name, self::$JIE_QI[$i]) === 0) {
+      if (strcmp($jieQi->getName(), self::$JIE_QI[$i]) === 0) {
         $offset = $i;
         break;
       }
     }
-    $current = Solar::fromYmd($this->solar->getYear(), $this->solar->getMonth(), $this->solar->getDay());
-    $startSolar = $jieQi->getSolar();
-    $start = Solar::fromYmd($startSolar->getYear(), $startSolar->getMonth(), $startSolar->getDay());
-    $days = $current->subtract($start);
-    $index = (int)($days / 5);
+    $index = (int)($this->solar->subtract($jieQi->getSolar()) / 5);
     if ($index > 2) {
       $index = 2;
     }
@@ -2848,9 +2843,8 @@ class Lunar
   public function getHou()
   {
     $jieQi = $this->getPrevJieQiByWholeDay(true);
-    $days = $this->solar->subtract($jieQi->getSolar());
     $max = count(LunarUtil::$HOU) - 1;
-    $offset = floor($days / 5);
+    $offset = floor($this->solar->subtract($jieQi->getSolar()) / 5);
     if ($offset > $max) {
       $offset = $max;
     }

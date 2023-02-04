@@ -113,8 +113,7 @@ class SolarHalfYear
    */
   public function next($halfYears)
   {
-    $month = SolarMonth::fromYm($this->year, $this->month);
-    $month = $month->next(self::$MONTH_COUNT * $halfYears);
+    $month = SolarMonth::fromYm($this->year, $this->month)->next(self::$MONTH_COUNT * $halfYears);
     return new SolarHalfYear($month->getYear(), $month->getMonth());
   }
 
