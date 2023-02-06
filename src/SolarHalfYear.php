@@ -32,8 +32,8 @@ class SolarHalfYear
 
   function __construct($year, $month)
   {
-    $this->year = $year;
-    $this->month = $month;
+    $this->year = intval($year);
+    $this->month = intval($month);
   }
 
   public function toString()

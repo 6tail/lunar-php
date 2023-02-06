@@ -344,4 +344,13 @@ class EightCharTest extends TestCase
     $this->assertEquals($expected, $actual);
   }
 
+  public function test17()
+  {
+    $lunar = Solar::fromYmdHms('1999', '06', '07', '09', '11', '00')->getLunar()->getEightChar();
+    $actual = $lunar->toString();
+
+    $expected = '己卯 庚午 庚寅 辛巳';
+    $this->assertEquals($expected, $actual);
+  }
+
 }

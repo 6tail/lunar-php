@@ -63,6 +63,7 @@ class LunarYear
   function __construct($lunarYear)
   {
     LunarYear::_initLeap();
+    $lunarYear = intval($lunarYear);
     $this->year = $lunarYear;
     $offset = $lunarYear - 4;
     $yearGanIndex = $offset % 10;

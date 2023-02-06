@@ -40,10 +40,10 @@ class SolarWeek
 
   function __construct($year, $month, $day, $start)
   {
-    $this->year = $year;
-    $this->month = $month;
-    $this->day = $day;
-    $this->start = $start;
+    $this->year = intval($year);
+    $this->month = intval($month);
+    $this->day = intval($day);
+    $this->start = intval($start);
   }
 
   public function toString()

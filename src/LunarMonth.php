@@ -37,9 +37,9 @@ class LunarMonth
 
   function __construct($lunarYear, $lunarMonth, $dayCount, $firstJulianDay)
   {
-    $this->year = $lunarYear;
-    $this->month = $lunarMonth;
-    $this->dayCount = $dayCount;
+    $this->year = intval($lunarYear);
+    $this->month = intval($lunarMonth);
+    $this->dayCount = intval($dayCount);
     $this->firstJulianDay = $firstJulianDay;
   }
 

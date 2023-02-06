@@ -25,7 +25,7 @@ class SolarYear
 
   function __construct($year)
   {
-    $this->year = $year;
+    $this->year = intval($year);
   }
 
   public function toString()

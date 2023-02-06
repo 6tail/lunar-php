@@ -196,12 +196,12 @@ class Lunar
 
   private function __construct($lunarYear, $lunarMonth, $lunarDay, $hour, $minute, $second, $solar, $y)
   {
-    $this->year = $lunarYear;
-    $this->month = $lunarMonth;
-    $this->day = $lunarDay;
-    $this->hour = $hour;
-    $this->minute = $minute;
-    $this->second = $second;
+    $this->year = intval($lunarYear);
+    $this->month = intval($lunarMonth);
+    $this->day = intval($lunarDay);
+    $this->hour = intval($hour);
+    $this->minute = intval($minute);
+    $this->second = intval($second);
     $this->solar = $solar;
     $this->compute($y);
   }

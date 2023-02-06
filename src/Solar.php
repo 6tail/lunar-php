@@ -62,6 +62,13 @@ class Solar
 
   function __construct($year, $month, $day, $hour, $minute, $second)
   {
+    $year = intval($year);
+    $month = intval($month);
+    $day = intval($day);
+    $hour = intval($hour);
+    $minute = intval($minute);
+    $second = intval($second);
+
     if (1582 == $year && 10 == $month) {
       if ($day > 4 && $day < 15) {
         throw new RuntimeException(sprintf('wrong solar year %d month %d day %d', $year, $month, $day));
@@ -190,9 +197,13 @@ class Solar
       $offsetYear += 60;
     }
     $startYear = $today->getYear() - $offsetYear - 1;
-    while ($startYear >= $baseYear) {
+    while (true) {
       $years[] = $startYear;
       $startYear -= 60;
+      if ($startYear < $baseYear) {
+        $years[] = $baseYear;
+        break;
+      }
     }
     $hour = 0;
     $timeZhi = substr($timeGanZhi, strlen($timeGanZhi) / 2);
