@@ -127,5 +127,11 @@ class SolarTest extends TestCase
     $days = SolarUtil::getDaysBetween(1582, 1, 1, 1583, 1, 1);
     $this->assertEquals(355, $days);
   }
+
+  public function test24()
+  {
+    $solar = Solar::fromYmd(1582, 10, 15);
+    $this->assertEquals('1582-09-30', $solar->next(-5)->toYmd());
+  }
   
 }

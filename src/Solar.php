@@ -445,27 +445,32 @@ class Solar
   {
     if ($this->year > $solar->getYear()) {
       return true;
-    } else if ($this->year < $solar->getYear()) {
+    }
+    if ($this->year < $solar->getYear()) {
       return false;
     }
     if ($this->month > $solar->getMonth()) {
       return true;
-    } else if ($this->month < $solar->getMonth()) {
+    }
+    if ($this->month < $solar->getMonth()) {
       return false;
     }
     if ($this->day > $solar->getDay()) {
       return true;
-    } else if ($this->day < $solar->getDay()) {
+    }
+    if ($this->day < $solar->getDay()) {
       return false;
     }
     if ($this->hour > $solar->getHour()) {
       return true;
-    } else if ($this->hour < $solar->getHour()) {
+    }
+    if ($this->hour < $solar->getHour()) {
       return false;
     }
     if ($this->minute > $solar->getMinute()) {
       return true;
-    } else if ($this->minute < $solar->getMinute()) {
+    }
+    if ($this->minute < $solar->getMinute()) {
       return false;
     }
     return $this->second > $solar->second;
@@ -480,27 +485,32 @@ class Solar
   {
     if ($this->year > $solar->getYear()) {
       return false;
-    } else if ($this->year < $solar->getYear()) {
+    }
+    if ($this->year < $solar->getYear()) {
       return true;
     }
     if ($this->month > $solar->getMonth()) {
       return false;
-    } else if ($this->month < $solar->getMonth()) {
+    }
+    if ($this->month < $solar->getMonth()) {
       return true;
     }
     if ($this->day > $solar->getDay()) {
       return false;
-    } else if ($this->day < $solar->getDay()) {
+    }
+    if ($this->day < $solar->getDay()) {
       return true;
     }
     if ($this->hour > $solar->getHour()) {
       return false;
-    } else if ($this->hour < $solar->getHour()) {
+    }
+    if ($this->hour < $solar->getHour()) {
       return true;
     }
     if ($this->minute > $solar->getMinute()) {
       return false;
-    } else if ($this->minute < $solar->getMinute()) {
+    }
+    if ($this->minute < $solar->getMinute()) {
       return true;
     }
     return $this->second < $solar->second;
@@ -519,8 +529,7 @@ class Solar
     if (2 == $m) {
       if ($d > 28) {
         if (!SolarUtil::isLeapYear($y)) {
-          $d -= 28;
-          $m++;
+          $d = 28;
         }
       }
     }
@@ -547,8 +556,7 @@ class Solar
     if (2 == $m) {
       if ($d > 28) {
         if (!SolarUtil::isLeapYear($y)) {
-          $d -= 28;
-          $m++;
+          $d = 28;
         }
       }
     }
@@ -570,33 +578,36 @@ class Solar
     $y = $this->year;
     $m = $this->month;
     $d = $this->day;
+    if (1582 == $y && 10 == $m) {
+      if ($d > 4) {
+        $d -= 10;
+		}
+    }
     if ($days > 0) {
-      $d = $this->day + $days;
+      $d += $days;
       $daysInMonth = SolarUtil::getDaysOfMonth($y, $m);
       while ($d > $daysInMonth) {
         $d -= $daysInMonth;
         $m++;
         if ($m > 12) {
-          $m -= 12;
+          $m = 1;
           $y++;
         }
         $daysInMonth = SolarUtil::getDaysOfMonth($y, $m);
       }
     } else if ($days < 0) {
-      $rest = -$days;
-      while ($d <= $rest) {
-        $rest -= $d;
+      while ($d + $days <= 0) {
         $m--;
         if ($m < 1) {
           $m = 12;
           $y--;
         }
-        $d = SolarUtil::getDaysOfMonth($y, $m);
+        $d += SolarUtil::getDaysOfMonth($y, $m);
       }
-      $d -= $rest;
+      $d += $days;
     }
     if (1582 == $y && 10 == $m) {
-      if ($d > 4 && $d < 15) {
+      if ($d > 4) {
         $d += 10;
       }
     }
