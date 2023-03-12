@@ -165,8 +165,7 @@ class SolarWeek
               $week = SolarWeek::fromYmd($solar->getYear(), $solar->getMonth(), $solar->getDay(), $this->start);
             }
           } else {
-            $size = SolarUtil::getWeeksOfMonth($week->getYear(), $week->getMonth(), $week->getStart());
-            if ($size === $index) {
+            if (SolarUtil::getWeeksOfMonth($week->getYear(), $week->getMonth(), $week->getStart()) === $index) {
               $lastDay = $week->getFirstDay()->next(6);
               $week = SolarWeek::fromYmd($lastDay->getYear(), $lastDay->getMonth(), $lastDay->getDay(), $this->start);
               $weekMonth = $week->getMonth();

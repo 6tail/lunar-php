@@ -162,12 +162,42 @@ class LunarYear
   }
 
   /**
-   * 获取本年的月份
+   * 获取月份
    * @return LunarMonth[]
    */
   public function getMonths()
   {
     return $this->months;
+  }
+
+  /**
+   * 获取总天数
+   * @return int
+   */
+  public function getDayCount()
+  {
+    $n = 0;
+    foreach ($this->months as $m) {
+      if ($m->getYear() == $this->year) {
+        $n += $m->getDayCount();
+      }
+    }
+    return $n;
+  }
+
+  /**
+   * 获取本年的月份
+   * @return LunarMonth[]
+   */
+  public function getMonthsInYear()
+  {
+    $l = array();
+    foreach ($this->months as $m) {
+      if ($m->getYear() == $this->year) {
+        $l[] = $m;
+      }
+    }
+    return $l;
   }
 
   /**
@@ -225,7 +255,9 @@ class LunarYear
     //冬至前的初一
     $w = ShouXingUtil::calcShuo($jq[0]);
     if ($w > $jq[0]) {
-      $w -= 29.5306;
+      if ($currentYear != 41 && $currentYear != 193 && $currentYear != 288 && $currentYear != 345 && $currentYear != 918 && $currentYear != 1013) {
+        $w -= 29.5306;
+      }
     }
     // 递推每月初一
     for ($i = 0; $i < 16; $i++) {
@@ -236,42 +268,38 @@ class LunarYear
       $dayCounts[] = (int)($hs[$i + 1] - $hs[$i]);
     }
 
-    $currentYearLeap = -1;
-    if (array_key_exists('_' . $currentYear, LunarYear::$LEAP)) {
-      $currentYearLeap = LunarYear::$LEAP['_' . $currentYear];
-    } else {
-      if ($hs[13] <= $jq[24]) {
-        $i = 1;
-        while ($hs[$i + 1] > $jq[2 * $i] && $i < 13) {
-          $i++;
-        }
-        $currentYearLeap = $i;
-      }
-    }
-
     $prevYear = $currentYear - 1;
-    $prevYearLeap = -1;
-    if (array_key_exists('_' . $prevYear, LunarYear::$LEAP)) {
-      $prevYearLeap = LunarYear::$LEAP['_' . $prevYear] - 12;
+    $leapYear = -1;
+    $leapIndex = -1;
+
+    if (array_key_exists('_' . $currentYear, LunarYear::$LEAP)) {
+      $leapYear = $currentYear;
+      $leapIndex = LunarYear::$LEAP['_' . $currentYear];
+    } else {
+      if (array_key_exists('_' . $prevYear, LunarYear::$LEAP)) {
+        $leapYear = $prevYear;
+        $leapIndex = LunarYear::$LEAP['_' . $prevYear] - 12;
+      } else {
+        if ($hs[13] <= $jq[24]) {
+          $i = 1;
+          while ($hs[$i + 1] > $jq[2 * $i] && $i < 13) {
+            $i++;
+          }
+          $leapYear = $currentYear;
+          $leapIndex = $i;
+        }
+      }
     }
 
     $y = $prevYear;
     $m = 11;
     for ($i = 0, $j = count($dayCounts); $i < $j; $i++) {
       $cm = $m;
-      $isNextLeap = false;
-      if ($y == $currentYear && $i == $currentYearLeap) {
+      if ($y == $leapYear && $i == $leapIndex) {
         $cm = -$cm;
-      } else if ($y == $prevYear && $i == $prevYearLeap) {
-        $cm = -$cm;
-      }
-      if ($y == $currentYear && $i + 1 == $currentYearLeap) {
-        $isNextLeap = true;
-      } else if ($y == $prevYear && $i + 1 == $prevYearLeap) {
-        $isNextLeap = true;
       }
       $this->months[] = new LunarMonth($y, $cm, $dayCounts[$i], $hs[$i] + Solar::$J2000);
-      if (!$isNextLeap) {
+      if ($y != $leapYear || $i + 1 != $leapIndex) {
         $m++;
       }
       if ($m == 13) {

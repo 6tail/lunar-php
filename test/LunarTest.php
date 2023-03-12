@@ -373,4 +373,28 @@ class LunarTest extends TestCase
     $this->assertEquals('1582-10-15', $lunar->getSolar()->toYmd());
   }
 
+  public function test59()
+  {
+    $lunar = Lunar::fromYmd(41, 1, 1);
+    $this->assertEquals('0041-02-20', $lunar->getSolar()->toYmd());
+  }
+
+  public function test60()
+  {
+    $lunar = Lunar::fromYmd(345, 1, 1);
+    $this->assertEquals('0345-02-18', $lunar->getSolar()->toYmd());
+  }
+
+  public function test61()
+  {
+    $lunar = Lunar::fromYmd(1051, 1, 1);
+    $this->assertEquals('1051-02-14', $lunar->getSolar()->toYmd());
+  }
+
+  public function test62()
+  {
+    $lunar = Lunar::fromYmd(1537, 1, 1);
+    $this->assertEquals('1537-02-10', $lunar->getSolar()->toYmd());
+  }
+
 }

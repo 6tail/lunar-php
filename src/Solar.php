@@ -74,6 +74,12 @@ class Solar
         throw new RuntimeException(sprintf('wrong solar year %d month %d day %d', $year, $month, $day));
       }
     }
+    if ($month < 1 || $month > 12) {
+      throw new RuntimeException(sprintf('wrong month %d', $month));
+    }
+    if ($day < 1 || $day > 31) {
+      throw new RuntimeException(sprintf('wrong day %d', $day));
+    }
     if ($hour < 0 || $hour > 23) {
       throw new RuntimeException(sprintf('wrong hour %d', $hour));
     }
@@ -197,26 +203,32 @@ class Solar
       $offsetYear += 60;
     }
     $startYear = $today->getYear() - $offsetYear - 1;
-    while (true) {
+    $minYear = $baseYear - 2;
+    while ($startYear >= $minYear) {
       $years[] = $startYear;
       $startYear -= 60;
-      if ($startYear < $baseYear) {
-        $years[] = $baseYear;
-        break;
-      }
     }
-    $hour = 0;
+    $hours = array();
     $timeZhi = substr($timeGanZhi, strlen($timeGanZhi) / 2);
-    for ($i = 0, $j = count(LunarUtil::$ZHI); $i < $j; $i++) {
+    for ($i = 1, $j = count(LunarUtil::$ZHI); $i < $j; $i++) {
       if (strcmp(LunarUtil::$ZHI[$i], $timeZhi) === 0) {
-        $hour = ($i - 1) * 2;
+        $hours[] = ($i - 1) * 2;
       }
     }
-    foreach ($years as $y) {
-      inner: for ($x = 0; $x < 3; $x++) {
-        $year = $y + $x;
-        $solar = self::fromYmdHms($year, 1, 1, $hour, 0, 0);
-        while ($solar->getYear() == $year) {
+    if (strcmp('子', $timeZhi) === 0) {
+      $hours[] = 23;
+    }
+    foreach ($hours as $hour) {
+      foreach ($years as $y) {
+        $maxYear = $y + 3;
+        $year = $y;
+        $month = 11;
+        if ($year < $baseYear) {
+          $year = $baseYear;
+          $month = 1;
+        }
+        $solar = self::fromYmdHms($year, $month, 1, $hour, 0, 0);
+        while ($solar->getYear() <= $maxYear) {
           $lunar = $solar->getLunar();
           $dgz = (2 == $sect) ? $lunar->getDayInGanZhiExact2() : $lunar->getDayInGanZhiExact();
           if (strcmp($lunar->getYearInGanZhiExact(), $yearGanZhi) == 0 && strcmp($lunar->getMonthInGanZhiExact(), $monthGanZhi) == 0 && strcmp($dgz, $dayGanZhi) == 0 && strcmp($lunar->getTimeInGanZhi(), $timeGanZhi) == 0) {
@@ -547,8 +559,7 @@ class Solar
    * @return Solar 阳历
    */
   public function nextMonth($months) {
-    $month = SolarMonth::fromYm($this->year, $this->month);
-    $month = $month->next($months);
+    $month = SolarMonth::fromYm($this->year, $this->month)->next($months);
     $y = $month->getYear();
     $m = $month->getMonth();
     $d = $this->day;
@@ -670,7 +681,7 @@ class Solar
     $solar = self::fromYmdHms($this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second);
     if ($days != 0) {
       $rest = abs($days);
-      $add = $days < 1 ? -1 : 1;
+      $add = $days < 0 ? -1 : 1;
       while ($rest > 0) {
         $solar = $solar->next($add);
         $work = true;

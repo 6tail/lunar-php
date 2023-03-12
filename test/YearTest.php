@@ -54,4 +54,28 @@ class YearTest extends TestCase
     $this->assertEquals('三日得金', $year->getDeJin());
   }
 
+  public function test7()
+  {
+    $year = LunarYear::fromYear(2023);
+    $this->assertEquals(384, $year->getDayCount());
+  }
+
+  public function test8()
+  {
+    $year = LunarYear::fromYear(2021);
+    $this->assertEquals(354, $year->getDayCount());
+  }
+
+  public function test9()
+  {
+    $year = LunarYear::fromYear(2022);
+    $this->assertEquals(355, $year->getDayCount());
+  }
+
+  public function test10()
+  {
+    $year = LunarYear::fromYear(1518);
+    $this->assertEquals(355, $year->getDayCount());
+  }
+
 }

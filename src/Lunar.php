@@ -262,9 +262,7 @@ class Lunar
     $lunarMonth = 0;
     $lunarDay = 0;
     foreach ($ly->getMonths() as $m) {
-      // 初一
-      $firstDay = Solar::fromJulianDay($m->getFirstJulianDay());
-      $days = $solar->subtract($firstDay);
+      $days = $solar->subtract(Solar::fromJulianDay($m->getFirstJulianDay()));
       if ($days < $m->getDayCount()) {
         $lunarYear = $m->getYear();
         $lunarMonth = $m->getMonth();
@@ -2757,8 +2755,7 @@ class Lunar
       $start = $this->jieQi['冬至'];
       $start = Solar::fromYmd($start->getYear(), $start->getMonth(), $start->getDay());
     }
-    $end = Solar::fromYmd($start->getYear(), $start->getMonth(), $start->getDay());
-    $end = $end->next(81);
+    $end = Solar::fromYmd($start->getYear(), $start->getMonth(), $start->getDay())->next(81);
     if ($current->isBefore($start) || (!$current->isBefore($end))) {
       return null;
     }
