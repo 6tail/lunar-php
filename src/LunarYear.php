@@ -293,17 +293,20 @@ class LunarYear
 
     $y = $prevYear;
     $m = 11;
+    $index = $m;
     for ($i = 0, $j = count($dayCounts); $i < $j; $i++) {
       $cm = $m;
       if ($y == $leapYear && $i == $leapIndex) {
         $cm = -$cm;
       }
-      $this->months[] = new LunarMonth($y, $cm, $dayCounts[$i], $hs[$i] + Solar::$J2000);
+      $this->months[] = new LunarMonth($y, $cm, $dayCounts[$i], $hs[$i] + Solar::$J2000, $index);
       if ($y != $leapYear || $i + 1 != $leapIndex) {
         $m++;
       }
+      $index++;
       if ($m == 13) {
         $m = 1;
+        $index = 1;
         $y++;
       }
     }

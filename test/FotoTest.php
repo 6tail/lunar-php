@@ -12,4 +12,10 @@ class FotoTest extends TestCase
     $this->assertEquals('二五六五年十月十四 (三元降) (四天王巡行)', $foto->toFullString());
   }
 
+  public function test1()
+  {
+    $foto = Foto::fromLunar(Lunar::fromYmd(2021, 3, 16));
+    $this->assertEquals(array('准提菩萨圣诞'), $foto->getOtherFestivals());
+  }
+
 }

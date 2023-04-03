@@ -88,7 +88,24 @@ class Foto
    */
   public function getFestivals()
   {
-    return FotoUtil::getFestivals($this->getMonth() . '-' . $this->getDay());
+    return FotoUtil::getFestivals(abs($this->getMonth()) . '-' . $this->getDay());
+  }
+
+  /**
+   * 获取纪念日
+   *
+   * @return string[] 纪念日列表
+   */
+  public function getOtherFestivals()
+  {
+    $l = array();
+    $key = $this->getMonth() . '-' . $this->getDay();
+    if (!empty(FotoUtil::$OTHER_FESTIVAL[$key])) {
+      foreach (FotoUtil::$OTHER_FESTIVAL[$key] as $f) {
+        $l[] = $f;
+      }
+    }
+    return $l;
   }
 
   public function isMonthZhai()

@@ -186,8 +186,7 @@ class EightChar
 
   private function getDiShi($zhiIndex)
   {
-    $offset = EightChar::$CHANG_SHENG_OFFSET[$this->getDayGan()];
-    $index = $offset + ($this->getDayGanIndex() % 2 == 0 ? $zhiIndex : 0 - $zhiIndex);
+    $index = EightChar::$CHANG_SHENG_OFFSET[$this->getDayGan()] + ($this->getDayGanIndex() % 2 == 0 ? $zhiIndex : 0 - $zhiIndex);
     if ($index >= 12) {
       $index -= 12;
     }

@@ -111,7 +111,7 @@ class LunarUtil
 
   public static $DAY = array('', '初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十', '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十');
 
-  public static $YUE_XIANG = array('', '朔', '既朔', '蛾眉新', '蛾眉新', '蛾眉', '夕月', '上弦', '上弦', '九夜', '宵', '宵', '宵', '渐盈凸', '小望', '望', '既望', '立待', '居待', '寝待', '更待', '渐亏凸', '下弦', '下弦', '有明', '有明', '蛾眉残', '蛾眉残', '残', '晓', '晦');
+  public static $YUE_XIANG = array('', '朔', '既朔', '蛾眉新', '蛾眉新', '蛾眉', '夕', '上弦', '上弦', '九夜', '宵', '宵', '宵', '渐盈凸', '小望', '望', '既望', '立待', '居待', '寝待', '更待', '渐亏凸', '下弦', '下弦', '有明', '有明', '蛾眉残', '蛾眉残', '残', '晓', '晦');
 
   /**
    * 农历日期对应的节日
@@ -1047,8 +1047,7 @@ class LunarUtil
         $ys = substr($left, strpos($left, ':') + 1, strlen($left));
         $ys = substr($ys, 0, strpos($ys, ','));
         for ($i = 0, $j = strlen($ys); $i < $j; $i += 2) {
-          $m = substr($ys, $i, 2);
-          $l[] = self::$YI_JI[hexdec($m)];
+          $l[] = self::$YI_JI[hexdec(substr($ys, $i, 2))];
         }
         break;
       }
@@ -1091,8 +1090,7 @@ class LunarUtil
       if ($matched) {
         $ys = substr($left, strpos($left, ',') + 1, strlen($left));
         for ($i = 0, $j = strlen($ys); $i < $j; $i += 2) {
-          $m = substr($ys, $i, 2);
-          $l[] = self::$YI_JI[hexdec($m)];
+          $l[] = self::$YI_JI[hexdec(substr($ys, $i, 2))];
         }
         break;
       }
@@ -1123,8 +1121,7 @@ class LunarUtil
       }
       $js = substr($left, 0, strpos($left, ','));
       for ($i = 0, $j = strlen($js); $i < $j; $i += 2) {
-        $m = substr($js, $i, 2);
-        $l[] = self::$SHEN_SHA[hexdec($m)];
+        $l[] = self::$SHEN_SHA[hexdec(substr($js, $i, 2))];
       }
     }
     if (count($l) < 1) {
@@ -1152,8 +1149,7 @@ class LunarUtil
       }
       $xs = substr($left, strpos($left, ',') + 1, strlen($left));
       for ($i = 0, $j = strlen($xs); $i < $j; $i += 2) {
-        $m = substr($xs, $i, 2);
-        $l[] = self::$SHEN_SHA[hexdec($m)];
+        $l[] = self::$SHEN_SHA[hexdec(substr($xs, $i, 2))];
       }
     }
     if (count($l) < 1) {
@@ -1181,8 +1177,7 @@ class LunarUtil
       }
       $ys = substr($left, 0, strpos($left, ','));
       for ($i = 0, $j = strlen($ys); $i < $j; $i += 2) {
-        $m = substr($ys, $i, 2);
-        $l[] = self::$YI_JI[hexdec($m)];
+        $l[] = self::$YI_JI[hexdec(substr($ys, $i, 2))];
       }
     }
     if (count($l) < 1) {
@@ -1210,8 +1205,7 @@ class LunarUtil
       }
       $js = substr($left, strpos($left, ',') + 1, strlen($left));
       for ($i = 0, $j = strlen($js); $i < $j; $i += 2) {
-        $m = substr($js, $i, 2);
-        $l[] = self::$YI_JI[hexdec($m)];
+        $l[] = self::$YI_JI[hexdec(substr($js, $i, 2))];
       }
     }
     if (count($l) < 1) {

@@ -273,9 +273,7 @@ class LunarTime
    */
   public function getTianShen()
   {
-    $dayZhi = $this->lunar->getDayZhiExact();
-    $offset = LunarUtil::$ZHI_TIAN_SHEN_OFFSET[$dayZhi];
-    return LunarUtil::$TIAN_SHEN[($this->zhiIndex + $offset) % 12 + 1];
+    return LunarUtil::$TIAN_SHEN[($this->zhiIndex + LunarUtil::$ZHI_TIAN_SHEN_OFFSET[$this->lunar->getDayZhiExact()]) % 12 + 1];
   }
 
   /**

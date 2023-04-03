@@ -1867,9 +1867,7 @@ class Lunar
    */
   public function getDayTianShen()
   {
-    $monthZhi = $this->getMonthZhi();
-    $offset = LunarUtil::$ZHI_TIAN_SHEN_OFFSET[$monthZhi];
-    return LunarUtil::$TIAN_SHEN[($this->dayZhiIndex + $offset) % 12 + 1];
+    return LunarUtil::$TIAN_SHEN[($this->dayZhiIndex + LunarUtil::$ZHI_TIAN_SHEN_OFFSET[$this->getMonthZhi()]) % 12 + 1];
   }
 
   /**
@@ -1878,9 +1876,7 @@ class Lunar
    */
   public function getTimeTianShen()
   {
-    $dayZhi = $this->getDayZhiExact();
-    $offset = LunarUtil::$ZHI_TIAN_SHEN_OFFSET[$dayZhi];
-    return LunarUtil::$TIAN_SHEN[($this->timeZhiIndex + $offset) % 12 + 1];
+    return LunarUtil::$TIAN_SHEN[($this->timeZhiIndex + LunarUtil::$ZHI_TIAN_SHEN_OFFSET[$this->getDayZhiExact()]) % 12 + 1];
   }
 
   /**
