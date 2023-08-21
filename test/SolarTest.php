@@ -45,7 +45,7 @@ class SolarTest extends TestCase
 
   public function test10()
   {
-    $this->assertEquals(false, SolarUtil::isLeapYear(1500));
+    $this->assertEquals(true, SolarUtil::isLeapYear(1500));
   }
 
   public function test11()

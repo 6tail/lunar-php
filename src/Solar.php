@@ -151,6 +151,10 @@ class Solar
       $minute -= 60;
       $hour++;
     }
+    if ($hour > 23) {
+      $hour -= 24;
+      $day++;
+    }
 
     return self::fromYmdHms($year, $month, $day, $hour, $minute, $second);
   }
@@ -700,6 +704,58 @@ class Solar
       }
     }
     return $solar;
+  }
+
+  /**
+   * 获取薪资比例(感谢 https://gitee.com/smr1987)
+   * @return int 薪资比例：1/2/3
+   */
+  public function getSalaryRate()
+  {
+    // 元旦节
+    if ($this->month == 1 && $this->day == 1) {
+      return 3;
+    }
+    // 劳动节
+    if ($this->month == 5 && $this->day == 1) {
+      return 3;
+    }
+    // 国庆
+    if ($this->month == 10 && $this->day >= 1 && $this->day <= 3) {
+      return 3;
+    }
+    $lunar = $this->getLunar();
+    // 春节
+    if ($lunar->getMonth() == 1 && $lunar->getDay() >= 1 && $lunar->getDay() <= 3) {
+      return 3;
+    }
+    // 端午
+    if ($lunar->getMonth() == 5 && $lunar->getDay() == 5) {
+      return 3;
+    }
+    // 中秋
+    if ($lunar->getMonth() == 8 && $lunar->getDay() == 15) {
+      return 3;
+    }
+    // 清明
+    if (strcmp('清明', $lunar->getJieQi()) === 0) {
+      return 3;
+    }
+    $holiday = HolidayUtil::getHolidayByYmd($this->year, $this->month, $this->day);
+    if (null != $holiday) {
+      // 法定假日非上班
+      if (!$holiday->isWork()) {
+        return 2;
+      }
+    } else {
+      // 周末
+      $week = $this->getWeek();
+      if ($week == 6 || $week == 0) {
+        return 2;
+      }
+    }
+    // 工作日
+    return 1;
   }
 
 }

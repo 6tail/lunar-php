@@ -25,3 +25,7 @@ Output:
 ## Documentation
 
 Please visit [https://6tail.cn/calendar/api.html](https://6tail.cn/calendar/api.html "https://6tail.cn/calendar/api.html")
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=6tail/lunar-php&type=Date)](https://star-history.com/#6tail/lunar-php&Date)
