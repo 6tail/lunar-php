@@ -133,5 +133,29 @@ class SolarTest extends TestCase
     $solar = Solar::fromYmd(1582, 10, 15);
     $this->assertEquals('1582-09-30', $solar->next(-5)->toYmd());
   }
+
+  public function test25()
+  {
+    $solar = Solar::fromYmd(2023, 8, 31);
+    $this->assertEquals('2023-09-30', $solar->nextMonth(1)->toYmd());
+  }
+
+  public function test26()
+  {
+    $solar = Solar::fromYmd(2023, 8, 31);
+    $this->assertEquals('2023-10-31', $solar->nextMonth(2)->toYmd());
+  }
+
+  public function test27()
+  {
+    $solar = Solar::fromYmd(2023, 8, 31);
+    $this->assertEquals('2024-02-29', $solar->nextMonth(6)->toYmd());
+  }
+
+  public function test28()
+  {
+    $solar = Solar::fromYmd(2023, 8, 31);
+    $this->assertEquals('2025-08-31', $solar->nextYear(2)->toYmd());
+  }
   
 }
