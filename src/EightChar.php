@@ -170,7 +170,7 @@ class EightChar
     $hideGan = LunarUtil::$ZHI_HIDE_GAN[$zhi];
     $l = array();
     foreach ($hideGan as $gan) {
-      $l[] = LunarUtil::$SHI_SHEN_ZHI[$this->getDayGan() . $zhi . $gan];
+      $l[] = LunarUtil::$SHI_SHEN_ZHI[$this->getDayGan() . $gan];
     }
     return $l;
   }

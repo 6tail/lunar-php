@@ -178,7 +178,7 @@ class Solar
    * @param string $monthGanZhi 月柱
    * @param string $dayGanZhi 日柱
    * @param string $timeGanZhi 时柱
-   * @param int sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
+   * @param int $sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
    * @return Solar[] 符合的阳历列表
    */
   public static function fromBaZiBySect($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect)
@@ -192,7 +192,7 @@ class Solar
    * @param string $monthGanZhi 月柱
    * @param string $dayGanZhi 日柱
    * @param string $timeGanZhi 时柱
-   * @param int sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
+   * @param int $sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
    * @param int $baseYear 起始年
    * @return Solar[]
    */
