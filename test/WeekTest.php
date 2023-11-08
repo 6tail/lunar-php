@@ -84,4 +84,39 @@ class WeekTest extends TestCase
     $this->assertEquals(2, $solar->getWeek());
   }
 
+  public function test9()
+  {
+    $this->assertEquals(0, Solar::fromYmd(1129, 11, 17)->getWeek());
+  }
+
+  public function test10()
+  {
+    $this->assertEquals(5, Solar::fromYmd(1129, 11, 1)->getWeek());
+  }
+
+  public function test11()
+  {
+    $this->assertEquals(4, Solar::fromYmd(8, 11, 1)->getWeek());
+  }
+
+  public function test12()
+  {
+    $this->assertEquals(0, Solar::fromYmd(1582, 9, 30)->getWeek());
+  }
+
+  public function test13()
+  {
+    $this->assertEquals(1, Solar::fromYmd(1582, 1, 1)->getWeek());
+  }
+
+  public function test14()
+  {
+    $this->assertEquals(6, Solar::fromYmd(1500, 2, 29)->getWeek());
+  }
+
+  public function test15()
+  {
+    $this->assertEquals(3, Solar::fromYmd(9865, 7, 26)->getWeek());
+  }
+
 }

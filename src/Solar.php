@@ -649,25 +649,7 @@ class Solar
    */
   public function getWeek()
   {
-    $start = self::fromYmd(1582, 10, 15);
-    $y = $this->year;
-    $m = $this->month;
-    $d = $this->day;
-    $current = self::fromYmd($y, $m, $d);
-    // 蔡勒公式
-    if ($m < 3) {
-      $m += 12;
-      $y--;
-    }
-    $c = (int)($y / 100);
-    $y = $y - $c * 100;
-    $x = $y + (int)($y / 4) + (int)($c / 4) - 2 * $c;
-    if ($current->isBefore($start)) {
-      $w = ($x + (int)((13 * ($m + 1)) / 5) + $d + 2) % 7;
-    } else {
-      $w = ($x + (int)((26 * ($m + 1)) / 10) + $d - 1) % 7;
-    }
-    return ($w + 7) % 7;
+    return ((int)$this->getJulianDay() + 7000002) % 7;
   }
 
   /**

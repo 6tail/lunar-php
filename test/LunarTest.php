@@ -329,7 +329,7 @@ class LunarTest extends TestCase
   public function test52()
   {
     $solar = Solar::fromYmd(2011, 11, 12);
-    $this->assertEquals('厕灶厨 外西南', $solar->getLunar()->getDayPositionTai());
+    $this->assertEquals('厨灶厕 外西南', $solar->getLunar()->getDayPositionTai());
   }
 
   public function test53()

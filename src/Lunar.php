@@ -2786,19 +2786,15 @@ class Lunar
     $start = $start->next(10);
     $days = $current->subtract($start);
     $liQiuSolar = Solar::fromYmd($liQiu->getYear(), $liQiu->getMonth(), $liQiu->getDay());
-    if (!$liQiuSolar->isAfter($start)) {
-      if ($days < 10) {
-        return new Fu('末伏', $days + 1);
-      }
-    } else {
+    if ($liQiuSolar->isAfter($start)) {
       if ($days < 10) {
         return new Fu('中伏', $days + 11);
       }
       $start = $start->next(10);
       $days = $current->subtract($start);
-      if ($days < 10) {
-        return new Fu('末伏', $days + 1);
-      }
+    }
+    if ($days < 10) {
+      return new Fu('末伏', $days + 1);
     }
     return null;
   }

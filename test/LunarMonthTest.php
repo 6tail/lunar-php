@@ -52,4 +52,10 @@ class LunarMonthTest extends TestCase
     $this->assertEquals('壬寅', $month->getGanZhi());
   }
 
+  public function test7()
+  {
+    $month = LunarMonth::fromYm(2016, 1);
+    $this->assertEquals(1, $month->getIndex());
+  }
+
 }
