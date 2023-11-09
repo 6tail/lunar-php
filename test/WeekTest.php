@@ -119,4 +119,16 @@ class WeekTest extends TestCase
     $this->assertEquals(3, Solar::fromYmd(9865, 7, 26)->getWeek());
   }
 
+  public function test16()
+  {
+    $this->assertEquals(6, Solar::fromYmd(1961, 9, 30)->getWeek());
+    $this->assertEquals(6, Solar::fromYmdHms(1961, 9, 30, 23, 59, 59)->getWeek());
+  }
+
+  public function test17()
+  {
+    $this->assertEquals(3, Solar::fromYmdHms(2021, 9, 15, 20, 0, 0)->getWeek());
+    $this->assertEquals(3, Solar::fromYmdHms(2021, 9, 15, 23, 59, 59)->getWeek());
+  }
+
 }

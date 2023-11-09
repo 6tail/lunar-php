@@ -649,7 +649,7 @@ class Solar
    */
   public function getWeek()
   {
-    return ((int)$this->getJulianDay() + 7000002) % 7;
+    return ((int)($this->getJulianDay() + 0.5) + 7000001) % 7;
   }
 
   /**
