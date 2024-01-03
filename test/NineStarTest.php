@@ -9,7 +9,7 @@ class NineStarTest extends TestCase
   public function test1()
   {
     $lunar = Solar::fromYmd(1985, 2, 19)->getLunar();
-    $this->assertEquals("六", $lunar->getYearNineStar()->getNumber());
+    $this->assertEquals('六', $lunar->getYearNineStar()->getNumber());
   }
 
   public function test22()

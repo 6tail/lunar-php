@@ -202,7 +202,7 @@ class Solar
     $l = array();
     $years = array();
     $today = self::fromDate(new DateTime());
-    $offsetYear = LunarUtil::getJiaZiIndex($today->getLunar()->getYearInGanZhiExact()) - LunarUtil::getJiaZiIndex($yearGanZhi);
+    $offsetYear = ($today->getYear() - 4) % 60  - LunarUtil::getJiaZiIndex($yearGanZhi);
     if ($offsetYear < 0) {
       $offsetYear += 60;
     }

@@ -303,3 +303,20 @@ $times = $lunar->getTimes();
 foreach ($times as $time) {
   echo $time->getPositionFuBySect(2) . "\n";
 }
+
+$jinYear = 2023;
+$solar = Solar::fromYmdHms(2023, 11, 29, 0, 0, 0);
+$lunar = $solar->getLunar();
+$eightChar = $lunar->getEightChar();
+$yun = $eightChar->getYun(1);
+$dayuns = $yun->getDaYun();
+foreach ($dayuns as $dayun) {
+  $startYear = $dayun->getStartYear();
+  $endYear = $dayun->getEndYear();
+  echo $dayun->getGanZhi()." " .$startYear. " ". $endYear . "\n";
+  if ($jinYear >= $startYear && $jinYear <= $endYear) {
+    $dangQianDaYun = $dayun;
+  }
+}
+echo "\n";
+echo $dangQianDaYun->getGanZhi(). "\n";

@@ -157,7 +157,7 @@ class EightChar
    */
   public function getYearShiShenGan()
   {
-    return LunarUtil::$SHI_SHEN_GAN[$this->getDayGan() . $this->getYearGan()];
+    return LunarUtil::$SHI_SHEN[$this->getDayGan() . $this->getYearGan()];
   }
 
   /**
@@ -170,7 +170,7 @@ class EightChar
     $hideGan = LunarUtil::$ZHI_HIDE_GAN[$zhi];
     $l = array();
     foreach ($hideGan as $gan) {
-      $l[] = LunarUtil::$SHI_SHEN_ZHI[$this->getDayGan() . $gan];
+      $l[] = LunarUtil::$SHI_SHEN[$this->getDayGan() . $gan];
     }
     return $l;
   }
@@ -265,7 +265,7 @@ class EightChar
    */
   public function getMonthShiShenGan()
   {
-    return LunarUtil::$SHI_SHEN_GAN[$this->getDayGan() . $this->getMonthGan()];
+    return LunarUtil::$SHI_SHEN[$this->getDayGan() . $this->getMonthGan()];
   }
 
   /**
@@ -445,7 +445,7 @@ class EightChar
    */
   public function getTimeShiShenGan()
   {
-    return LunarUtil::$SHI_SHEN_GAN[$this->getDayGan() . $this->getTimeGan()];
+    return LunarUtil::$SHI_SHEN[$this->getDayGan() . $this->getTimeGan()];
   }
 
   /**

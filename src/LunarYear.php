@@ -248,7 +248,7 @@ class LunarYear
       $this->jieQiJulianDays[] = $jd + Solar::$J2000;
     }
 
-    // 冬至前的初一，今年"首朔"的日月黄经差w
+    // 冬至前的初一，今年首朔的日月黄经差w
     $w = ShouXingUtil::calcShuo($jq[0]);
     if ($w > $jq[0]) {
       $w -= 29.53;
