@@ -218,7 +218,7 @@ class EightCharTest extends TestCase
     $solar = Solar::fromYmdHms(1994, 12, 6, 2, 0, 0);
     $lunar = $solar->getLunar();
     $eightChar = $lunar->getEightChar();
-    $this->assertEquals('丁丑', $eightChar->getShenGong());
+    $this->assertEquals('乙丑', $eightChar->getShenGong());
   }
 
   public function testShenGong2()
@@ -398,6 +398,18 @@ class EightCharTest extends TestCase
     }
 
     $expected = array('1875-09-20 18:00:00', '1815-10-05 18:00:00', '1635-09-18 18:00:00', '1575-09-23 18:00:00', '1395-09-08 18:00:00', '1335-09-23 18:00:00', '1155-09-08 18:00:00', '1095-09-23 18:00:00');
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function test22()
+  {
+    $solarList = Solar::fromBaZi('癸卯','乙卯','丙辰','丁酉');
+    $actual = array();
+    foreach ($solarList as $solar) {
+      $actual[] = $solar->toYmdHms();
+    }
+
+    $expected = array('1963-03-14 18:00:00', '1903-03-29 18:00:00');
     $this->assertEquals($expected, $actual);
   }
 
