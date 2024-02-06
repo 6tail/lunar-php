@@ -37,7 +37,7 @@ class LiuNian
   private $age;
 
   /**
-   * 阴历
+   * 农历
    * @var Lunar
    */
   private $lunar;
@@ -93,7 +93,7 @@ class LiuNian
   }
 
   /**
-   * 获取阴历
+   * 获取农历
    * @return Lunar
    */
   public function getLunar()

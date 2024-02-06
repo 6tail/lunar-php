@@ -49,7 +49,7 @@ class DaYun
   private $yun;
 
   /**
-   * 阴历
+   * 农历
    * @var Lunar
    */
   private $lunar;
@@ -135,7 +135,7 @@ class DaYun
   }
 
   /**
-   * 获取阴历
+   * 获取农历
    * @return Lunar
    */
   public function getLunar()

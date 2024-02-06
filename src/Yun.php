@@ -50,7 +50,7 @@ class Yun
   private $forward;
 
   /**
-   * 阴历日期
+   * 农历日期
    * @var Lunar
    */
   private $lunar;
@@ -176,7 +176,7 @@ class Yun
   }
 
   /**
-   * 获取阴历日期
+   * 获取农历日期
    * @return Lunar
    */
   public function getLunar()
@@ -185,7 +185,7 @@ class Yun
   }
 
   /**
-   * 获取起运的阳历日期
+   * 获取起运的公历日期
    * @return Solar
    */
   public function getStartSolar()

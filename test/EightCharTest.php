@@ -292,7 +292,7 @@ class EightCharTest extends TestCase
       $actual[] = $solar->toYmdHms();
     }
 
-    $expected = array('1976-09-21 12:00:00', '1916-10-06 12:00:00');
+    $expected = array('1916-10-06 12:00:00', '1976-09-21 12:00:00');
     $this->assertEquals($expected, $actual);
   }
 
@@ -316,7 +316,7 @@ class EightCharTest extends TestCase
       $actual[] = $solar->toYmdHms();
     }
 
-    $expected = array('1999-07-21 16:00:00', '1939-08-05 16:00:00');
+    $expected = array('1939-08-05 16:00:00', '1999-07-21 16:00:00');
     $this->assertEquals($expected, $actual);
   }
 
@@ -328,7 +328,7 @@ class EightCharTest extends TestCase
       $actual[] = $solar->toYmdHms();
     }
 
-    $expected = array('1960-12-17 12:00:00', '1901-01-01 12:00:00');
+    $expected = array('1901-01-01 12:00:00', '1960-12-17 12:00:00');
     $this->assertEquals($expected, $actual);
   }
 
@@ -340,7 +340,7 @@ class EightCharTest extends TestCase
       $actual[] = $solar->toYmdHms();
     }
 
-    $expected = array('2020-07-21 22:00:00', '1960-08-05 22:00:00');
+    $expected = array('1960-08-05 22:00:00', '2020-07-21 22:00:00');
     $this->assertEquals($expected, $actual);
   }
 
@@ -355,13 +355,13 @@ class EightCharTest extends TestCase
 
   public function test18()
   {
-    $solarList = Solar::fromBaZiBySectAndBaseYear('癸卯','甲寅','癸丑','甲子', 2, 1843);
+    $solarList = Solar::fromBaZiBySectAndBaseYear('癸卯','甲寅','甲寅','甲子', 2, 1843);
     $actual = array();
     foreach ($solarList as $solar) {
       $actual[] = $solar->toYmdHms();
     }
 
-    $expected = array('2023-02-24 23:00:00', '1843-02-08 23:00:00');
+    $expected = array('1843-02-09 00:00:00', '2023-02-25 00:00:00');
     $this->assertEquals($expected, $actual);
   }
 
@@ -373,7 +373,7 @@ class EightCharTest extends TestCase
       $actual[] = $solar->toYmdHms();
     }
 
-    $expected = array('1960-01-15 16:00:00', '1900-01-29 16:00:00');
+    $expected = array('1900-01-29 16:00:00', '1960-01-15 16:00:00');
     $this->assertEquals($expected, $actual);
   }
 
@@ -397,7 +397,7 @@ class EightCharTest extends TestCase
       $actual[] = $solar->toYmdHms();
     }
 
-    $expected = array('1875-09-20 18:00:00', '1815-10-05 18:00:00', '1635-09-18 18:00:00', '1575-09-23 18:00:00', '1395-09-08 18:00:00', '1335-09-23 18:00:00', '1155-09-08 18:00:00', '1095-09-23 18:00:00');
+    $expected = array('1095-09-23 18:00:00', '1155-09-08 18:00:00', '1335-09-23 18:00:00', '1395-09-08 18:00:00', '1575-09-23 18:00:00', '1635-09-18 18:00:00', '1815-10-05 18:00:00', '1875-09-20 18:00:00');
     $this->assertEquals($expected, $actual);
   }
 
@@ -409,7 +409,7 @@ class EightCharTest extends TestCase
       $actual[] = $solar->toYmdHms();
     }
 
-    $expected = array('1963-03-14 18:00:00', '1903-03-29 18:00:00');
+    $expected = array('1903-03-29 18:00:00', '1963-03-14 18:00:00');
     $this->assertEquals($expected, $actual);
   }
 

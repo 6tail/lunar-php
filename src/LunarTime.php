@@ -23,7 +23,7 @@ class LunarTime
   private $zhiIndex;
 
   /**
-   * 阴历
+   * 农历
    * @var Lunar
    */
   private $lunar;
@@ -40,9 +40,9 @@ class LunarTime
    * @param int $lunarYear 年（农历）
    * @param int $lunarMonth 月（农历），1到12，闰月为负，即闰2月=-2
    * @param int $lunarDay 日（农历），1到30
-   * @param int $hour 小时（阳历）
-   * @param int $minute 分钟（阳历）
-   * @param int $second 秒钟（阳历）
+   * @param int $hour 小时（公历）
+   * @param int $minute 分钟（公历）
+   * @param int $second 秒钟（公历）
    * @return LunarTime
    */
   public static function fromYmdHms($lunarYear, $lunarMonth, $lunarDay, $hour, $minute, $second)

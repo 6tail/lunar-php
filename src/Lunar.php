@@ -63,7 +63,7 @@ class Lunar
   private $second;
 
   /**
-   * 对应阳历
+   * 对应公历
    * @var Solar
    */
   private $solar;
@@ -183,7 +183,7 @@ class Lunar
   private $weekIndex;
 
   /**
-   * 24节气表（对应阳历的准确时刻）
+   * 24节气表（对应公历的准确时刻）
    * @var Solar[]
    */
   private $jieQi = array();
@@ -223,9 +223,9 @@ class Lunar
    * @param int $lunarYear 年（农历）
    * @param int $lunarMonth 月（农历），1到12，闰月为负，即闰2月=-2
    * @param int $lunarDay 日（农历），1到30
-   * @param int $hour 小时（阳历）
-   * @param int $minute 分钟（阳历）
-   * @param int $second 秒钟（阳历）
+   * @param int $hour 小时（公历）
+   * @param int $minute 分钟（公历）
+   * @param int $second 秒钟（公历）
    * @return Lunar
    */
   public static function fromYmdHms($lunarYear, $lunarMonth, $lunarDay, $hour, $minute, $second)
@@ -251,8 +251,8 @@ class Lunar
   }
 
   /**
-   * 通过阳历初始化
-   * @param Solar $solar 阳历
+   * 通过公历初始化
+   * @param Solar $solar 公历
    * @return Lunar
    */
   public static function fromSolar($solar)
@@ -315,7 +315,7 @@ class Lunar
     $solarYmd = $this->solar->toYmd();
     $solarYmdHms = $this->solar->toYmdHms();
 
-    //获取立春的阳历时刻
+    //获取立春的公历时刻
     $liChun = $this->jieQi['立春'];
     if ($liChun->getYear() != $solarYear) {
       $liChun = $this->jieQi['LI_CHUN'];
@@ -323,7 +323,7 @@ class Lunar
     $liChunYmd = $liChun->toYmd();
     $liChunYmdHms = $liChun->toYmdHms();
 
-    //阳历和阴历年份相同代表正月初一及以后
+    //公历和农历年份相同代表正月初一及以后
     if ($this->year === $solarYear) {
       //立春日期判断
       if (strcmp($solarYmd, $liChunYmd) < 0) {
@@ -2149,7 +2149,7 @@ class Lunar
   }
 
   /**
-   * 获取节气表（节气名称:阳历），节气交接时刻精确到秒，以冬至开头，按先后顺序排列
+   * 获取节气表（节气名称:公历），节气交接时刻精确到秒，以冬至开头，按先后顺序排列
    * @return Solar[] 节气表
    */
   public function getJieQiTable()

@@ -12,7 +12,7 @@ use RuntimeException;
 bcscale(12);
 
 /**
- * 阳历日期
+ * 公历日期
  * @package com\nlf\calendar
  */
 class Solar
@@ -160,12 +160,12 @@ class Solar
   }
 
   /**
-   * 通过八字获取阳历列表（晚子时日柱按当天，起始年为1900）
+   * 通过八字获取公历列表（晚子时日柱按当天，起始年为1900）
    * @param string $yearGanZhi 年柱
    * @param string $monthGanZhi 月柱
    * @param string $dayGanZhi 日柱
    * @param string $timeGanZhi 时柱
-   * @return Solar[] 符合的阳历列表
+   * @return Solar[] 符合的公历列表
    */
   public static function fromBaZi($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi)
   {
@@ -173,13 +173,13 @@ class Solar
   }
 
   /**
-   * 通过八字获取阳历列表（起始年为1900）
+   * 通过八字获取公历列表（起始年为1900）
    * @param string $yearGanZhi 年柱
    * @param string $monthGanZhi 月柱
    * @param string $dayGanZhi 日柱
    * @param string $timeGanZhi 时柱
    * @param int $sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
-   * @return Solar[] 符合的阳历列表
+   * @return Solar[] 符合的公历列表
    */
   public static function fromBaZiBySect($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect)
   {
@@ -187,7 +187,7 @@ class Solar
   }
 
   /**
-   * 通过八字获取阳历列表
+   * 通过八字获取公历列表
    * @param string $yearGanZhi 年柱
    * @param string $monthGanZhi 月柱
    * @param string $dayGanZhi 日柱
@@ -200,48 +200,67 @@ class Solar
   {
     $sect = (1 == $sect) ? 1 : 2;
     $l = array();
-    $years = array();
-    $today = self::fromDate(new DateTime());
-    $offsetYear = ($today->getYear() - 4) % 60  - LunarUtil::getJiaZiIndex($yearGanZhi);
-    if ($offsetYear < 0) {
-      $offsetYear += 60;
+    // 月地支距寅月的偏移值
+    $m = LunarUtil::index(substr($monthGanZhi, strlen($monthGanZhi) / 2), LunarUtil::$ZHI, -1) - 2;
+    if ($m < 0) {
+      $m += 12;
     }
-    $startYear = $today->getYear() - $offsetYear - 1;
-    $minYear = $baseYear - 2;
-    while ($startYear >= $minYear) {
-      $years[] = $startYear;
-      $startYear -= 60;
+    // 月天干要一致
+    if (((LunarUtil::index(substr($yearGanZhi, 0, strlen($yearGanZhi) / 2), LunarUtil::$GAN, -1) + 1) * 2 + $m) % 10 != LunarUtil::index(substr($monthGanZhi, 0, strlen($monthGanZhi) / 2), LunarUtil::$GAN, -1)) {
+      return $l;
     }
-    $hours = array();
-    $timeZhi = substr($timeGanZhi, strlen($timeGanZhi) / 2);
-    for ($i = 1, $j = count(LunarUtil::$ZHI); $i < $j; $i++) {
-      if (strcmp(LunarUtil::$ZHI[$i], $timeZhi) === 0) {
-        $hours[] = ($i - 1) * 2;
-      }
+    // 1年的立春是辛酉，序号57
+    $y = LunarUtil::getJiaZiIndex($yearGanZhi) - 57;
+    if ($y < 0) {
+      $y += 60;
     }
-    if (strcmp('子', $timeZhi) === 0) {
-      $hours[] = 23;
-    }
-    foreach ($hours as $hour) {
-      foreach ($years as $y) {
-        $maxYear = $y + 3;
-        $year = $y;
-        $month = 11;
-        if ($year < $baseYear) {
-          $year = $baseYear;
-          $month = 1;
-        }
-        $solar = self::fromYmdHms($year, $month, 1, $hour, 0, 0);
-        while ($solar->getYear() <= $maxYear) {
+    $y++;
+    // 节令偏移值
+    $m *= 2;
+    // 时辰地支转时刻，子时按零点算
+    $h = LunarUtil::index(substr($timeGanZhi, strlen($timeGanZhi) / 2), LunarUtil::$ZHI, -1) * 2;
+    $startYear = $baseYear - 1;
+
+    // 结束年
+    $date = new DateTime();
+    $calendar = DateTime::createFromFormat('Y-n-j G:i:s', $date->format('Y-n-j G:i:s'), $date->getTimezone());
+    $calendar->setTimezone(new DateTimezone('Asia/Shanghai'));
+    $endYear = intval($calendar -> format('Y'));
+
+    while ($y <= $endYear) {
+      if ($y >= $startYear) {
+        // 立春为寅月的开始
+        $jieQiTable = Lunar::fromYmd($y, 1, 1)->getJieQiTable();
+        // 节令推移，年干支和月干支就都匹配上了
+        $solarTime = $jieQiTable[Lunar::$JIE_QI_IN_USE[4 + $m]];
+        if ($solarTime->getYear() >= $baseYear) {
+          $mi = 0;
+          $s = 0;
+          // 日干支和节令干支的偏移值
+          $lunar = $solarTime->getLunar();
+          $dgz = (2 == $sect) ? $lunar->getDayInGanZhiExact2() : $lunar->getDayInGanZhiExact();
+          $d = LunarUtil::getJiaZiIndex($dayGanZhi) - LunarUtil::getJiaZiIndex($dgz);
+          if ($d < 0) {
+            $d += 60;
+          }
+          if ($d > 0) {
+            // 从节令推移天数
+            $solarTime = $solarTime->next($d);
+          } else if ($h == $solarTime->getHour()) {
+            // 如果正好是节令当天，且小时和节令的小时数相等的极端情况，把分钟和秒钟带上
+            $mi = $solarTime->getMinute();
+            $s = $solarTime->getSecond();
+          }
+          // 验证一下
+          $solar = Solar::fromYmdHms($solarTime->getYear(), $solarTime->getMonth(), $solarTime->getDay(), $h, $mi, $s);
           $lunar = $solar->getLunar();
           $dgz = (2 == $sect) ? $lunar->getDayInGanZhiExact2() : $lunar->getDayInGanZhiExact();
           if (strcmp($lunar->getYearInGanZhiExact(), $yearGanZhi) == 0 && strcmp($lunar->getMonthInGanZhiExact(), $monthGanZhi) == 0 && strcmp($dgz, $dayGanZhi) == 0 && strcmp($lunar->getTimeInGanZhi(), $timeGanZhi) == 0) {
             $l[] = $solar;
-            break;
           }
-          $solar = $solar->next(1);
         }
       }
+      $y += 60;
     }
     return $l;
   }
@@ -424,8 +443,8 @@ class Solar
   }
 
   /**
-   * 阳历日期相减，获得相差天数
-   * @param $solar Solar 阳历
+   * 公历日期相减，获得相差天数
+   * @param $solar Solar 公历
    * @return int 天数
    */
   public function subtract($solar)
@@ -434,8 +453,8 @@ class Solar
   }
 
   /**
-   * 阳历日期相减，获得相差分钟数
-   * @param $solar Solar 阳历
+   * 公历日期相减，获得相差分钟数
+   * @param $solar Solar 公历
    * @return int 分钟数
    */
   public function subtractMinute($solar)
@@ -454,7 +473,7 @@ class Solar
 
   /**
    * 是否在指定日期之后
-   * @param $solar Solar 阳历
+   * @param $solar Solar 公历
    * @return bool
    */
   public function isAfter($solar)
@@ -494,7 +513,7 @@ class Solar
 
   /**
    * 是否在指定日期之前
-   * @param $solar Solar 阳历
+   * @param $solar Solar 公历
    * @return bool
    */
   public function isBefore($solar)
@@ -535,7 +554,7 @@ class Solar
   /**
    * 年推移
    * @param $years int 年数
-   * @return Solar 阳历
+   * @return Solar 公历
    */
   public function nextYear($years) {
     $y = $this->year + $years;
@@ -558,7 +577,7 @@ class Solar
   /**
    * 月推移
    * @param $months int 月数
-   * @return Solar 阳历
+   * @return Solar 公历
    */
   public function nextMonth($months) {
     $month = SolarMonth::fromYm($this->year, $this->month)->next($months);
@@ -581,7 +600,7 @@ class Solar
   /**
    * 天推移
    * @param $days int 天数
-   * @return Solar 阳历
+   * @return Solar 公历
    */
   public function next($days)
   {
@@ -627,7 +646,7 @@ class Solar
   /**
    * 小时推移
    * @param $hours int 小时数
-   * @return Solar 阳历
+   * @return Solar 公历
    */
   public function nextHour($hours) {
     $h = $this->hour + $hours;
@@ -653,7 +672,7 @@ class Solar
   }
 
   /**
-   * 获取往后推几个工作日的阳历日期，如果要往前推，则天数用负数
+   * 获取往后推几个工作日的公历日期，如果要往前推，则天数用负数
    * @param int $days 天数
    * @return Solar
    */

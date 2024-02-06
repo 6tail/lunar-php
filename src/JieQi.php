@@ -15,7 +15,7 @@ class JieQi
   private $name;
 
   /**
-   * 阳历日期
+   * 公历日期
    * @var Solar
    */
   private $solar;
@@ -57,7 +57,7 @@ class JieQi
   }
 
   /**
-   * 获取阳历日期
+   * 获取公历日期
    * @return Solar
    */
   public function getSolar()
@@ -66,8 +66,8 @@ class JieQi
   }
 
   /**
-   * 设置阳历日期
-   * @param Solar $solar 阳历日期
+   * 设置公历日期
+   * @param Solar $solar 公历日期
    */
   public function setSolar($solar)
   {

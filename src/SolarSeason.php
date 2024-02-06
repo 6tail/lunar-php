@@ -7,7 +7,7 @@ use DateTime;
 bcscale(12);
 
 /**
- * 阳历季度
+ * 公历季度
  * @package com\nlf\calendar
  */
 class SolarSeason
@@ -53,7 +53,7 @@ class SolarSeason
   }
 
   /**
-   * 通过指定年月获取阳历季度
+   * 通过指定年月获取公历季度
    * @param int $year 年
    * @param int $month 月，1到12
    * @return SolarSeason
@@ -64,7 +64,7 @@ class SolarSeason
   }
 
   /**
-   * 通过指定DateTime获取阳历季度
+   * 通过指定DateTime获取公历季度
    * @param DateTime $date DateTime
    * @return SolarSeason
    */

@@ -6,7 +6,7 @@ use com\nlf\calendar\Solar;
 use RuntimeException;
 
 /**
- * 阳历工具
+ * 公历工具
  * @package com\nlf\calendar\util
  */
 class SolarUtil

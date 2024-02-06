@@ -8,7 +8,7 @@ use DateTime;
 bcscale(12);
 
 /**
- * 阳历周
+ * 公历周
  * @package com\nlf\calendar
  */
 class SolarWeek
@@ -62,7 +62,7 @@ class SolarWeek
   }
 
   /**
-   * 通过指定年月日获取阳历周
+   * 通过指定年月日获取公历周
    * @param int $year 年
    * @param int $month 月，1到12
    * @param int $day 日，1到31
@@ -75,7 +75,7 @@ class SolarWeek
   }
 
   /**
-   * 通过指定DateTime获取阳历周
+   * 通过指定DateTime获取公历周
    * @param DateTime $date DateTime
    * @param int $start 星期几作为一周的开始，1234560分别代表星期一至星期天
    * @return SolarWeek
@@ -186,7 +186,7 @@ class SolarWeek
   }
 
   /**
-   * 获取本周第一天的阳历日期（可能跨月）
+   * 获取本周第一天的公历日期（可能跨月）
    * @return Solar
    */
   public function getFirstDay()
@@ -200,7 +200,7 @@ class SolarWeek
   }
 
   /**
-   * 获取本周第一天的阳历日期（仅限当月）
+   * 获取本周第一天的公历日期（仅限当月）
    * @return Solar
    */
   public function getFirstDayInMonth()
@@ -215,7 +215,7 @@ class SolarWeek
   }
 
   /**
-   * 获取本周的阳历日期列表（可能跨月）
+   * 获取本周的公历日期列表（可能跨月）
    * @return Solar[]
    */
   public function getDays()
@@ -233,7 +233,7 @@ class SolarWeek
   }
 
   /**
-   * 获取本周的阳历日期列表（仅限当月）
+   * 获取本周的公历日期列表（仅限当月）
    * @return Solar[]
    */
   public function getDaysInMonth()

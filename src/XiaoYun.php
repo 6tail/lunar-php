@@ -37,7 +37,7 @@ class XiaoYun
   private $age;
 
   /**
-   * 阴历
+   * 农历
    * @var Lunar
    */
   private $lunar;
@@ -101,7 +101,7 @@ class XiaoYun
   }
 
   /**
-   * 获取阴历
+   * 获取农历
    * @return Lunar
    */
   public function getLunar()

@@ -6,7 +6,7 @@ use DateTime;
 
 
 /**
- * 阳历年
+ * 公历年
  * @package com\nlf\calendar
  */
 class SolarYear
@@ -44,7 +44,7 @@ class SolarYear
   }
 
   /**
-   * 通过指定年获取阳历年
+   * 通过指定年获取公历年
    * @param int $year 年
    * @return SolarYear
    */
@@ -54,7 +54,7 @@ class SolarYear
   }
 
   /**
-   * 通过指定DateTime获取阳历年
+   * 通过指定DateTime获取公历年
    * @param DateTime $date DateTime
    * @return SolarYear
    */

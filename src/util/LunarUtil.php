@@ -724,6 +724,16 @@ class LunarUtil
     return strtoupper($s);
   }
 
+  public static function index($name, $names, $offset)
+  {
+      for ($i = 0, $j = count($names); $i < $j; $i++) {
+          if (strcmp($names[$i], $name) === 0) {
+              return $i + $offset;
+          }
+      }
+      return -1;
+  }
+
   /**
    * 获取干支对应的甲子序号
    * @param string $ganZhi 干支
@@ -731,12 +741,7 @@ class LunarUtil
    */
   public static function getJiaZiIndex($ganZhi)
   {
-    for ($i = 0, $j = count(self::$JIA_ZI); $i < $j; $i++) {
-      if (strcmp(self::$JIA_ZI[$i], $ganZhi) === 0) {
-        return $i;
-      }
-    }
-    return -1;
+    return self::index($ganZhi, self::$JIA_ZI, 0);
   }
 
   /**

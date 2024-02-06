@@ -7,7 +7,7 @@ use DateTime;
 
 
 /**
- * 阳历月
+ * 公历月
  * @package com\nlf\calendar
  */
 class SolarMonth
@@ -50,7 +50,7 @@ class SolarMonth
   }
 
   /**
-   * 通过指定年月获取阳历月
+   * 通过指定年月获取公历月
    * @param int $year 年
    * @param int $month 月，1到12
    * @return SolarMonth
@@ -61,7 +61,7 @@ class SolarMonth
   }
 
   /**
-   * 通过DateTime获取阳历月
+   * 通过DateTime获取公历月
    * @param DateTime $date DateTime
    * @return SolarMonth
    */
@@ -82,7 +82,7 @@ class SolarMonth
   }
 
   /**
-   * 获取本月的阳历日期列表
+   * 获取本月的公历日期列表
    * @return Solar[]
    */
   public function getDays()
@@ -98,7 +98,7 @@ class SolarMonth
   }
 
   /**
-   * 获取本月的阳历周列表
+   * 获取本月的公历周列表
    * @param int $start 星期几作为一周的开始，1234560分别代表星期一至星期天
    * @return SolarWeek[] 周列表
    */
@@ -118,7 +118,7 @@ class SolarMonth
   }
 
   /**
-   * 获取往后推几个月的阳历月，如果要往前推，则月数用负数
+   * 获取往后推几个月的公历月，如果要往前推，则月数用负数
    * @param int $months 月数
    * @return SolarMonth
    */
