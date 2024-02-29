@@ -219,6 +219,10 @@ class Solar
     $m *= 2;
     // 时辰地支转时刻，子时按零点算
     $h = LunarUtil::index(substr($timeGanZhi, strlen($timeGanZhi) / 2), LunarUtil::$ZHI, -1) * 2;
+    $hours = array($h);
+    if (0 == $h && 2 == $sect) {
+      $hours = array(0, 23);
+    }
     $startYear = $baseYear - 1;
 
     // 结束年
@@ -234,8 +238,6 @@ class Solar
         // 节令推移，年干支和月干支就都匹配上了
         $solarTime = $jieQiTable[Lunar::$JIE_QI_IN_USE[4 + $m]];
         if ($solarTime->getYear() >= $baseYear) {
-          $mi = 0;
-          $s = 0;
           // 日干支和节令干支的偏移值
           $lunar = $solarTime->getLunar();
           $dgz = (2 == $sect) ? $lunar->getDayInGanZhiExact2() : $lunar->getDayInGanZhiExact();
@@ -246,17 +248,23 @@ class Solar
           if ($d > 0) {
             // 从节令推移天数
             $solarTime = $solarTime->next($d);
-          } else if ($h == $solarTime->getHour()) {
-            // 如果正好是节令当天，且小时和节令的小时数相等的极端情况，把分钟和秒钟带上
-            $mi = $solarTime->getMinute();
-            $s = $solarTime->getSecond();
           }
-          // 验证一下
-          $solar = Solar::fromYmdHms($solarTime->getYear(), $solarTime->getMonth(), $solarTime->getDay(), $h, $mi, $s);
-          $lunar = $solar->getLunar();
-          $dgz = (2 == $sect) ? $lunar->getDayInGanZhiExact2() : $lunar->getDayInGanZhiExact();
-          if (strcmp($lunar->getYearInGanZhiExact(), $yearGanZhi) == 0 && strcmp($lunar->getMonthInGanZhiExact(), $monthGanZhi) == 0 && strcmp($dgz, $dayGanZhi) == 0 && strcmp($lunar->getTimeInGanZhi(), $timeGanZhi) == 0) {
-            $l[] = $solar;
+          foreach ($hours as $hour)
+          {
+            $mi = 0;
+            $s = 0;
+            if ($d == 0 && $hour == $solarTime->getHour()) {
+              // 如果正好是节令当天，且小时和节令的小时数相等的极端情况，把分钟和秒钟带上
+              $mi = $solarTime->getMinute();
+              $s = $solarTime->getSecond();
+            }
+            // 验证一下
+            $solar = Solar::fromYmdHms($solarTime->getYear(), $solarTime->getMonth(), $solarTime->getDay(), $hour, $mi, $s);
+            $lunar = $solar->getLunar();
+            $dgz = (2 == $sect) ? $lunar->getDayInGanZhiExact2() : $lunar->getDayInGanZhiExact();
+            if (strcmp($lunar->getYearInGanZhiExact(), $yearGanZhi) == 0 && strcmp($lunar->getMonthInGanZhiExact(), $monthGanZhi) == 0 && strcmp($dgz, $dayGanZhi) == 0 && strcmp($lunar->getTimeInGanZhi(), $timeGanZhi) == 0) {
+              $l[] = $solar;
+            }
           }
         }
       }

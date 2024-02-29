@@ -2179,7 +2179,7 @@ class Lunar
       }
       $day = $wholeDay ? $solar->toYmd() : $solar->toYmdHms();
       if ($forward) {
-        if (strcmp($day, $today) < 0) {
+        if (strcmp($day, $today) <= 0) {
           continue;
         }
         if (null == $near) {
