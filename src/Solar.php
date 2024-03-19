@@ -239,9 +239,7 @@ class Solar
         $solarTime = $jieQiTable[Lunar::$JIE_QI_IN_USE[4 + $m]];
         if ($solarTime->getYear() >= $baseYear) {
           // 日干支和节令干支的偏移值
-          $lunar = $solarTime->getLunar();
-          $dgz = (2 == $sect) ? $lunar->getDayInGanZhiExact2() : $lunar->getDayInGanZhiExact();
-          $d = LunarUtil::getJiaZiIndex($dayGanZhi) - LunarUtil::getJiaZiIndex($dgz);
+          $d = LunarUtil::getJiaZiIndex($dayGanZhi) - LunarUtil::getJiaZiIndex($solarTime->getLunar()->getDayInGanZhiExact2());
           if ($d < 0) {
             $d += 60;
           }

@@ -437,4 +437,27 @@ class EightCharTest extends TestCase
     $this->assertEquals($expected, $actual);
   }
 
+  public function test25()
+  {
+    $solarList = Solar::fromBaZiBySectAndBaseYear('丁卯','丁未','甲申','乙丑', 1, 1900);
+    $actual = array();
+    foreach ($solarList as $solar) {
+      $actual[] = $solar->toYmdHms();
+    }
+
+    $expected = array('1987-08-03 02:00:00');
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function test26()
+  {
+    $solar = Solar::fromYmdHms(2000, 1, 23, 22, 0, 0);
+    $lunar = $solar->getLunar();
+    $eightChar = $lunar->getEightChar();
+    $this->assertEquals('己卯', $eightChar->getYear());
+    $this->assertEquals('丁丑', $eightChar->getMonth());
+    $this->assertEquals('庚辰', $eightChar->getDay());
+    $this->assertEquals('丁亥', $eightChar->getTime());
+  }
+
 }
