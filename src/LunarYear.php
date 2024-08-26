@@ -5,8 +5,6 @@ namespace com\nlf\calendar;
 use com\nlf\calendar\util\LunarUtil;
 use com\nlf\calendar\util\ShouXingUtil;
 
-bcscale(12);
-
 /**
  * 农历年
  * @package com\nlf\calendar

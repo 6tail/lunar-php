@@ -4,8 +4,6 @@ namespace com\nlf\calendar;
 
 use DateTime;
 
-bcscale(12);
-
 /**
  * 公历季度
  * @package com\nlf\calendar

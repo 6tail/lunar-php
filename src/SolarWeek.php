@@ -5,8 +5,6 @@ namespace com\nlf\calendar;
 use com\nlf\calendar\util\SolarUtil;
 use DateTime;
 
-bcscale(12);
-
 /**
  * 公历周
  * @package com\nlf\calendar

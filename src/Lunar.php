@@ -6,8 +6,6 @@ use com\nlf\calendar\util\LunarUtil;
 use com\nlf\calendar\util\SolarUtil;
 use DateTime;
 
-bcscale(12);
-
 /**
  * 农历日期
  * @package com\nlf\calendar

@@ -4,8 +4,6 @@ namespace com\nlf\calendar\util;
 
 use com\nlf\calendar\Solar;
 
-bcscale(12);
-
 /**
  * 寿星天文历工具
  * @package com\nlf\calendar\util

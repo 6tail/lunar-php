@@ -4,8 +4,6 @@ namespace com\nlf\calendar;
 
 use com\nlf\calendar\util\LunarUtil;
 
-bcscale(12);
-
 /**
  * 运
  * @package com\nlf\calendar

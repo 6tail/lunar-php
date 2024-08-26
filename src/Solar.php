@@ -9,8 +9,6 @@ use DateTime;
 use DateTimeZone;
 use RuntimeException;
 
-bcscale(12);
-
 /**
  * 公历日期
  * @package com\nlf\calendar
@@ -69,16 +67,21 @@ class Solar
     $minute = intval($minute);
     $second = intval($second);
 
+    if ($month < 1 || $month > 12) {
+      throw new RuntimeException(sprintf('wrong month %d', $month));
+    }
+    if ($day < 1) {
+      throw new RuntimeException(sprintf('wrong day %d', $day));
+    }
     if (1582 == $year && 10 == $month) {
       if ($day > 4 && $day < 15) {
         throw new RuntimeException(sprintf('wrong solar year %d month %d day %d', $year, $month, $day));
       }
-    }
-    if ($month < 1 || $month > 12) {
-      throw new RuntimeException(sprintf('wrong month %d', $month));
-    }
-    if ($day < 1 || $day > 31) {
-      throw new RuntimeException(sprintf('wrong day %d', $day));
+    } else {
+      $days = SolarUtil::getDaysOfMonth($year, $month);
+      if ($day > $days) {
+        throw new RuntimeException(sprintf('only %d days in solar year %d month %d', $days, $year, $month));
+      }
     }
     if ($hour < 0 || $hour > 23) {
       throw new RuntimeException(sprintf('wrong hour %d', $hour));
