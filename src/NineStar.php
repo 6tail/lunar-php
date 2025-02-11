@@ -26,7 +26,7 @@ class NineStar
    * 七色
    * @var array
    */
-  public static $COLOR = array('白', '黒', '碧', '绿', '黄', '白', '赤', '白', '紫');
+  public static $COLOR = array('白', '黑', '碧', '绿', '黄', '白', '赤', '白', '紫');
 
   /**
    * 五行
