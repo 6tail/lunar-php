@@ -559,11 +559,12 @@ class EightChar
   /**
    * 获取运
    * @param int $gender 性别，1男，0女
+   * @param int $sect 流派，1按天数和时辰数计算，3天1年，1天4个月，1时辰10天；2按分钟数计算。默认流派1
    * @return Yun 运
    */
-  public function getYun($gender)
+  public function getYun($gender, $sect = 1)
   {
-    return $this->getYunBySect($gender, 1);
+      return new Yun($this, $gender, $sect);
   }
 
   /**
@@ -571,6 +572,7 @@ class EightChar
    * @param int $gender 性别，1男，0女
    * @param int $sect 流派，1按天数和时辰数计算，3天1年，1天4个月，1时辰10天；2按分钟数计算
    * @return Yun 运
+   * @deprecated 1.4.1 已废弃，请使用getYun方法
    */
   public function getYunBySect($gender, $sect)
   {

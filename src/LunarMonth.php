@@ -197,18 +197,21 @@ class LunarMonth
   }
 
   /**
-   * 获取福神方位，默认流派2
+   * 获取福神方位
+   * @param int $sect 流派，可选1或2。（默认流派2）
    * @return string 福神方位，如艮
    */
-  public function getPositionFu()
+  public function getPositionFu($sect = 2)
   {
-    return $this->getPositionFuBySect(2);
+    $fu = 1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2;
+    return $fu[$this->getGanIndex() + 1];
   }
 
   /**
    * 获取福神方位
    * @param int $sect 流派，可选1或2
    * @return string 福神方位，如艮
+   * @deprecated 1.4.1 已废弃，请使用getPositionFuDesc方法
    */
   public function getPositionFuBySect($sect)
   {
@@ -217,12 +220,13 @@ class LunarMonth
   }
 
   /**
-   * 获取福神方位描述，默认流派2
+   * 获取福神方位描述
+   * @param int $sect 流派，可选1或2。(默认流派2)
    * @return string 福神方位描述，如东北
    */
-  public function getPositionFuDesc()
+  public function getPositionFuDesc($sect = 2)
   {
-    return $this->getPositionFuDescBySect(2);
+    return LunarUtil::$POSITION_DESC[$this->getPositionFu($sect)];
   }
 
   /**
@@ -232,7 +236,7 @@ class LunarMonth
    */
   public function getPositionFuDescBySect($sect)
   {
-    return LunarUtil::$POSITION_DESC[$this->getPositionFuBySect($sect)];
+    return LunarUtil::$POSITION_DESC[$this->getPositionFu($sect)];
   }
 
   /**

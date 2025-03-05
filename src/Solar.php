@@ -168,11 +168,13 @@ class Solar
    * @param string $monthGanZhi 月柱
    * @param string $dayGanZhi 日柱
    * @param string $timeGanZhi 时柱
+   * @param int $sect 流派，2晚子时日柱按当天，1晚子时日柱按明天。（默认流派2）
+   * @param int $baseYear 起始年（默认1900）
    * @return Solar[] 符合的公历列表
    */
-  public static function fromBaZi($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi)
+  public static function fromBaZi($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect = 2, $baseYear = 1900)
   {
-    return self::fromBaZiBySect($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, 2);
+    return self::_fromBaZiBySectAndBaseYear($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect, $baseYear);
   }
 
   /**
@@ -183,10 +185,11 @@ class Solar
    * @param string $timeGanZhi 时柱
    * @param int $sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
    * @return Solar[] 符合的公历列表
+   * @deprecated 1.4.1 已废弃，请使用fromBaZi
    */
   public static function fromBaZiBySect($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect)
   {
-    return self::fromBaZiBySectAndBaseYear($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect, 1900);
+    return self::_fromBaZiBySectAndBaseYear($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect, 1900);
   }
 
   /**
@@ -198,8 +201,14 @@ class Solar
    * @param int $sect 流派，2晚子时日柱按当天，1晚子时日柱按明天
    * @param int $baseYear 起始年
    * @return Solar[]
+   * @deprecated 1.4.1 已废弃，请使用fromBaZi
    */
   public static function fromBaZiBySectAndBaseYear($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect, $baseYear)
+  {
+    return self::_fromBaZiBySectAndBaseYear($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect, $baseYear);
+  }
+
+  public static function _fromBaZiBySectAndBaseYear($yearGanZhi, $monthGanZhi, $dayGanZhi, $timeGanZhi, $sect, $baseYear)
   {
     $sect = (1 == $sect) ? 1 : 2;
     $l = array();

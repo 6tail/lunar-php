@@ -60,7 +60,7 @@ class YunTest extends TestCase
     $solar = Solar::fromYmdHms(2022, 3, 9, 20, 51, 0);
     $lunar = $solar->getLunar();
     $eightChar = $lunar->getEightChar();
-    $yun = $eightChar->getYunBySect(1, 2);
+    $yun = $eightChar->getYun(1, 2);
     $this->assertEquals(8, $yun->getStartYear());
     $this->assertEquals(9, $yun->getStartMonth());
     $this->assertEquals(2, $yun->getStartDay());
@@ -72,7 +72,7 @@ class YunTest extends TestCase
     $solar = Solar::fromYmdHms(2018, 6, 11, 9, 30, 0);
     $lunar = $solar->getLunar();
     $eightChar = $lunar->getEightChar();
-    $yun = $eightChar->getYunBySect(0, 2);
+    $yun = $eightChar->getYun(0, 2);
     $this->assertEquals('2020-03-21', $yun->getStartSolar()->toYmd());
   }
 

@@ -1252,18 +1252,21 @@ class Lunar
   }
 
   /**
-   * 获取日福神方位，默认流派2
+   * 获取日福神方位
+   * @param int $sect 流派，可选1或2。（默认流派2）
    * @return string 福神方位，如艮
    */
-  public function getDayPositionFu()
+  public function getDayPositionFu($sect = 2)
   {
-    return $this->getDayPositionFuBySect(2);
+    $fu = 1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2;
+    return $fu[$this->dayGanIndex + 1];
   }
 
   /**
    * 获取日福神方位
    * @param int $sect 流派，可选1或2
    * @return string 福神方位，如艮
+   * @deprecated 1.4.1 废弃，请使用getDayPositionFu方法
    */
   public function getDayPositionFuBySect($sect)
   {
@@ -1272,37 +1275,42 @@ class Lunar
   }
 
   /**
-   * 获取日福神方位描述，默认流派2
+   * 获取日福神方位描述
+   * @param int $sect 流派，可选1或2。（默认流派2）
    * @return string 福神方位描述，如东北
    */
-  public function getDayPositionFuDesc()
+  public function getDayPositionFuDesc($sect = 2)
   {
-    return $this->getDayPositionFuDescBySect(2);
+    return LunarUtil::$POSITION_DESC[$this->getDayPositionFu($sect)];
   }
 
   /**
    * 获取日福神方位描述
    * @param int $sect 流派，可选1或2
    * @return string 福神方位描述，如东北
+   * @deprecated 1.4.1 废弃，请使用getDayPositionFuDesc方法
    */
   public function getDayPositionFuDescBySect($sect)
   {
-    return LunarUtil::$POSITION_DESC[$this->getDayPositionFuBySect($sect)];
+    return LunarUtil::$POSITION_DESC[$this->getDayPositionFu($sect)];
   }
 
   /**
-   * 获取时辰福神方位，默认流派2
+   * 获取时辰福神方位
+   * @param int $sect 流派，可选1或2。（默认流派2）
    * @return string 福神方位，如艮
    */
-  public function getTimePositionFu()
+  public function getTimePositionFu($sect = 2)
   {
-    return $this->getTimePositionFuBySect(2);
+    $fu = 1 == $sect ? LunarUtil::$POSITION_FU : LunarUtil::$POSITION_FU_2;
+    return $fu[$this->timeGanIndex + 1];
   }
 
   /**
    * 获取时辰福神方位
    * @param int $sect 流派，可选1或2
    * @return string 福神方位，如艮
+   * @deprecated 1.4.1 废弃，请使用getTimePositionFu方法
    */
   public function getTimePositionFuBySect($sect)
   {
@@ -1311,22 +1319,24 @@ class Lunar
   }
 
   /**
-   * 获取时辰福神方位描述，默认流派2
+   * 获取时辰福神方位描述
+   * @param int $sect 流派，可选1或2。（默认流派2）
    * @return string 福神方位描述，如东北
    */
-  public function getTimePositionFuDesc()
+  public function getTimePositionFuDesc($sect = 2)
   {
-    return $this->getTimePositionFuDescBySect(2);
+    return LunarUtil::$POSITION_DESC[$this->getTimePositionFu($sect)];
   }
 
   /**
    * 获取时辰福神方位描述
    * @param int $sect 流派，可选1或2
    * @return string 福神方位描述，如东北
+   * @deprecated 1.4.1 废弃，请使用getTimePositionFuDesc方法
    */
   public function getTimePositionFuDescBySect($sect)
   {
-    return LunarUtil::$POSITION_DESC[$this->getTimePositionFuBySect($sect)];
+    return LunarUtil::$POSITION_DESC[$this->getTimePositionFu($sect)];
   }
 
   /**
@@ -1383,12 +1393,7 @@ class Lunar
     return LunarUtil::$POSITION_DESC[$this->getTimePositionCai()];
   }
 
-  public function getYearPositionTaiSui()
-  {
-    return $this->getYearPositionTaiSuiBySect(2);
-  }
-
-  public function getYearPositionTaiSuiBySect($sect)
+  public function _getYearPositionTaiSuiBySect($sect)
   {
     switch ($sect) {
       case 1:
@@ -1403,14 +1408,30 @@ class Lunar
     return LunarUtil::$POSITION_TAI_SUI_YEAR[$yearZhiIndex];
   }
 
-  public function getYearPositionTaiSuiDesc()
+  public function getYearPositionTaiSui($sect = 2)
   {
-    return $this->getYearPositionTaiSuiDescBySect(2);
+    return $this->_getYearPositionTaiSuiBySect($sect);
   }
 
+  /**
+   * @deprecated 1.4.1 废弃，请使用getYearPositionTaiSui方法
+   */
+  public function getYearPositionTaiSuiBySect($sect)
+  {
+    return $this->_getYearPositionTaiSuiBySect($sect);
+  }
+
+  public function getYearPositionTaiSuiDesc($sect = 2)
+  {
+    return LunarUtil::$POSITION_DESC[$this->getYearPositionTaiSui($sect)];
+  }
+
+  /**
+   * @deprecated 1.4.1 废弃，请使用getYearPositionTaiSuiDesc方法
+   */
   public function getYearPositionTaiSuiDescBySect($sect)
   {
-    return LunarUtil::$POSITION_DESC[$this->getYearPositionTaiSuiBySect($sect)];
+    return LunarUtil::$POSITION_DESC[$this->getYearPositionTaiSui($sect)];
   }
 
   protected function _getMonthPositionTaiSui($monthZhiIndex, $monthGanIndex)
@@ -1441,7 +1462,7 @@ class Lunar
     return $p;
   }
 
-  public function getMonthPositionTaiSuiBySect($sect)
+  public function _getMonthPositionTaiSuiBySect($sect)
   {
     switch ($sect) {
       case 3:
@@ -1455,32 +1476,43 @@ class Lunar
     return $this->_getMonthPositionTaiSui($monthZhiIndex, $monthGanIndex);
   }
 
-  public function getMonthPositionTaiSui()
+  /**
+   * @deprecated 1.4.1 废弃，请使用getMonthPositionTaiSui方法
+   */
+  public function getMonthPositionTaiSuiBySect($sect)
   {
-    return $this->getMonthPositionTaiSuiBySect(2);
+    return $this->_getMonthPositionTaiSuiBySect($sect);
   }
 
-  public function getMonthPositionTaiSuiDesc()
+  public function getMonthPositionTaiSui($sect = 2)
   {
-    return $this->getMonthPositionTaiSuiDescBySect(2);
+    return $this->_getMonthPositionTaiSuiBySect($sect);
   }
 
+  public function getMonthPositionTaiSuiDesc($sect = 2)
+  {
+    return LunarUtil::$POSITION_DESC[$this->getMonthPositionTaiSui($sect)];
+  }
+
+  /**
+   * @deprecated 1.4.1 废弃，请使用getMonthPositionTaiSuiDesc方法
+   */
   public function getMonthPositionTaiSuiDescBySect($sect)
   {
-    return LunarUtil::$POSITION_DESC[$this->getMonthPositionTaiSuiBySect($sect)];
+    return LunarUtil::$POSITION_DESC[$this->getMonthPositionTaiSui($sect)];
   }
 
   protected function _getDayPositionTaiSui($dayInGanZhi, $yearZhiIndex)
   {
-    if (strpos('甲子,乙丑,丙寅,丁卯,戊辰,已巳',$dayInGanZhi) !== false) {
+    if (strpos('甲子,乙丑,丙寅,丁卯,戊辰,已巳', $dayInGanZhi) !== false) {
       $p = '震';
-    } else if (strpos('丙子,丁丑,戊寅,已卯,庚辰,辛巳',$dayInGanZhi) !== false) {
+    } else if (strpos('丙子,丁丑,戊寅,已卯,庚辰,辛巳', $dayInGanZhi) !== false) {
       $p = '离';
-    } else if (strpos('戊子,已丑,庚寅,辛卯,壬辰,癸巳',$dayInGanZhi) !== false) {
+    } else if (strpos('戊子,已丑,庚寅,辛卯,壬辰,癸巳', $dayInGanZhi) !== false) {
       $p = '中';
-    } else if (strpos('庚子,辛丑,壬寅,癸卯,甲辰,乙巳',$dayInGanZhi) !== false) {
+    } else if (strpos('庚子,辛丑,壬寅,癸卯,甲辰,乙巳', $dayInGanZhi) !== false) {
       $p = '兑';
-    } else if (strpos('壬子,癸丑,甲寅,乙卯,丙辰,丁巳',$dayInGanZhi) !== false) {
+    } else if (strpos('壬子,癸丑,甲寅,乙卯,丙辰,丁巳', $dayInGanZhi) !== false) {
       $p = '坎';
     } else {
       $p = LunarUtil::$POSITION_TAI_SUI_YEAR[$yearZhiIndex];
@@ -1488,7 +1520,7 @@ class Lunar
     return $p;
   }
 
-  public function getDayPositionTaiSuiBySect($sect)
+  public function _getDayPositionTaiSuiBySect($sect)
   {
     switch ($sect) {
       case 1:
@@ -1506,19 +1538,30 @@ class Lunar
     return $this->_getDayPositionTaiSui($dayInGanZhi, $yearZhiIndex);
   }
 
-  public function getDayPositionTaiSui()
+  /**
+   * @deprecated 1.4.1 废弃，请使用getDayPositionTaiSui方法
+   */
+  public function getDayPositionTaiSuiBySect($sect)
   {
-    return $this->getDayPositionTaiSuiBySect(2);
+    return $this->_getDayPositionTaiSuiBySect($sect);
   }
 
-  public function getDayPositionTaiSuiDesc()
+  public function getDayPositionTaiSui($sect = 2)
   {
-    return $this->getDayPositionTaiSuiDescBySect(2);
+    return $this->_getDayPositionTaiSuiBySect($sect);
   }
 
+  public function getDayPositionTaiSuiDesc($sect = 2)
+  {
+    return LunarUtil::$POSITION_DESC[$this->getDayPositionTaiSui($sect)];
+  }
+
+  /**
+   * @deprecated 1.4.1 废弃，请使用getDayPositionTaiSuiDesc方法
+   */
   public function getDayPositionTaiSuiDescBySect($sect)
   {
-    return LunarUtil::$POSITION_DESC[$this->getDayPositionTaiSuiBySect($sect)];
+    return LunarUtil::$POSITION_DESC[$this->getDayPositionTaiSui($sect)];
   }
 
   /**
@@ -1936,11 +1979,12 @@ class Lunar
 
   /**
    * 获取每日宜
+   * @param int $sect 流派，1以节交接当天起算月，2以节交接时刻起算月。默认流派1
    * @return string[] 宜
    */
-  public function getDayYi()
+  public function getDayYi($sect = 1)
   {
-    return LunarUtil::getDayYi($this->getMonthInGanZhiExact(), $this->getDayInGanZhi());
+    return LunarUtil::getDayYi(2 == $sect ? $this->getMonthInGanZhiExact() : $this->getMonthInGanZhi(), $this->getDayInGanZhi());
   }
 
   /**
@@ -1954,11 +1998,12 @@ class Lunar
 
   /**
    * 获取每日忌
+   * @param int $sect 流派，1以节交接当天起算月，2以节交接时刻起算月。默认流派1
    * @return string[] 忌
    */
-  public function getDayJi()
+  public function getDayJi($sect = 1)
   {
-    return LunarUtil::getDayJi($this->getMonthInGanZhiExact(), $this->getDayInGanZhi());
+    return LunarUtil::getDayJi(2 == $sect ? $this->getMonthInGanZhiExact() : $this->getMonthInGanZhi(), $this->getDayInGanZhi());
   }
 
   /**
@@ -2015,7 +2060,7 @@ class Lunar
     return NineStar::fromIndex($offset - 1);
   }
 
-  public function getYearNineStarBySect($sect)
+  public function _getYearNineStarBySect($sect)
   {
     switch ($sect) {
       case 1:
@@ -2031,12 +2076,20 @@ class Lunar
   }
 
   /**
+   * @deprecated 1.4.1 已废弃，请使用getYearNineStar方法
+   */
+  public function getYearNineStarBySect($sect)
+  {
+    return $this->_getYearNineStarBySect($sect);
+  }
+
+  /**
    * 获取值年九星（流年紫白星起例歌诀：年上吉星论甲子，逐年星逆中宫起；上中下作三元汇，一上四中七下兑。）
    * @return NineStar 值年九星
    */
-  public function getYearNineStar()
+  public function getYearNineStar($sect = 2)
   {
-    return $this->getYearNineStarBySect(2);
+    return $this->_getYearNineStarBySect($sect);
   }
 
   public function _getMonthNineStar($yearZhiIndex, $monthZhiIndex)
@@ -2050,7 +2103,7 @@ class Lunar
     return NineStar::fromIndex($offset);
   }
 
-  public function getMonthNineStarBySect($sect)
+  public function _getMonthNineStarBySect($sect)
   {
     switch ($sect) {
       case 1:
@@ -2069,12 +2122,20 @@ class Lunar
   }
 
   /**
+   * @deprecated 1.4.1 已废弃，请使用getMonthNineStar方法
+   */
+  public function getMonthNineStarBySect($sect)
+  {
+    return $this->_getMonthNineStarBySect($sect);
+  }
+
+  /**
    * 获取值月九星（月紫白星歌诀：子午卯酉八白起，寅申巳亥二黑求，辰戌丑未五黄中。）
    * @return NineStar 值月九星
    */
-  public function getMonthNineStar()
+  public function getMonthNineStar($sect = 2)
   {
-    return $this->getMonthNineStarBySect(2);
+    return $this->_getMonthNineStarBySect($sect);
   }
 
   /**

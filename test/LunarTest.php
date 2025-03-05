@@ -415,4 +415,18 @@ class LunarTest extends TestCase
     $this->assertEquals('九一七年冬月十六', $lunar->toString());
   }
 
+    public function test66()
+    {
+        $lunar = Solar::fromYmd(2025, 3, 5)->getLunar();
+        $this->assertEquals('破屋, 坏垣, 求医, 治病', implode(', ', $lunar->getDayYi()));
+        $this->assertEquals('诸事不宜', implode(', ', $lunar->getDayJi()));
+    }
+
+    public function test67()
+    {
+        $lunar = Solar::fromYmd(2025, 5, 3)->getLunar();
+        $this->assertEquals('祭祀, 祈福, 求嗣, 斋醮, 沐浴, 纳畜, 入殓, 破土, 安葬', implode(', ', $lunar->getDayYi()));
+        $this->assertEquals('移徙, 入宅, 嫁娶, 出行, 安床', implode(', ', $lunar->getDayJi()));
+    }
+
 }
