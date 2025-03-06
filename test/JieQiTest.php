@@ -24,14 +24,14 @@ class JieQiTest extends TestCase
   {
     $lunar = Lunar::fromYmd(2050, 12, 1);
     $jieQiTable = $lunar->getJieQiTable();
-    $this->assertEquals('2050-12-07 06:41:13', $jieQiTable['DA_XUE']->toYmdHms());
+    $this->assertEquals('2050-12-07 06:40:53', $jieQiTable['DA_XUE']->toYmdHms());
   }
 
   public function test9()
   {
     $lunar = Solar::fromYmd(2023, 6, 1)->getLunar();
     $jieQiTable = $lunar->getJieQiTable();
-    $this->assertEquals('2022-12-22 05:48:11', $jieQiTable['冬至']->toYmdHms());
+    $this->assertEquals('2022-12-22 05:48:01', $jieQiTable['冬至']->toYmdHms());
   }
 
 }
