@@ -1504,11 +1504,11 @@ class Lunar
 
   protected function _getDayPositionTaiSui($dayInGanZhi, $yearZhiIndex)
   {
-    if (strpos('甲子,乙丑,丙寅,丁卯,戊辰,已巳', $dayInGanZhi) !== false) {
+    if (strpos('甲子,乙丑,丙寅,丁卯,戊辰,己巳', $dayInGanZhi) !== false) {
       $p = '震';
-    } else if (strpos('丙子,丁丑,戊寅,已卯,庚辰,辛巳', $dayInGanZhi) !== false) {
+    } else if (strpos('丙子,丁丑,戊寅,己卯,庚辰,辛巳', $dayInGanZhi) !== false) {
       $p = '离';
-    } else if (strpos('戊子,已丑,庚寅,辛卯,壬辰,癸巳', $dayInGanZhi) !== false) {
+    } else if (strpos('戊子,己丑,庚寅,辛卯,壬辰,癸巳', $dayInGanZhi) !== false) {
       $p = '中';
     } else if (strpos('庚子,辛丑,壬寅,癸卯,甲辰,乙巳', $dayInGanZhi) !== false) {
       $p = '兑';

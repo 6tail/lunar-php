@@ -536,15 +536,12 @@ class EightChar
    */
   public function getShenGong()
   {
-    $offset = LunarUtil::index($this->getMonthZhi(), self::$MONTH_ZHI, 0) + LunarUtil::index($this->getTimeZhi(), LunarUtil::$ZHI, 0);
-    while ($offset > 12) {
-      $offset -= 12;
-    }
-    $ganIndex = ($this->lunar->getYearGanIndexExact() + 1) * 2 + ($offset % 12);
+    $offset = (LunarUtil::index($this->getMonthZhi(), self::$MONTH_ZHI, 0) + LunarUtil::index($this->getTimeZhi(), LunarUtil::$ZHI, 0) - 1) % 12;
+    $ganIndex = ($this->lunar->getYearGanIndexExact() + 1) * 2 + $offset;
     while ($ganIndex > 10) {
       $ganIndex -= 10;
     }
-    return sprintf('%s%s', LunarUtil::$GAN[$ganIndex], self::$MONTH_ZHI[$offset]);
+    return sprintf('%s%s', LunarUtil::$GAN[$ganIndex + 1], self::$MONTH_ZHI[$offset + 1]);
   }
 
   /**
