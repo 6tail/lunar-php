@@ -355,7 +355,7 @@ class EightCharTest extends TestCase
 
   public function test18()
   {
-    $solarList = Solar::fromBaZiBySectAndBaseYear('癸卯','甲寅','甲寅','甲子', 2, 1843);
+    $solarList = Solar::fromBaZi('癸卯','甲寅','甲寅','甲子', 2, 1843);
     $actual = array();
     foreach ($solarList as $solar) {
       $actual[] = $solar->toYmdHms();
@@ -391,7 +391,7 @@ class EightCharTest extends TestCase
 
   public function test21()
   {
-    $solarList = Solar::fromBaZiBySectAndBaseYear('乙亥','乙酉','乙酉','乙酉', 1, 1000);
+    $solarList = Solar::fromBaZi('乙亥','乙酉','乙酉','乙酉', 1, 1000);
     $actual = array();
     foreach ($solarList as $solar) {
       $actual[] = $solar->toYmdHms();
@@ -415,7 +415,7 @@ class EightCharTest extends TestCase
 
   public function test23()
   {
-    $solarList = Solar::fromBaZiBySectAndBaseYear('甲辰','丙寅','壬戌','壬子', 2, 1900);
+    $solarList = Solar::fromBaZi('甲辰','丙寅','壬戌','壬子');
     $actual = array();
     foreach ($solarList as $solar) {
       $actual[] = $solar->toYmdHms();
@@ -427,7 +427,7 @@ class EightCharTest extends TestCase
 
   public function test24()
   {
-    $solarList = Solar::fromBaZiBySectAndBaseYear('甲辰','丙寅','癸亥','壬子', 1, 1900);
+    $solarList = Solar::fromBaZi('甲辰','丙寅','癸亥','壬子', 1);
     $actual = array();
     foreach ($solarList as $solar) {
       $actual[] = $solar->toYmdHms();

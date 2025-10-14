@@ -5,6 +5,7 @@ namespace com\nlf\calendar;
 use com\nlf\calendar\util\LunarUtil;
 use com\nlf\calendar\util\SolarUtil;
 use DateTime;
+use RuntimeException;
 
 /**
  * 农历日期
@@ -230,6 +231,16 @@ class Lunar
   {
     $y = LunarYear::fromYear($lunarYear);
     $m = $y->getMonth($lunarMonth);
+    if (null == $m) {
+      throw new RuntimeException(sprintf('wrong lunar year %d month %d', $lunarYear, $lunarMonth));
+    }
+    if ($lunarDay < 1) {
+      throw new RuntimeException("lunar day must bigger than 0");
+    }
+    $days = $m->getDayCount();
+    if ($lunarDay > $days) {
+      throw new RuntimeException(sprintf('only %d days in lunar year %d month %d', $days, $lunarYear, $lunarMonth));
+    }
     $noon = Solar::fromJulianDay($m->getFirstJulianDay() + $lunarDay - 1);
     $solar = Solar::fromYmdHms($noon->getYear(), $noon->getMonth(), $noon->getDay(), $hour, $minute, $second);
     if ($noon->getYear() != $lunarYear) {
@@ -2021,7 +2032,7 @@ class Lunar
    */
   public function getDayJiShen()
   {
-    return LunarUtil::getDayJiShen($this->getMonth(), $this->getDayInGanZhi());
+    return LunarUtil::getDayJiShen($this->getMonthZhiIndex(), $this->getDayInGanZhi());
   }
 
   /**
@@ -2030,7 +2041,7 @@ class Lunar
    */
   public function getDayXiongSha()
   {
-    return LunarUtil::getDayXiongSha($this->getMonth(), $this->getDayInGanZhi());
+    return LunarUtil::getDayXiongSha($this->getMonthZhiIndex(), $this->getDayInGanZhi());
   }
 
   /**

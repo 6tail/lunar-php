@@ -270,6 +270,9 @@ class Solar
             }
             // 验证一下
             $solar = Solar::fromYmdHms($solarTime->getYear(), $solarTime->getMonth(), $solarTime->getDay(), $hour, $mi, $s);
+            if ($d == 30) {
+              $solar = $solar->nextHour(-1);
+            }
             $lunar = $solar->getLunar();
             $dgz = (2 == $sect) ? $lunar->getDayInGanZhiExact2() : $lunar->getDayInGanZhiExact();
             if (strcmp($lunar->getYearInGanZhiExact(), $yearGanZhi) == 0 && strcmp($lunar->getMonthInGanZhiExact(), $monthGanZhi) == 0 && strcmp($dgz, $dayGanZhi) == 0 && strcmp($lunar->getTimeInGanZhi(), $timeGanZhi) == 0) {
