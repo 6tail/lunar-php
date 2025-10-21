@@ -46,7 +46,7 @@ class LunarMonth
     $this->dayCount = intval($dayCount);
     $this->firstJulianDay = $firstJulianDay;
     $this->index = $index;
-    $this->zhiIndex = ($index - 1 + LunarUtil::$BASE_MONTH_ZHI_INDEX) % 12;
+    $this->zhiIndex = (abs($lunarMonth) - 1 + LunarUtil::$BASE_MONTH_ZHI_INDEX) % 12;
   }
 
   public function toString()
@@ -124,7 +124,7 @@ class LunarMonth
   public function getGanIndex()
   {
     $offset = (LunarYear::fromYear($this->year)->getGanIndex() + 1) % 5 * 2;
-    return ($this->index - 1 + $offset) % 10;
+    return (abs($this->month) - 1 + $offset) % 10;
   }
 
   public function getGan()

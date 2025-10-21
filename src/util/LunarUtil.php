@@ -855,7 +855,7 @@ class LunarUtil
     $l = array();
     $m = $monthZhiIndex - 2;
     if ($m < 0) {
-      $m += 10;
+      $m += 12;
     }
     if (preg_match(sprintf('/;%02X(.[^;]*)/', self::getJiaZiIndex($dayGanZhi)), self::$DAY_SHEN_SHA[$m], $matches)) {
       $data = $matches[1];
@@ -883,7 +883,7 @@ class LunarUtil
     $l = array();
     $m = $monthZhiIndex - 2;
     if ($m < 0) {
-      $m += 10;
+      $m += 12;
     }
     if (preg_match(sprintf('/;%02X(.[^;]*)/', self::getJiaZiIndex($dayGanZhi)), self::$DAY_SHEN_SHA[$m], $matches)) {
       $data = $matches[1];

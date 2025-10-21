@@ -21,14 +21,14 @@ class LunarMonthTest extends TestCase
   {
     $month = LunarMonth::fromYm(2023, -2);
     $this->assertEquals(3, $month->getIndex());
-    $this->assertEquals('丙辰', $month->getGanZhi());
+    $this->assertEquals('乙卯', $month->getGanZhi());
   }
 
   public function test3()
   {
     $month = LunarMonth::fromYm(2023, 3);
     $this->assertEquals(4, $month->getIndex());
-    $this->assertEquals('丁巳', $month->getGanZhi());
+    $this->assertEquals('丙辰', $month->getGanZhi());
   }
 
   public function test4()
@@ -42,7 +42,7 @@ class LunarMonthTest extends TestCase
   {
     $month = LunarMonth::fromYm(2023, 12);
     $this->assertEquals(13, $month->getIndex());
-    $this->assertEquals('丙寅', $month->getGanZhi());
+    $this->assertEquals('乙丑', $month->getGanZhi());
   }
 
   public function test6()
